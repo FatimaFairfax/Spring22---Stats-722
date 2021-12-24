@@ -1,0 +1,9 @@
+---
+title: "Bayes 13 - Logistic Regression"
+author: "Fatima Fairfax"
+date: "12/23/2021"
+output: html_document
+---
+
+Notes for the logistic regression chapter in Bayes Rules.
+

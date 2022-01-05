@@ -8,3 +8,95 @@ output: html_document
 Notes for the logistic regression chapter in Bayes Rules.
 
 # Chapter 13
+
+When Y is a categorical response variable, you will need to employ either logistic regression or naive Bayesian classification.
+
+E.g., want to predict if it will rain tomorrow or not in Perth. Y = 1, rain tomorrow and Y = 0, otherwise. The predictor variables are:
+
+X1 = today's humidity at 9am
+X2 = today's humidity at 3pm
+X3 = whether or not it rained today
+
+A vague prior is that on an average day, there's a 20% chance of rain. And we have a vague sense that the chance of rain increases when the day before rained or had high humidity. 
+
+```{r}
+library(bayesrules)
+library(rstanarm)
+library(bayesplot)
+library(tidyverse)
+library(tidybayes)
+library(broom.mixed)
+```
+
+
+## Odds and Probability
+
+Revisit the concept of odds and probability. Where pi represents some probability: 
+
+$odds = \frac{\pi}{1 - \pi}$
+
+Probability restricts values between 0 and 1, odds can be from 0 to infinity. If the probability of rain tomorrow is pi = 2/3, then the probability it doesn't rain is 1 - pi = 1/3 and the odds of rain are 2. It's twice as likely to rain than not. 
+
+If the probability that it will rain is 50%, then the odds of rain are 1:
+
+$\frac{1/2}{1 - 1/2} = 1$. So an odds of 1 represents a 50-50 chance.
+
+*Interpreting Odds*
+
+- The odds of an event are less than 1 if and only if the events chances are less than 50-50; pi < 0.5
+- The odds of an event are equal to 1 iff the event's chances are 50-50; pi = 50
+- The odds of an event are greater than 1 iff the events's chances are greater than 50-50; pi > 50
+
+We can convert odds to probability and probability to odds in the same way:
+
+$\pi = \frac{odds}{1 + odds}$
+
+If the odds of rain tomorrow are 4 to 1, then there's an 80% chance of rain:
+
+$\pi = \frac{4}{1 + 4} = 0.8$
+
+## Building the logistic regression model
+
+### Specifying the data model
+
+For this type of question, we're going to want to do a Bernoulli:
+
+$Y_i | \pi_i \text{ ~}  Bern(\pi_i)$
+
+with an expected value $E(Y_i|\pi_i) = \pi_i$
+
+We have to specify how the expected value of rain pi_i depends on predictor Xi1 - humidity at 9am. We can use logistic regression and linear model:
+
+$g(\pi_i) = \beta_0 + \beta_1X_{i1}$
+
+We use the log odds because it allows us to use all numbers on the real line. We can assume that pi depends on Xi1 through the logit link function: $g(\pi_i) = log(\frac{\pi_i}{1 - \pi_i})$
+
+We assume the log(odds of rain) is linearly related to 9am humidity. To work on scales that are easier to interpret, we will rewrite this in terms of odds and probability, the former following from the log function and the following formula:
+
+$\frac{\pi_i}{1 - \pi_i} = e^{\beta_0 + \beta_1X_{i1}}$
+
+and 
+
+$\pi_i = \frac{e^{\beta_0 + \beta_1X_{i1}}}{1 + e^{\beta_0 + \beta_1X_{i1}}}$
+
+Two key features of these transformations are that 1) odds and probability scales are nonlinear, 2) this preserves the properties of odds (non-negative) and probability (between 0 and 1)
+
+*Interpreting logistic regression coefficients*
+
+Let Y be a binary indicator of some event in interest which occurs with probability pi. Consider the logistic regression model of Y with predictors (X1,X2,...Xn):
+
+log(odds) = log(pi / (1 - pi)) = beta_0 + beta_1X_1 + ... + beta_pXp
+
+**Interpreting Beta_0**
+
+When X1, X2 etc. are all 0, beta_0 is the *log odds* of the event of interest and e^beta_0 is the *odds*.
+
+**Interpreting Beta_1**
+
+
+
+
+
+
+
+

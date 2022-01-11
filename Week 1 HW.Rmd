@@ -13,6 +13,7 @@ output:
 
 A variable is a collection of observations of the same measure. 
 
+
 2. What type of variables are the following?
 
 a.	Age -- continuous (though typically taken in count form)
@@ -25,9 +26,11 @@ g.	The university or college that a student attends -- categorical
 h.	A therapist’s written assessment of a patient’s symptoms of depression -- qualitative
 i.	Whether a soccer team is in its league’s A division (highest), B division (next highest), or C division (lowest) -- ordinal
 
+
 3. Which of the following provides a description of the probability that each value of a variable will occur?
 
 distribution
+
 
 4. From the provided frequency table, provide the following:
 
@@ -51,11 +54,13 @@ avg_sal
 
 The average salary is $103,529
 
+
 b. Calculate the median
 
 This data set has 17 values. The Median is the 9th value. 
 
 Median = $90,000
+
 
 c. Calculate the minimum and maximum
 
@@ -63,6 +68,7 @@ This is just the lowest and highest value in the data set:
 
 Minimum = $85,000
 Maximum = $130,000
+
 
 d. Calculate the interquartile range
 
@@ -85,17 +91,21 @@ summary(list_4)
 This gives a median of $90,000, min = $85,00; max = $130,000 and interquartile range of $125,000 - $85,000 = $40,000.
 
 
+
 5. Which of the following commonly represents the truth we are trying to estimate in statistics?
 
 c. Greek letters like $\mu$ and $\beta$
+
 
 6. Which of the following reduces impact of extreme values if the distribution of a variable is skewed?
 
 a. Log transforming the variable
 
+
 7. Order the following distribution from the one with lowest to the one with highest variability:
 
 d < a < c < b
+
 
 
 # Chapter 4 Question - Describing Relationships
@@ -206,7 +216,6 @@ model2 <- lm(lwg ~ log(inc) + wc + k5, data = df)
 msummary(list(model1,model2))
 ```
 
-Idk why the text is white...
 
 But this shows that model 2 has a larger intercept value, *meaning that...*
 
@@ -217,25 +226,94 @@ But this shows that model 2 has a larger intercept value, *meaning that...*
 
 1. What is a conditional distribution?
 
+The distribution of one variable given the value of another variable.
+
+
 2. Using the fictional data on the relationship between Depression and Income level:
 
 a. How does the conditional mean of Depression change as Income increases?
 
 The conditional mean of Depression decreases as Income increases.
 
+
 b. Does the graph indicate that lower income causes depression?
 
 No. The graph only shows a correlation between depression and income level. This graph does not represent a display of causality.
 
-*3. Using the provided table from university students on their financial aid info:*
+
+*3. Using the provided table from university students on their financial aid receipt status:*
+
+```{r}
+#create the table
+
+fin_aid <- c('Yes', 'No')
+Freshman <- c(508,371)
+Sophomore <- c(349,337)
+Junior <- c(425,384)
+Senior <- c(288,338)
+
+tab_5 <- data.frame(fin_aid,Freshman,Sophomore,Junior,Senior)
+
+tab_5
+```
+
 
 a.	Calculate the probability of receiving financial aid given that a student is a Senior.
 
+```{r}
+tab_5 |> 
+  group_by(fin_aid) |> 
+  summarize(prob_Senior = Senior / 626)
+```
+
+This would look at the conditional column of being a Senior and calculating the probability of receiving financial aid. The number of seniors total is 338 + 288 = 626. Of those 288 receive financial aid. So conditional on being a senior, the probability of receiving financial aid is 288 / 626 = 0.46
+
+
 b.	Calculate the probability that a student is a Senior given that they receive financial aid.
+
+This looks at the conditional row of receiving financial aid and calculating the probability of being a Senior. The number of people total who receive financial aid are 1570. Of those, 288 are Seniors. Conditional on receiving financial aid, the probability of being a Senior is 288 / 1570 = 0.18.
+
+
 
 c.	Calculate the probability of receiving financial aid given that a student is a Freshman
 
+This is the same process of question 3a. The number of Freshman total are 508 + 371 = 879. Conditional on being a freshman, the probability of receiving financial aid is 508 / 879 = 0.58.
 
-*4. Describe two advantages and disadvantages of using line-fitting methods as opposed to calculating local means*
 
-5. 
+4. Describe two advantages and one disadvantages of using line-fitting methods as opposed to calculating local means
+
+Advantage - line fitting gives the conditional mean of Y for any value of X, even if we don't have data on that specific value and it let's us cleanly describe the relationship between X and Y.
+
+Disadvantage - you have to choose the right underlying distribution for line fitting to get an accurate assessment
+
+
+5. Consider the line: $Y = 4 - 3.5X$
+
+a. What is the conditional predicted mean of Y when X = 6
+
+Y = 4 - 3.5 (6) = -17
+
+b. What is the conditional predicted mean of Y when X = -2
+
+Y = 11
+
+
+6. Which term describes a measurement of how much two variables vary with each other -- **covariance**
+
+
+7. What is the different between covariance and correlation?
+
+Correlation is a method of rescaling covariance by dividing it by the standard deviation of each variable. This allows us to see more clearly the strength of a relationship and allows us to compare correlation coefficients between analyses were covariance, which remains in the unit of the variable, might be harder to interpret comparatively.
+
+
+8. Based on the fictional data on math exam scores by intelligence measure collected from a sample of 100 students:
+
+a. What type of shape is fitted in Figure A? -- *a straight line*
+
+b. What type of shape is fitted in Figure B? -- *a parabola* 
+
+c. Which shape is better fit and how can you tell? -- *the parabola because the data points are closer to the line (the residuals will be smaller)*
+
+d. For figure A, describe the residuals for different ranges of math exam scores.
+
+There are residuals both above and below the line in figure A. The ones above the line are generally further away...

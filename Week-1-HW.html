@@ -272,9 +272,6 @@ summary(list_4)</code></pre>
 <h2>Coding Exercise</h2>
 <p>First, I load the packages associated with this textbook:</p>
 <pre class="r"><code>install.packages(&#39;causaldata&#39;,repos=&quot;https://cran.us.r-project.org&quot;)</code></pre>
-<pre><code>## 
-## The downloaded binary packages are in
-##  /var/folders/ty/njzj80956zbg7m6c4zxcmnw40000gn/T//RtmpnOIKpG/downloaded_packages</code></pre>
 <p>Using a dataset of women’s labor force participation and earnings from 1975 I will: a) load in the data b) draw scatterplot between women’s earnings and household earnings c) get the conditional mean of women’s earnings on if they attended college d) get the conditional mean of women’s earnings on bins of household earning e) draw the LOESS and linear regression curves of the mean of log earnings conditional on log household earning f) run a linear regression of log earnings on log household earning by itself and with controls</p>
 <pre class="r"><code>#loading libraries
 
@@ -287,11 +284,8 @@ library(tidyverse)</code></pre>
 <pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>install.packages(&#39;modelsummary&#39;,repos = &quot;https://cran.us.r-project.org&quot;)</code></pre>
-<pre><code>## 
-## The downloaded binary packages are in
-##  /var/folders/ty/njzj80956zbg7m6c4zxcmnw40000gn/T//RtmpnOIKpG/downloaded_packages</code></pre>
-<pre class="r"><code>library(modelsummary)</code></pre>
+<pre class="r"><code>install.packages(&#39;modelsummary&#39;,repos = &quot;https://cran.us.r-project.org&quot;)
+library(modelsummary)</code></pre>
 <pre class="r"><code>#getting relevant data from the full data set
 
 df &lt;- causaldata::Mroz |&gt; 
@@ -313,7 +307,11 @@ glimpse(df)</code></pre>
 ## $ inc  &lt;dbl&gt; 10.910001, 19.500000, 12.039999, 6.800000, 20.100000, 9.859000, 9…
 ## $ earn &lt;dbl&gt; 3.354037, 1.388889, 4.545455, 1.096491, 4.591837, 4.742126, 8.333…</code></pre>
 <p>Looking up the Mroz data, some relevant variable terms are:</p>
-<p>lfp = labor force participation k5 = number of children 5 years old or younger wc = wife attended college lwg = log expected wages inc = family income exclusive of wife’s income</p>
+<p>lfp = labor force participation</p>
+<p>k5 = number of children 5 years old or younger</p>
+<p>wc = wife attended college</p>
+<p>lwg = log expected wages</p>
+<p>inc = family income exclusive of wife’s income</p>
 <pre class="r"><code>#Draw scatterplot
 ggplot(df,aes(x = inc, y = earn)) +
   geom_point() +
@@ -564,15 +562,47 @@ F
 </tr>
 </tbody>
 </table>
-<p>Idk why the text is white…</p>
-<p>But this shows that model 2 has a larger intercept value, <em>meaning that…</em></p>
-<p><em>We can also do this in Bayesian notation using rstanarm…[do this last analysis that way]</em></p>
+<p>But this shows that model 2 has a larger intercept value, *meaning that when you control for college and children under 5, the log expected wages is higher.</p>
+<p>We can also do this the Bayesian way using rstanarm.</p>
+<pre class="r"><code>library(rstanarm)</code></pre>
+<pre><code>## Loading required package: Rcpp</code></pre>
+<pre><code>## This is rstanarm version 2.21.1</code></pre>
+<pre><code>## - See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</code></pre>
+<pre><code>## - Default priors may change, so it&#39;s safest to specify priors, even if equivalent to the defaults.</code></pre>
+<pre><code>## - For execution on a local, multicore CPU with excess RAM we recommend calling</code></pre>
+<pre><code>##   options(mc.cores = parallel::detectCores())</code></pre>
+<pre class="r"><code>library(broom)
+library(broom.mixed)
+options(mc.cores=parallel::detectCores())
+
+b1 &lt;- stan_glm(lwg ~ log(inc),data = df)</code></pre>
+<pre><code>## Warning in log(inc): NaNs produced</code></pre>
+<pre class="r"><code>b2 &lt;- stan_glm(lwg ~ log(inc) + wc + k5, data = df)</code></pre>
+<pre><code>## Warning in log(inc): NaNs produced</code></pre>
+<pre class="r"><code>tidy(b1)</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   term        estimate std.error
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)    0.569    0.185 
+## 2 log(inc)       0.221    0.0658</code></pre>
+<pre class="r"><code>tidy(b2)</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   term        estimate std.error
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   0.711     0.181 
+## 2 log(inc)      0.133     0.0662
+## 3 wcTRUE        0.334     0.0806
+## 4 k5           -0.0668    0.0915</code></pre>
+<p>This is decently close. The more complex model is further off.</p>
 </div>
-<div id="homework-questions" class="section level2">
-<h2>Homework Questions</h2>
+<div id="chapter-4-homework-questions" class="section level2">
+<h2>Chapter 4 Homework Questions</h2>
 <ol style="list-style-type: decimal">
-<li><p>What is a conditional distribution?</p></li>
-<li><p>Using the fictional data on the relationship between Depression and Income level:</p></li>
+<li>What is a conditional distribution?</li>
+</ol>
+<p>The distribution of one variable given the value of another variable.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Using the fictional data on the relationship between Depression and Income level:</li>
 </ol>
 <ol style="list-style-type: lower-alpha">
 <li>How does the conditional mean of Depression change as Income increases?</li>
@@ -582,16 +612,126 @@ F
 <li>Does the graph indicate that lower income causes depression?</li>
 </ol>
 <p>No. The graph only shows a correlation between depression and income level. This graph does not represent a display of causality.</p>
-<p><em>3. Using the provided table from university students on their financial aid info:</em></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Using the provided table from university students on their financial aid receipt status:</li>
+</ol>
+<pre class="r"><code>#create the table
+
+fin_aid &lt;- c(&#39;Yes&#39;, &#39;No&#39;)
+Freshman &lt;- c(508,371)
+Sophomore &lt;- c(349,337)
+Junior &lt;- c(425,384)
+Senior &lt;- c(288,338)
+
+tab_5 &lt;- data.frame(fin_aid,Freshman,Sophomore,Junior,Senior)
+
+tab_5</code></pre>
+<pre><code>##   fin_aid Freshman Sophomore Junior Senior
+## 1     Yes      508       349    425    288
+## 2      No      371       337    384    338</code></pre>
 <ol style="list-style-type: lower-alpha">
-<li><p>Calculate the probability of receiving financial aid given that a student is a Senior.</p></li>
-<li><p>Calculate the probability that a student is a Senior given that they receive financial aid.</p></li>
-<li><p>Calculate the probability of receiving financial aid given that a student is a Freshman</p></li>
+<li>Calculate the probability of receiving financial aid given that a student is a Senior.</li>
 </ol>
-<p><em>4. Describe two advantages and disadvantages of using line-fitting methods as opposed to calculating local means</em></p>
+<pre class="r"><code>tab_5 |&gt; 
+  group_by(fin_aid) |&gt; 
+  summarize(prob_Senior = Senior / 626)</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   fin_aid prob_Senior
+##   &lt;chr&gt;         &lt;dbl&gt;
+## 1 No            0.540
+## 2 Yes           0.460</code></pre>
+<p>This would look at the conditional column of being a Senior and calculating the probability of receiving financial aid. The number of seniors total is 338 + 288 = 626. Of those 288 receive financial aid. So conditional on being a senior, the probability of receiving financial aid is 288 / 626 = 0.46</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Calculate the probability that a student is a Senior given that they receive financial aid.</li>
+</ol>
+<p>This looks at the conditional row of receiving financial aid and calculating the probability of being a Senior. The number of people total who receive financial aid are 1570. Of those, 288 are Seniors. Conditional on receiving financial aid, the probability of being a Senior is 288 / 1570 = 0.18.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Calculate the probability of receiving financial aid given that a student is a Freshman</li>
+</ol>
+<p>This is the same process of question 3a. The number of Freshman total are 508 + 371 = 879. Conditional on being a freshman, the probability of receiving financial aid is 508 / 879 = 0.58.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Describe two advantages and one disadvantages of using line-fitting methods as opposed to calculating local means</li>
+</ol>
+<p>Advantage - line fitting gives the conditional mean of Y for any value of X, even if we don’t have data on that specific value and it let’s us cleanly describe the relationship between X and Y.</p>
+<p>Disadvantage - you have to choose the right underlying distribution for line fitting to get an accurate assessment</p>
 <ol start="5" style="list-style-type: decimal">
-<li></li>
+<li>Consider the line: <span class="math inline">\(Y = 4 - 3.5X\)</span></li>
 </ol>
+<ol style="list-style-type: lower-alpha">
+<li>What is the conditional predicted mean of Y when X = 6</li>
+</ol>
+<p>Y = 4 - 3.5 (6) = -17</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>What is the conditional predicted mean of Y when X = -2</li>
+</ol>
+<p>Y = 11</p>
+<ol start="6" style="list-style-type: decimal">
+<li><p>Which term describes a measurement of how much two variables vary with each other – <strong>covariance</strong></p></li>
+<li><p>What is the different between covariance and correlation?</p></li>
+</ol>
+<p>Correlation is a method of rescaling covariance by dividing it by the standard deviation of each variable. This allows us to see more clearly the strength of a relationship and allows us to compare correlation coefficients between analyses were covariance, which remains in the unit of the variable, might be harder to interpret comparatively. How you interpret the correlation is: every 1 standard deviation change in variable X corresponds to a ?? standard deviation change variable Y with values going from -1 to 1.</p>
+<ol start="8" style="list-style-type: decimal">
+<li>Based on the fictional data on math exam scores by intelligence measure collected from a sample of 100 students:</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li><p>What type of shape is fitted in Figure A? – <em>a straight line</em></p></li>
+<li><p>What type of shape is fitted in Figure B? – <em>a parabola</em></p></li>
+<li><p>Which shape is better fit and how can you tell? – <em>the parabola because the data points are closer to the line (the residuals will be smaller)</em></p></li>
+<li><p>For figure A, describe the residuals for different ranges of math exam scores.</p></li>
+</ol>
+<p>There are observed data both above and below the line in figure A. The ones above the line are generally further away producing higher residual values. There are more data points below the line and they are generally closer to the line, meaning the residuals are smaller but there are more of them.</p>
+<ol start="9" style="list-style-type: decimal">
+<li>The table below has data on 5 employees on how well they get along with coworkers and job satisfaction. The rediction variable is the predicted satisfaction level, or conditional mean of satisfaction, for each value for GetAlong derived after fitting a line of best fit using OLS:</li>
+</ol>
+<pre class="r"><code>getalong &lt;- c(4.7,4.21,5.42,4.14,3.3)
+sat &lt;- c(5.07,4.05,5.33,4.02,3.59)
+pred &lt;- c(4.72,4.28,5.38,4.22,3.45)
+
+tab_9 &lt;- data.frame(getalong,sat,pred)
+tab_9</code></pre>
+<pre><code>##   getalong  sat pred
+## 1     4.70 5.07 4.72
+## 2     4.21 4.05 4.28
+## 3     5.42 5.33 5.38
+## 4     4.14 4.02 4.22
+## 5     3.30 3.59 3.45</code></pre>
+<ol style="list-style-type: lower-alpha">
+<li>Create a column ‘residual’ that takes the residual value for each observation:</li>
+</ol>
+<pre class="r"><code>tab_9 &lt;- tab_9 |&gt; mutate(residual = sat - pred)
+
+tab_9</code></pre>
+<pre><code>##   getalong  sat pred residual
+## 1     4.70 5.07 4.72     0.35
+## 2     4.21 4.05 4.28    -0.23
+## 3     5.42 5.33 5.38    -0.05
+## 4     4.14 4.02 4.22    -0.20
+## 5     3.30 3.59 3.45     0.14</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Describe how OLS uses residuals when fitting a line</li>
+</ol>
+<p>OLS fits the line that gives the lowest sum of squared residuals.</p>
+<ol start="10" style="list-style-type: decimal">
+<li>Consider the example: What is the relationship between first generation status and graduation rate in a population of college students?</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>Give an example of a variable that might explain why first generation status and graduation rate are correlated other than one causing the other.</li>
+</ol>
+<p>A potential variable would be household income. Household income could be correlated with first generation status (as we’ve seen that holding a bachelors degree has some correlation with income) and household income may also have an impact of graduation rates, particularly around the ability to pay for the entirety of a college education.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Describe in five steps how you would subtract out the part of the first-generation/graduation-rate relationship that is explained by the variable you listed in part a.</li>
+</ol>
+<ol style="list-style-type: decimal">
+<li>Find the mean of first-gen status conditional on income</li>
+<li>Subtract out the conditional mean to get the residual of first-gen status</li>
+<li>Find the mean of graduation rate conditional on income</li>
+<li>Subtract out the conditional mean to get the residual of graduation rate status</li>
+<li>Describe the relationship between the residual of first-gen status and the residual of graduation rate</li>
+</ol>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>How would you interpret the first-generation/graduation-rate relationship you get after performing the steps in part b?</li>
+</ol>
+<p>This relationship should be devoid of an effect of income. If the relationship between these residuals is very low or 0, then income explained a substantial part of the relationship. If there is still a strong relationship, then there is part of the relationship that is not explained by income.</p>
 </div>
 </div>
 

@@ -114,7 +114,7 @@ d < a < c < b
 
 First, I load the packages associated with this textbook:
 
-```{r}
+```{r results='hide'}
 install.packages('causaldata',repos="https://cran.us.r-project.org")
 ```
 
@@ -127,7 +127,7 @@ e) draw the LOESS and linear regression curves of the mean of log earnings condi
 f) run a linear regression of log earnings on log household earning by itself and with controls
 
 
-```{r}
+```{r results='hide'}
 #loading libraries
 
 library(tidyverse)
@@ -151,9 +151,13 @@ glimpse(df)
 Looking up the Mroz data, some relevant variable terms are:
 
 lfp = labor force participation 
+
 k5  = number of children 5 years old or younger
+
 wc = wife attended college
+
 lwg = log expected wages
+
 inc = family income exclusive of wife's income
 
 
@@ -217,12 +221,29 @@ msummary(list(model1,model2))
 ```
 
 
-But this shows that model 2 has a larger intercept value, *meaning that...*
+But this shows that model 2 has a larger intercept value, *meaning that when you control for college and children under 5, the log expected wages is higher.
 
-*We can also do this in Bayesian notation using rstanarm...[do this last analysis that way]*
+We can also do this the Bayesian way using rstanarm.
+
+```{r Bayesian Models, results='hide'}
+library(rstanarm)
+library(broom)
+library(broom.mixed)
+options(mc.cores=parallel::detectCores())
+
+b1 <- stan_glm(lwg ~ log(inc),data = df)
+b2 <- stan_glm(lwg ~ log(inc) + wc + k5, data = df)
+```
+
+```{r}
+tidy(b1)
+tidy(b2)
+```
+
+This is decently close. The more complex model is further off. 
 
 
-## Homework Questions
+## Chapter 4 Homework Questions
 
 1. What is a conditional distribution?
 
@@ -241,7 +262,7 @@ b. Does the graph indicate that lower income causes depression?
 No. The graph only shows a correlation between depression and income level. This graph does not represent a display of causality.
 
 
-*3. Using the provided table from university students on their financial aid receipt status:*
+3. Using the provided table from university students on their financial aid receipt status:
 
 ```{r}
 #create the table
@@ -274,7 +295,6 @@ b.	Calculate the probability that a student is a Senior given that they receive 
 This looks at the conditional row of receiving financial aid and calculating the probability of being a Senior. The number of people total who receive financial aid are 1570. Of those, 288 are Seniors. Conditional on receiving financial aid, the probability of being a Senior is 288 / 1570 = 0.18.
 
 
-
 c.	Calculate the probability of receiving financial aid given that a student is a Freshman
 
 This is the same process of question 3a. The number of Freshman total are 508 + 371 = 879. Conditional on being a freshman, the probability of receiving financial aid is 508 / 879 = 0.58.
@@ -303,7 +323,7 @@ Y = 11
 
 7. What is the different between covariance and correlation?
 
-Correlation is a method of rescaling covariance by dividing it by the standard deviation of each variable. This allows us to see more clearly the strength of a relationship and allows us to compare correlation coefficients between analyses were covariance, which remains in the unit of the variable, might be harder to interpret comparatively.
+Correlation is a method of rescaling covariance by dividing it by the standard deviation of each variable. This allows us to see more clearly the strength of a relationship and allows us to compare correlation coefficients between analyses were covariance, which remains in the unit of the variable, might be harder to interpret comparatively. How you interpret the correlation is: every 1 standard deviation change in variable X corresponds to a ?? standard deviation change variable Y with values going from -1 to 1. 
 
 
 8. Based on the fictional data on math exam scores by intelligence measure collected from a sample of 100 students:
@@ -316,4 +336,52 @@ c. Which shape is better fit and how can you tell? -- *the parabola because the 
 
 d. For figure A, describe the residuals for different ranges of math exam scores.
 
-There are residuals both above and below the line in figure A. The ones above the line are generally further away...
+There are observed data both above and below the line in figure A. The ones above the line are generally further away producing higher residual values. There are more data points below the line and they are generally closer to the line, meaning the residuals are smaller but there are more of them.
+
+
+9. The table below has data on 5 employees on how well they get along with coworkers and job satisfaction. The rediction variable is the predicted satisfaction level, or conditional mean of satisfaction, for each value for GetAlong derived after fitting a line of best fit using OLS:
+
+```{r}
+getalong <- c(4.7,4.21,5.42,4.14,3.3)
+sat <- c(5.07,4.05,5.33,4.02,3.59)
+pred <- c(4.72,4.28,5.38,4.22,3.45)
+
+tab_9 <- data.frame(getalong,sat,pred)
+tab_9
+```
+
+
+a. Create a column 'residual' that takes the residual value for each observation:
+
+```{r}
+tab_9 <- tab_9 |> mutate(residual = sat - pred)
+
+tab_9
+```
+
+
+b. Describe how OLS uses residuals when fitting a line
+
+OLS fits the line that gives the lowest sum of squared residuals.
+
+
+10. Consider the example: What is the relationship between first generation status and graduation rate in a population of college students?
+
+a.	Give an example of a variable that might explain why first generation status and graduation rate are correlated other than one causing the other.
+
+A potential variable would be household income. Household income could be correlated with first generation status (as we've seen that holding a bachelors degree has some correlation with income) and household income may also have an impact of graduation rates, particularly around the ability to pay for the entirety of a college education.
+
+
+b.	Describe in five steps how you would subtract out the part of the first-generation/graduation-rate relationship that is explained by the variable you listed in part a.
+
+
+1. Find the mean of first-gen status conditional on income
+2. Subtract out the conditional mean to get the residual of first-gen status
+3. Find the mean of graduation rate conditional on income
+4. Subtract out the conditional mean to get the residual of graduation rate status
+5. Describe the relationship between the residual of first-gen status and the residual of graduation rate
+
+
+c.	How would you interpret the first-generation/graduation-rate relationship you get after performing the steps in part b?
+
+This relationship should be devoid of an effect of income. If the relationship between these residuals is very low or 0, then income explained a substantial part of the relationship. If there is still a strong relationship, then there is part of the relationship that is not explained by income.

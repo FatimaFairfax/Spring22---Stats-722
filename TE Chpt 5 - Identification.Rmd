@@ -1,0 +1,102 @@
+---
+title: "Chpt 5 HW - The Effect"
+author: "Fatima Fairfax"
+date: "1/16/2022"
+output: html_document
+---
+
+# Chapter 5 - Identification
+
+## 1. List three assumptions you made about the data generating process before sitting in a chair.
+
+  a. the chair is made of solid materials
+  b. the chair construction is good enough to carry my weight
+  c. the chair remains at the same height whether you are sitting in it or not
+
+
+## 2. Which term is the best definition of the term *identified* as in "this variation has identified the effect we're interested in"?
+
+    d. In the variation we use, there's no reason we'd see any relationship at all except for the effect we're interested in
+    
+
+## 3.	Go to your favorite news source and find an article that describes the results of a new empirical study. Describe what you think are some features of the data generating process. What are some ways to explain their result other than the interpretation they had? Did the study (as described in the article) have ways of blocking out the alternate explanation you thought of?
+
+Through a reputable new source (aka Twitter news feed) I found an article that claims: "Oral CBD Prevented Covid-19 Infection in Real-World Patients, Study Suggests." They found that the rate of positive infections in those with seizure conditions that are prescribed and take oral CBD were lower than the rate of positive infections for those who do not take CBD. This was also accompanied by some lab testing that suggests that CBD might inhibit replication of genes that grow and spread the virus. (The actual report does disclaim that they do not endorse substituting CBD for vaccines and that this is not an excuse to invest in unregulated forms of cannibal substances)
+
+The authors likely thought that those with seizures and other related co-morbidities are at increased risk for covid-19 infection. CBD has medical properties that may reduce incidents of covid-19 infections. People with co-morbidities in the current environment of a covid world are likely to try unconventional avenues to mitigate risk (such as CBD).
+
+*Alternate Explanations:* The authors do look at populations with the same main co-morbidity (seizures), and state that on some main demographics the treatment and control groups are similar. However there are other alternative explanations that could be at play. There are likely wealth and medical access differences in people who can obtain and afford oral CBD. Those who can afford treatment probably already have other protective factors that would lower their positive covid testing rate, such as the exposure at their job site (people who can work remote v "essential workers). One explanation could be that CBD has a political connotation as well and perhaps more "liberal" patients are willing to try CBD treatment and are also more likely to be vaccinated based on their political views. Alternatively, perhaps those more likely to be willing to try CBD treatments are those who are more trusting of science and new medicines. They would also be people more likely to trust and have gotten covid vaccines and boosters. People who might CBD also might be people who are looking in to other alternative medicines and using multiple things that lead to their lower rate of infection.  
+
+
+
+## 4.	You read about a new study with the headline “eating caviar linked to longer lifespan.” The study’s research question is “does eating caviar make you live longer?” In the study’s data, they find that people who eat caviar have, on average, longer lifespans than people who don’t.
+
+a.	What are some alternate explanations for this relationship? 
+
+ - Caviar is very expensive. If you are eating caviar you are likely wealthy. Wealth, and high SES, is tied to better health through life-style and resource and other connections.
+ 
+ - Young people likely don't have the taste for caviar, so you're likely going to get people who have already lived more life than others
+ 
+ - If you eat caviar it may be because you are pescatarian which may have links to health and lifespan (not making that claim at all)
+
+
+b.	What sort of variation would identify the answer to the research question?
+
+We want to find the variation in lifespan that is driven by if (or how much) caviar people eat. 
+
+
+c.	Give one suggestion for how the study authors might isolate variation that would identify the answer to the research question
+
+The authors could look at the relationship between caviar eating and lifespan in difference income brackets, which would control for some wealth disparities and see if there is still a link between caviar eating and lifespan.
+
+
+
+## 5.	For each of the following news headlines, assume that the underlying data actually only shows a correlation between the two variables mentioned. Give an alternate explanation for the correlation other than the causal relationship implied by the headline.
+
+a.	“As stock market drops, presidential approval ratings decline.”
+
+War! What is it good for? Plummeting stock markets and decreased presidential approval ratings. If a country is at war or attacked, the stock market will likely feel that effect and the president will likely have less approval.
+
+b.	“Dates are announced for the downtown summer concert series, driving up sales at downtown restaurants.” 
+
+Lifting lockdown restrictions. In this covid-age, the release of the summer concert dates come when the lockdown restrictions were lifted for the whole of "downtown" which would also be associated with increased restaurant sales (because they are now open again).
+
+c.	“Unsanitary? Hospital visits linked to 20% increased risk of disease.” 
+
+Chronic illness would lead people to be in hospitals more than the average population. They have more hospital visits and more incidents of disease. 
+
+
+d.	“Dress for success! Every CEO follows this office-wear rule.”
+
+Wealth! Wealthy people will be able to afford fancy suits and follow expensive trends and they will also be better positioned to become CEOs through networks and other resources. 
+
+
+
+## 6.	Why is a variable that causes both the “treatment” and “outcome” variables especially concerning for identification? You may want to use the phrase “alternate explanation” in your answer.
+
+A variable that causes both the treatment and outcome variable makes it hard to tease out the actual causal relationship between the treatment and outcome. If you can't isolate the effects of that confounder, then it could be the case that the only thing relating the treatment and control is that third variable.
+
+
+
+## 7.	Shoe company Crikey claims that people who wear their fancy and expensive professional running-shoe Cool Mistrunner brand run 4 to 5% faster than if they wore an average shoe. 
+
+a.	In a few sentences, describe the data-generating process (you will probably leave some things out, that’s okay).
+
+The shoe company likely thought that most people who run wear shoes, and they wear proper running-shoes. In addition, certain designs / materials enhance the ability for runners to run and that their specific combination of design and materials increases running performance above the average shoe.
+
+
+b.	What are possible alternative explanations for this claim, aside from the shoe making the person run faster?
+
+If you have the resources to invest in the fancy expensive shoe then you may have resources to help you train (treadmill, trainers etc.). You also may have more leisure time with which to train (assuming higher SES comes with more free time). Also, if you are investing in such a shoe, you are likely already dedicated to running and are likely already faster than someone who just got a regular shoe to run casually.
+
+
+c.	In running their study, the researchers accounted for some alternative explanations, including: gender, enthusiasm for running, and whether runners have participated in marathons and/or half marathons. Think of an alternative explanation not on this list. What is the implication of not accounting for this alternative explanation?
+
+SES of those able to afford the shoe. Those will have more resources and potentially leisure time to train and run long races would be something that could cause both the treatment (buying expensive shoes) and the outcome (being a faster runner). The implication of not accounting for this alternative explanation is that you would overemphasize the effect of the shoe on running speed where it could actually have no effect on speed when SES is held constant.
+
+
+
+## 8.	Which of the following terms describe how a variable changes from observation to observation?
+
+    b.	Variation
+

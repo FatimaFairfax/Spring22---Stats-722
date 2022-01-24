@@ -21,11 +21,11 @@ output: html_document
 
 ## 3.	Go to your favorite news source and find an article that describes the results of a new empirical study. Describe what you think are some features of the data generating process. What are some ways to explain their result other than the interpretation they had? Did the study (as described in the article) have ways of blocking out the alternate explanation you thought of?
 
-Through a reputable new source (aka Twitter news feed) I found an article that claims: "Oral CBD Prevented Covid-19 Infection in Real-World Patients, Study Suggests." They found that the rate of positive infections in those with seizure conditions that are prescribed and take oral CBD were lower than the rate of positive infections for those who do not take CBD. This was also accompanied by some lab testing that suggests that CBD might inhibit replication of genes that grow and spread the virus. (The actual report does disclaim that they do not endorse substituting CBD for vaccines and that this is not an excuse to invest in unregulated forms of cannibal substances)
+Through a reputable news source (aka Twitter news feed) I found an article that claims: "Oral CBD Prevented Covid-19 Infection in Real-World Patients, Study Suggests." They found that the rate of positive covid-19 infections in those with seizure conditions that are prescribed and take oral CBD were lower than the rate of positive covid-19 infections for those who do not take CBD. This was also accompanied by some lab testing that suggests that CBD might inhibit replication of genes that grow and spread the virus. (The actual report does disclaim that they do not endorse substituting CBD for vaccines and that this is not an excuse to invest in unregulated forms of cannibal substances)
 
 The authors likely thought that those with seizures and other related co-morbidities are at increased risk for covid-19 infection. CBD has medical properties that may reduce incidents of covid-19 infections. People with co-morbidities in the current environment of a covid world are likely to try unconventional avenues to mitigate risk (such as CBD).
 
-*Alternate Explanations:* The authors do look at populations with the same main co-morbidity (seizures), and state that on some main demographics the treatment and control groups are similar. However there are other alternative explanations that could be at play. There are likely wealth and medical access differences in people who can obtain and afford oral CBD. Those who can afford treatment probably already have other protective factors that would lower their positive covid testing rate, such as the exposure at their job site (people who can work remote v "essential workers). One explanation could be that CBD has a political connotation as well and perhaps more "liberal" patients are willing to try CBD treatment and are also more likely to be vaccinated based on their political views. Alternatively, perhaps those more likely to be willing to try CBD treatments are those who are more trusting of science and new medicines. They would also be people more likely to trust and have gotten covid vaccines and boosters. People who might CBD also might be people who are looking in to other alternative medicines and using multiple things that lead to their lower rate of infection.  
+*Alternate Explanations:* The authors do look at populations with the same main co-morbidity (seizures), and state that on some main demographics the treatment and control groups are similar. However there are other alternative explanations that could be at play. There are likely wealth and medical access differences in people who can obtain and afford oral CBD. Those who can afford treatment probably already have other protective factors that would lower their positive covid testing rate, such as the exposure at their job site (people who can work remote v "essential workers"). One explanation could be that CBD has a political connotation as well and perhaps more  "liberal" patients are willing to try CBD treatment and are also more likely to be vaccinated based on their political views. Alternatively, perhaps those more likely to be willing to try CBD treatments are those who are more trusting of science and new medicines. They would also be people more likely to trust and have gotten covid vaccines and boosters. People who might try CBD also might be people who are looking in to other alternative medicines and using multiple things that lead to their lower rate of infection.  
 
 
 
@@ -33,11 +33,9 @@ The authors likely thought that those with seizures and other related co-morbidi
 
 a.	What are some alternate explanations for this relationship? 
 
- - Caviar is very expensive. If you are eating caviar you are likely wealthy. Wealth, and high SES, is tied to better health through life-style and resource and other connections.
+ - Caviar is very expensive. If you are eating caviar you are likely wealthy. Wealth, and high SES, is tied to better health through life-style, resources, and other factors.
  
- - Young people likely don't have the taste for caviar, so you're likely going to get people who have already lived more life than others
- 
- - If you eat caviar it may be because you are pescatarian which may have links to health and lifespan (not making that claim at all)
+ - Young people likely don't have the taste for caviar or are less likely to have been exposed to situations where they would even be able to try caviar. This means you are likely accounting for people who have already lived more life than others.
 
 
 b.	What sort of variation would identify the answer to the research question?
@@ -47,7 +45,7 @@ We want to find the variation in lifespan that is driven by if (or how much) cav
 
 c.	Give one suggestion for how the study authors might isolate variation that would identify the answer to the research question
 
-The authors could look at the relationship between caviar eating and lifespan in difference income brackets, which would control for some wealth disparities and see if there is still a link between caviar eating and lifespan.
+The authors could look at the relationship between caviar eating and lifespan in different income brackets, which would control for some wealth disparities and see if there is still a link between caviar eating and lifespan.
 
 
 
@@ -68,13 +66,13 @@ Chronic illness would lead people to be in hospitals more than the average popul
 
 d.	“Dress for success! Every CEO follows this office-wear rule.”
 
-Wealth! Wealthy people will be able to afford fancy suits and follow expensive trends and they will also be better positioned to become CEOs through networks and other resources. 
+Wealth! Wealthy people will be able to afford fancy suits and follow expensive trends and they will also be better positioned to become CEOs through their networks and with other resources. 
 
 
 
 ## 6.	Why is a variable that causes both the “treatment” and “outcome” variables especially concerning for identification? You may want to use the phrase “alternate explanation” in your answer.
 
-A variable that causes both the treatment and outcome variable makes it hard to tease out the actual causal relationship between the treatment and outcome. If you can't isolate the effects of that confounder, then it could be the case that the only thing relating the treatment and control is that third variable.
+A variable that causes both the treatment and outcome variable makes it hard to tease out the actual causal relationship between the treatment and outcome and could be the source of an alternate explanation for the observed association between treatment and outcome. If you can't isolate the effects of that confounder, then it could be the case that the only thing relating the treatment and control is that third variable.
 
 
 
@@ -92,7 +90,7 @@ If you have the resources to invest in the fancy expensive shoe then you may hav
 
 c.	In running their study, the researchers accounted for some alternative explanations, including: gender, enthusiasm for running, and whether runners have participated in marathons and/or half marathons. Think of an alternative explanation not on this list. What is the implication of not accounting for this alternative explanation?
 
-SES of those able to afford the shoe. Those will have more resources and potentially leisure time to train and run long races would be something that could cause both the treatment (buying expensive shoes) and the outcome (being a faster runner). The implication of not accounting for this alternative explanation is that you would overemphasize the effect of the shoe on running speed where it could actually have no effect on speed when SES is held constant.
+SES of those able to afford the shoe. People with a higher SES will have more resources and potentially leisure time to train and run long races. This could cause both the treatment (buying expensive shoes) and the outcome (being a faster runner). The implication of not accounting for this alternative explanation is that you would overemphasize the effect of the shoe on running speed where it could actually have no effect on speed when SES is held constant.
 
 
 

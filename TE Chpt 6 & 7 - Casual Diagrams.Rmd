@@ -1,0 +1,226 @@
+---
+title: "TE Chpt 6 & 7 - Casual Diagrams"
+author: "Fatima Fairfax"
+date: "1/22/2022"
+output: html_document
+---
+
+# Causal Diagrams - Chapter 6
+
+## Question 1
+
+In a conversation with your friend, you mention a study you read that found that being tall causally makes you more likely to earn above $100,000 per year. Your friend says the study must be wrong, since they know several tall people who make much less than that, and several short people who do earn that much. Does your friend’s reasoning make sense or not, and why?
+
+  My friend does not have the right reasoning, though they are right to be skeptical of the conclusion of the study. The fact that they know some tall people who make less money and short people that make more doesn't have any bearing on the fact that at the aggregate, being tall makes it *more* likely that you make over $100k a year. There are definitely other factors that contribute to the likelihood that any individual person makes over $100k, so her short friends make have other features that positively correlate with money and her tall friends may have other ones that negatively correlate with money. If she were to look across her friends and control for other types of variation (e.g., family wealth, education attainment, occupation) then she might be able to challenge the study I found.
+
+
+## Question 2
+
+Consider the diagram: [[INSERT DIAGRAM LIKE PATH MODELS]]
+
+```{r}
+library(DiagrammeR)
+library(tidyverse)
+```
+
+```{r}
+flip_chart <- 
+  create_graph() |> #initiate graph
+  add_n_nodes(
+    n = 5,
+    type = "path",
+    label = c("TerrysMood", "CoinFlip", "TerryInRoom", "Cake", "Money"), #Labels for each node
+    node_aes = node_aes(
+      shape = "circle",
+      height = 1,
+      width = 1,
+      x = c(0,3,3,6,6), #Just the heights of each node (so it looks like a tree)
+      y = c(0,2,-2,2,0),
+      fill = c("blue", "blue", "blue", "blue", "blue"))) |> 
+  add_edge(
+    from = 1,
+    to = 3) |> 
+  add_edge(
+      from = 2,
+      to = 4) |> 
+  add_edge(
+      from = 2,
+      to = 5) |>  
+  add_edge(
+      from = 3,
+      to = 5)
+
+render_graph(flip_chart)
+```
+
+
+Which variables have a direct effect on money?
+
+  CoinFlip and TerryInRoom have direct effects on money.
+
+Which variables have an indirect effect on money?
+
+  Terry's Mood has an indirect effect on Money
+  
+
+## Question 3
+
+"Does reading Harry Potter as a child make you read more as an adult?"
+
+```{r}
+hp_chart <- 
+  create_graph() |> #initiate graph
+  add_n_nodes(
+    n = 5,
+    type = "path",
+    label = c("AgePotterReleased", "HarryPotterAsKid", "LikesReading", "ReadOtherRowlingBooks", "ReadingAsAdult"), #Labels for each node
+    node_aes = node_aes(
+      shape = "circle",
+      height = 1,
+      width = 1,
+      x = c(0,0,3,3,6), #Just the heights of each node (so it looks like a tree)
+      y = c(3,0,2,-2,0),
+      fill = c("blue", "blue", "grey", "blue", "blue"))) |> 
+  add_edge(
+    from = 1,
+    to = 2) |> 
+  add_edge(
+      from = 2,
+      to = 4) |> 
+  add_edge(
+      from = 2,
+      to = 5) |>  
+  add_edge(
+      from = 3,
+      to = 2,
+      edge_aes = edge_aes(
+        color = "gray")) |> 
+  add_edge(
+    from = 4,
+    to = 5
+  ) |> 
+  add_edge(
+    from = 3,
+    to = 5,
+    edge_aes = edge_aes(
+    color = "gray"
+  ))
+
+render_graph(hp_chart)
+```
+
+
+a.	What direct effects should be included when trying to answer your research question of interest?
+
+The direct effects included in this diagram include "likesreading," "readotherrowlingbooks," and "harrypotteraskid."
+
+b.	What indirect effects should be included when trying to answer your research question of interest?
+
+The indirect effect in this diagram is "agepotterreleased." This is relevant because Harry Potter may have been released when people are already out of childhood, so this would have an effect on if there is a relationship. 
+
+Another thing to be considered is language. If harry potter was not available in a child's native language during childhood then that would have an effect on this diagram as well. 
+
+
+c.	What is a likely alternative explanation of why we might see a relationship between reading Harry Potter and reading more as an adult?
+
+Besides generally liking reading...
+
+
+## Question 4
+
+a. Why do we bother to include variables on our diagram if we can't observe them?
+
+There is no way we can see all of the variables that might be part of the causal mechanism between two variables, but even if we can't see or measure it we know that there are many factors that may reasonably have an effect on the variables of interest. We include them in the diagram to account for the fact that we know there may be other influences that we can identify but can't observe.
+
+b. Why might we think that LikesReading is an unobserved or latent variable?
+
+Liking reading would make it more likely that a child would read a lot of things, including something as popular as Harry Potter, and that trait would likely also carry them through life where they read more as an adult. This variable would effect both variables and would overstate the effect of of reading Harry Potter on reading as adult.
+
+
+## Question 5
+
+Consider the research question: "do government fire-safety ads reduct forest fires?"
+
+a. Draw a causal diagram with:
+    (a) ForestFires is caused by FireSafetyAds
+    (b) FireSafetyAds and ParkRangers are caused by GovtBudget (the government has to pay for this stuff!)
+    (c) GovtBudget is caused by TimeSinceLastFire— a recent fire might get more money sent to the parks department
+
+
+b. Suggest one omitted arrow or variable that should be on the diagram
+
+
+## Question 6
+
+Think of a research question:
+
+a. The DGP for this question is:
+
+b. The cause of interest is _____ and the outcome is _____.
+
+c. What other variables are in play?
+
+d. Draw a causal diagram depicting the relationship between all of the variables?
+
+e. Can there be any unobserved or latent variables? Include them in the diagram.
+
+
+## Question 7
+
+Consider the research question: "Does the inclusion of 'free shipping' cause problem to buy items from an online store more?"
+
+a. Six variables that should be included in a causal diagram
+
+b. Is it feasible to collect data on all the variables that you listed in part a? Can the variables be measured easily?
+
+
+## Question 8
+
+Casuality is...
+
+
+## Question 9
+
+Which of the following describes a representation of a data generating process (DGP) including variables in that DGP and the causal relationships between them?
+
+    d. Casusal diagram
+    
+
+# Drawing Causal Diagrams - Chapter 7
+
+## Question 1
+
+In a simplified casual diagram about the DGP of viewership for a TV show:
+
+
+
+## Question 2
+
+Draw a causal diagram for the question: "do long shift hours make doctors give lower-quality care?" that incorporates:
+  
+a.	Long shift hours affect both how tired doctors are, and how much experience they have, both of which affect the quality of care
+b.	How long shifts are is often decided by the hospital the doctor works at. There are plenty of other things about a given hospital that also affect the quality of care, like its funding level, how crowded it is, and so on
+c.	New policies that reduce shift times may be implemented at the same time (with the timing determined by some unobservable change in policy preferences) as other policies that also attempt to improve the quality of care
+
+
+
+## Question 3
+
+Consider the question: Does funding level of public schools affect student achievement for students in your country?
+
+a.	What is the treatment and what is the outcome of interest? 
+b.	Write down a list of relevant variables. 
+c.	Which of the variables in your list in part b are causes of both treatment and outcome? 
+d.	Why might we want to pay extra attention to the variables listed in part c?
+e.	Draw a causal diagram of the variables listed in part b.
+f.	Simplify the diagram from part e.
+
+
+## Question 4
+
+Describe the kinds of situations that each of the following could be applied to in order to simplify a casual diagram
+
+
+
+
+

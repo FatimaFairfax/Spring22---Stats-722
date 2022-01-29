@@ -184,7 +184,7 @@ pre code {
 </div>
 <div id="question-2" class="section level2">
 <h2>Question 2</h2>
-<p>Consider the diagram: [[INSERT DIAGRAM LIKE PATH MODELS]]</p>
+<p>Consider the diagram:</p>
 <pre class="r"><code>library(DiagrammeR)
 library(tidyverse)</code></pre>
 <pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
@@ -222,12 +222,10 @@ library(tidyverse)</code></pre>
       to = 5)
 
 render_graph(flip_chart)</code></pre>
-<div id="htmlwidget-7f987c6e0806610ec170" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7f987c6e0806610ec170">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"TerrysMood\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"2\" [label = \"CoinFlip\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,2!\"] \n  \"3\" [label = \"TerryInRoom\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,-2!\"] \n  \"4\" [label = \"Cake\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"6,2!\"] \n  \"5\" [label = \"Money\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"6,0!\"] \n  \"1\"->\"3\" \n  \"2\"->\"4\" \n  \"2\"->\"5\" \n  \"3\"->\"5\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-<p>Which variables have a direct effect on money?</p>
-<p>CoinFlip and TerryInRoom have direct effects on money.</p>
-<p>Which variables have an indirect effect on money?</p>
-<p>Terry’s Mood has an indirect effect on Money</p>
+<div id="htmlwidget-cb570698c8880d6e1c78" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cb570698c8880d6e1c78">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"TerrysMood\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"2\" [label = \"CoinFlip\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,2!\"] \n  \"3\" [label = \"TerryInRoom\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,-2!\"] \n  \"4\" [label = \"Cake\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"6,2!\"] \n  \"5\" [label = \"Money\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"6,0!\"] \n  \"1\"->\"3\" \n  \"2\"->\"4\" \n  \"2\"->\"5\" \n  \"3\"->\"5\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>Which variables have a direct effect on money? – CoinFlip and TerryInRoom have direct effects on money.</p>
+<p>Which variables have an indirect effect on money? – Terry’s Mood has an indirect effect on Money</p>
 </div>
 <div id="question-3" class="section level2">
 <h2>Question 3</h2>
@@ -240,8 +238,8 @@ render_graph(flip_chart)</code></pre>
     label = c(&quot;AgePotterReleased&quot;, &quot;HarryPotterAsKid&quot;, &quot;LikesReading&quot;, &quot;ReadOtherRowlingBooks&quot;, &quot;ReadingAsAdult&quot;), #Labels for each node
     node_aes = node_aes(
       shape = &quot;circle&quot;,
-      height = 1,
-      width = 1,
+      height = 0.5,
+      width = 1.5,
       x = c(0,0,3,3,6), #Just the heights of each node (so it looks like a tree)
       y = c(3,0,2,-2,0),
       fill = c(&quot;blue&quot;, &quot;blue&quot;, &quot;grey&quot;, &quot;blue&quot;, &quot;blue&quot;))) |&gt; 
@@ -271,12 +269,12 @@ render_graph(flip_chart)</code></pre>
   ))
 
 render_graph(hp_chart)</code></pre>
-<div id="htmlwidget-3b09b651f298f5f267f4" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3b09b651f298f5f267f4">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"AgePotterReleased\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"0,3!\"] \n  \"2\" [label = \"HarryPotterAsKid\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"3\" [label = \"LikesReading\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#C0C0C0\", fontcolor = \"#FFFFFF\", pos = \"3,2!\"] \n  \"4\" [label = \"ReadOtherRowlingBooks\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,-2!\"] \n  \"5\" [label = \"ReadingAsAdult\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"6,0!\"] \n\"1\"->\"2\" [color = \"gray80\"] \n\"2\"->\"4\" [color = \"gray80\"] \n\"2\"->\"5\" [color = \"gray80\"] \n\"3\"->\"2\" [color = \"gray\"] \n\"4\"->\"5\" [color = \"gray80\"] \n\"3\"->\"5\" [color = \"gray\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-0e6e8a78024dce814c0f" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0e6e8a78024dce814c0f">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"AgePotterReleased\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"0,3!\"] \n  \"2\" [label = \"HarryPotterAsKid\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"3\" [label = \"LikesReading\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#C0C0C0\", fontcolor = \"#FFFFFF\", pos = \"3,2!\"] \n  \"4\" [label = \"ReadOtherRowlingBooks\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,-2!\"] \n  \"5\" [label = \"ReadingAsAdult\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"6,0!\"] \n\"1\"->\"2\" [color = \"gray80\"] \n\"2\"->\"4\" [color = \"gray80\"] \n\"2\"->\"5\" [color = \"gray80\"] \n\"3\"->\"2\" [color = \"gray\"] \n\"4\"->\"5\" [color = \"gray80\"] \n\"3\"->\"5\" [color = \"gray\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <ol style="list-style-type: lower-alpha">
 <li>What direct effects should be included when trying to answer your research question of interest?</li>
 </ol>
-<p>The direct effects included in this diagram include “likesreading,” “readotherrowlingbooks,” and “harrypotteraskid.”</p>
+<p>The direct effects included in this diagram are “likesreading,” “readotherrowlingbooks,” and “harrypotteraskid.” Another thing that could be included is “liked harry potter” or books of that genre. If a child reads harry potter and does not like the book, it might deter them from reading more books.</p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>What indirect effects should be included when trying to answer your research question of interest?</li>
 </ol>
@@ -285,7 +283,7 @@ render_graph(hp_chart)</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What is a likely alternative explanation of why we might see a relationship between reading Harry Potter and reading more as an adult?</li>
 </ol>
-<p>Besides generally liking reading…</p>
+<p>Besides generally liking reading, reading more as an adult and reading Harry Potter could be due to engagement in a school. Perhaps schools assign books, including Harry Potter, and formal education also leads to adults being in positions where they have to read as an adult.</p>
 </div>
 <div id="question-4" class="section level2">
 <h2>Question 4</h2>
@@ -300,7 +298,7 @@ render_graph(hp_chart)</code></pre>
 </div>
 <div id="question-5" class="section level2">
 <h2>Question 5</h2>
-<p>Consider the research question: “do government fire-safety ads reduct forest fires?”</p>
+<p>Consider the research question: “do government fire-safety ads reduce forest fires?”</p>
 <ol style="list-style-type: lower-alpha">
 <li>Draw a causal diagram with:
 <ol style="list-style-type: lower-alpha">
@@ -308,31 +306,145 @@ render_graph(hp_chart)</code></pre>
 <li>FireSafetyAds and ParkRangers are caused by GovtBudget (the government has to pay for this stuff!)</li>
 <li>GovtBudget is caused by TimeSinceLastFire— a recent fire might get more money sent to the parks department</li>
 </ol></li>
+</ol>
+<pre class="r"><code>fire_chart &lt;- 
+  create_graph() |&gt; #initiate graph
+  add_n_nodes(
+    n = 5,
+    type = &quot;path&quot;,
+    label = c(&quot;TimeSinceLastFire&quot;, &quot;GovtBudget&quot;, &quot;FireSafetyAds&quot;, &quot;ParkRangers&quot;, &quot;ForestFires&quot;), #Labels for each node
+    node_aes = node_aes(
+      shape = &quot;circle&quot;,
+      height = 1,
+      width = 1,
+      x = c(0,2,4,4,6), #Just the heights of each node (so it looks like a tree)
+      y = c(0,0,2,-2,0),
+      fill = c(&quot;purple&quot;, &quot;purple&quot;, &quot;purple&quot;, &quot;purple&quot;, &quot;purple&quot;))) |&gt; 
+  add_edge(
+    from = 1,
+    to = 2) |&gt; 
+  add_edge(
+      from = 2,
+      to = 3) |&gt; 
+  add_edge(
+      from = 2,
+      to = 4) |&gt;
+  add_edge(
+    from = 3,
+    to = 5)
+
+render_graph(fire_chart)</code></pre>
+<div id="htmlwidget-ffb08c9d19a96aadaf69" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ffb08c9d19a96aadaf69">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"TimeSinceLastFire\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"2\" [label = \"GovtBudget\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"2,0!\"] \n  \"3\" [label = \"FireSafetyAds\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"4,2!\"] \n  \"4\" [label = \"ParkRangers\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"4,-2!\"] \n  \"5\" [label = \"ForestFires\", shape = \"circle\", height = \"1\", width = \"1\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"6,0!\"] \n  \"1\"->\"2\" \n  \"2\"->\"3\" \n  \"2\"->\"4\" \n  \"3\"->\"5\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<ol start="2" style="list-style-type: lower-alpha">
 <li>Suggest one omitted arrow or variable that should be on the diagram</li>
 </ol>
+<p>In methods, we would have signs on these arrows and in that scenario there would be a negative arrow between ParkRangers and ForestFires.</p>
+<p>Another (positive) arrow that might exist is between TimeSinceLastFire and ForestFires. Perhaps there are down periods after fires where the conditions are better or worse from more fires.</p>
+<p>Another variable might be gender reveal parties…</p>
 </div>
 <div id="question-6" class="section level2">
 <h2>Question 6</h2>
-<p>Think of a research question:</p>
+<p>Think of a research question: Does parental income have a positive effect on child’s high school GPA?</p>
 <ol style="list-style-type: lower-alpha">
-<li><p>The DGP for this question is:</p></li>
-<li><p>The cause of interest is _____ and the outcome is _____.</p></li>
-<li><p>What other variables are in play?</p></li>
-<li><p>Draw a causal diagram depicting the relationship between all of the variables?</p></li>
-<li><p>Can there be any unobserved or latent variables? Include them in the diagram.</p></li>
+<li>Describe the DGP for this question:</li>
 </ol>
+<p>Parents likely contribute whatever resources they have to their child’s education. The more resources they have, the more parents can contribute. A child’s GPA is not just dependent on inherent ability, but resources make a difference in a child’s academic achievement. Parent’s with resources live in like places which may have an effect on the overall environment that a child learns in.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>The cause of interest is <strong>Parental income</strong> and the outcome is <strong>Child’s High School GPA</strong>.</p></li>
+<li><p>What other variables are in play?</p></li>
+</ol>
+<ul>
+<li>school quality</li>
+<li>teacher student ratios</li>
+<li>school district</li>
+<li>tutoring opportunities</li>
+<li>parental education level</li>
+<li>intelligence</li>
+</ul>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Draw a causal diagram depicting the relationship between all of the variables</li>
+</ol>
+<pre class="r"><code>ed_chart &lt;- 
+  create_graph() |&gt; 
+  add_n_nodes(
+    n = 7,
+    type = &quot;path&quot;,
+    label = c(&quot;ParentalEducation&quot;,&quot;ParentalIncome&quot;,&quot;SchoolDistrict&quot;,&quot;Tutoring&quot;,&quot;TeacherRatios&quot;,&quot;ChildGPA&quot;,&quot;Intelligence&quot;),
+    node_aes = node_aes(
+      shape = &quot;circle&quot;,
+      height = 0.5,
+      width = 1.5,
+      x = c(0,0,3,3,3,6,3),
+      y = c(2,0,0,2,-2,0,-4),
+      fill = c(&quot;darkgreen&quot;,&quot;darkgreen&quot;,&quot;darkgreen&quot;,&quot;darkgreen&quot;,&quot;darkgreen&quot;,&quot;darkgreen&quot;,&quot;gray&quot;))) |&gt; 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |&gt; 
+  add_edge(
+    from = 2,
+    to = 3
+  ) |&gt; 
+  add_edge(
+    from = 2,
+    to = 5
+  ) |&gt; 
+  add_edge(
+    from = 3,
+    to = 4
+  ) |&gt; 
+  add_edge(
+    from = 3,
+    to = 5
+  ) |&gt; 
+  add_edge(
+    from = 4,
+    to = 6
+  ) |&gt; 
+  add_edge(
+    from = 5,
+    to = 6
+  ) |&gt; 
+  add_edge(
+    from = 7,
+    to = 2
+  ) |&gt; 
+  add_edge(
+    from = 7,
+    to = 6
+  )
+
+render_graph(ed_chart)</code></pre>
+<div id="htmlwidget-2f89cc90a43a6d0b6f43" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2f89cc90a43a6d0b6f43">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"ParentalEducation\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#006400\", fontcolor = \"#FFFFFF\", pos = \"0,2!\"] \n  \"2\" [label = \"ParentalIncome\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#006400\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"3\" [label = \"SchoolDistrict\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#006400\", fontcolor = \"#FFFFFF\", pos = \"3,0!\"] \n  \"4\" [label = \"Tutoring\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#006400\", fontcolor = \"#FFFFFF\", pos = \"3,2!\"] \n  \"5\" [label = \"TeacherRatios\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#006400\", fontcolor = \"#FFFFFF\", pos = \"3,-2!\"] \n  \"6\" [label = \"ChildGPA\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#006400\", fontcolor = \"#FFFFFF\", pos = \"6,0!\"] \n  \"7\" [label = \"Intelligence\", shape = \"circle\", height = \"0.5\", width = \"1.5\", fillcolor = \"#C0C0C0\", fontcolor = \"#FFFFFF\", pos = \"3,-4!\"] \n  \"1\"->\"2\" \n  \"2\"->\"3\" \n  \"2\"->\"5\" \n  \"3\"->\"4\" \n  \"3\"->\"5\" \n  \"4\"->\"6\" \n  \"5\"->\"6\" \n  \"7\"->\"2\" \n  \"7\"->\"6\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Can there be any unobserved or latent variables? Include them in the diagram.</li>
+</ol>
+<p>One unobserved variable might be intelligence. In a meritocracy, intelligence may lead to a parent being in a position to have a high income and if intelligence can be passed down to children / is an innate trait, that would also be relevant in the relationship between income and GPA.</p>
 </div>
 <div id="question-7" class="section level2">
 <h2>Question 7</h2>
-<p>Consider the research question: “Does the inclusion of ‘free shipping’ cause problem to buy items from an online store more?”</p>
+<p>Consider the research question: “Does the inclusion of ‘free shipping’ cause people to buy items from an online store more?”</p>
 <ol style="list-style-type: lower-alpha">
-<li><p>Six variables that should be included in a causal diagram</p></li>
-<li><p>Is it feasible to collect data on all the variables that you listed in part a? Can the variables be measured easily?</p></li>
+<li>Six variables that should be included in a causal diagram</li>
 </ol>
+<ul>
+<li>‘free shipping’ label</li>
+<li>purchase of online items</li>
+<li>disposable income</li>
+<li>distance from physical store</li>
+<li>public transportation availability</li>
+<li>owning a car</li>
+</ul>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Is it feasible to collect data on all the variables that you listed in part a? Can the variables be measured easily?</li>
+</ol>
+<p>You could collect data on all of these variables through a survey and/or online purchase history. They are all reasonably easy to measure. The presence or absence of ‘free shipping’ and the subsequent purchase can be taken from the purchase history. Income and car possession could be self reported. The public transportation availability and distance from the physical store could be measured if the respondent provides an address, though these two would likely take the most work.</p>
 </div>
 <div id="question-8" class="section level2">
 <h2>Question 8</h2>
-<p>Casuality is…</p>
+<p>There is no single definition for causality. However, causality can be understood as the relationship between the cause and effect, or the change in probability of an outcome as a result of the change in a condition. Causality is important and interesting because it can help us understand the mechanisms through which outcomes occur which can help us understand the world better and interfere at the right places when we want to change outcomes.</p>
 </div>
 <div id="question-9" class="section level2">
 <h2>Question 9</h2>
@@ -344,7 +456,13 @@ render_graph(hp_chart)</code></pre>
 <h1>Drawing Causal Diagrams - Chapter 7</h1>
 <div id="question-1-1" class="section level2">
 <h2>Question 1</h2>
-<p>In a simplified casual diagram about the DGP of viewership for a TV show:</p>
+<p>In a simplified casual diagram about the DGP of viewership for a TV show, which of these is true?</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>The diagram should include a variable for “number of celebrities in the cast” – <strong>True</strong>. This would be a relevant variable to include.</p></li>
+<li><p>The diagram should contain one variable for “show airs in the evening” and another for “show doesn’t air in the evening” – <strong>False</strong> this would be redundant information.</p></li>
+<li><p>The diagram should not contain a variable for “show budget” because budgets are often secret and the researcher can’t measure them – <strong>False</strong> even if this can’t be measured, it is still likely a part of the causal mechanism so it’s appropriate to include it in the diagram</p></li>
+<li><p>The diagram should contain the variable “review score in the Jefferson Weekly,” which is the newspaper published by the students at Jefferson High School, with a readership of about 120 people. – <strong>False</strong> this variable would be unimportant because the effect, if existent at all, would be very weak since it’s only relevant for 120 people.</p></li>
+</ol>
 </div>
 <div id="question-2-1" class="section level2">
 <h2>Question 2</h2>
@@ -354,22 +472,351 @@ render_graph(hp_chart)</code></pre>
 <li>How long shifts are is often decided by the hospital the doctor works at. There are plenty of other things about a given hospital that also affect the quality of care, like its funding level, how crowded it is, and so on</li>
 <li>New policies that reduce shift times may be implemented at the same time (with the timing determined by some unobservable change in policy preferences) as other policies that also attempt to improve the quality of care</li>
 </ol>
+<pre class="r"><code>hosp_chart &lt;- 
+  create_graph() |&gt; 
+  add_n_nodes(
+    n = 6,
+    type = &quot;path&quot;,
+    label = c(&quot;LongHours&quot;,&quot;Tiredness&quot;,&quot;Experience&quot;,&quot;HospitalConditions&quot;,&quot;HealthcarePolicies&quot;,&quot;LowQualityCare&quot;),
+    node_aes = node_aes(
+      shape = &quot;square&quot;,
+      height = 0.5,
+      width = 1.5,
+      x = c(0,3,3,3,3,6),
+      y = c(0,3,1,-1,-3,0),
+      fill = c(&quot;purple&quot;,&quot;lightblue&quot;,&quot;lightblue&quot;,&quot;lightblue&quot;,&quot;lightblue&quot;,&quot;purple&quot;))) |&gt; 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |&gt; 
+  add_edge(
+    from = 1,
+    to = 3
+  ) |&gt; 
+  add_edge(
+    from = 2,
+    to = 6
+  ) |&gt; 
+  add_edge(
+    from = 3,
+    to = 6
+  ) |&gt; 
+  add_edge(
+    from = 1,
+    to = 6
+  ) |&gt; 
+  add_edge(
+    from = 4,
+    to = 1
+  ) |&gt; 
+  add_edge(
+    from = 4,
+    to = 6
+  ) |&gt; 
+  add_edge(
+    from = 5,
+    to = 1
+  ) |&gt; 
+  add_edge(
+    from = 5,
+    to = 6
+  )
+
+render_graph(hosp_chart)</code></pre>
+<div id="htmlwidget-3e2dbae80f6486a16d4f" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3e2dbae80f6486a16d4f">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"LongHours\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"2\" [label = \"Tiredness\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#ADD8E6\", fontcolor = \"#FFFFFF\", pos = \"3,3!\"] \n  \"3\" [label = \"Experience\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#ADD8E6\", fontcolor = \"#FFFFFF\", pos = \"3,1!\"] \n  \"4\" [label = \"HospitalConditions\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#ADD8E6\", fontcolor = \"#FFFFFF\", pos = \"3,-1!\"] \n  \"5\" [label = \"HealthcarePolicies\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#ADD8E6\", fontcolor = \"#FFFFFF\", pos = \"3,-3!\"] \n  \"6\" [label = \"LowQualityCare\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"6,0!\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n  \"2\"->\"6\" \n  \"3\"->\"6\" \n  \"1\"->\"6\" \n  \"4\"->\"1\" \n  \"4\"->\"6\" \n  \"5\"->\"1\" \n  \"5\"->\"6\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="question-3-1" class="section level2">
 <h2>Question 3</h2>
 <p>Consider the question: Does funding level of public schools affect student achievement for students in your country?</p>
 <ol style="list-style-type: lower-alpha">
 <li>What is the treatment and what is the outcome of interest?</li>
+</ol>
+<p>The treatment is <strong>funding for public schools</strong> and the outcome is <strong>student achievement</strong></p>
+<ol start="2" style="list-style-type: lower-alpha">
 <li>Write down a list of relevant variables.</li>
+</ol>
+<ul>
+<li>funding allocation within schools</li>
+<li>number of teachers</li>
+<li>student resources (like books, laptops etc)</li>
+<li>number of students</li>
+<li>outside tutoring</li>
+<li>SES of the school district</li>
+<li>tutoring</li>
+</ul>
+<ol start="3" style="list-style-type: lower-alpha">
 <li>Which of the variables in your list in part b are causes of both treatment and outcome?</li>
+</ol>
+<p>SES of the school district has an effect on both the treatment and the outcome. Funding for schools are usually driven by property tax, which is higher in more expensive neighborhoods. Also, higher SES families will be able to afford things like tutors for their kids to raise their achievement. They also have resources and influence over how schools function that might increase their child’s achievement (deserved or otherwise).</p>
+<ol start="4" style="list-style-type: lower-alpha">
 <li>Why might we want to pay extra attention to the variables listed in part c?</li>
+</ol>
+<p>The variables in c are confounders which means that they effect both the treatment and outcome. If we don’t account for these variables we might be overstating the causal relationship between the treatment and the outcome.</p>
+<ol start="5" style="list-style-type: lower-alpha">
 <li>Draw a causal diagram of the variables listed in part b.</li>
+</ol>
+<pre class="r"><code>school2_chart &lt;- 
+  create_graph() |&gt; 
+  add_n_nodes(
+    n = 8,
+    type = &quot;path&quot;,
+    label = c(&quot;Funding&quot;,&quot;Allocation&quot;,&quot;NumTeachers&quot;,&quot;StudentResources&quot;,&quot;NumStudents&quot;,&quot;Tutoring&quot;,&quot;DistrictSES&quot;,&quot;StudentAchieve&quot;),
+    node_aes = node_aes(
+      shape = &quot;square&quot;,
+      height = 0.5,
+      width = 1.5,
+      x = c(0,2,4,3,4,4,2,6),
+      y = c(0,2,2,0,-2,-4,-3,0),
+      fill = c(&quot;purple&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;purple&quot;))) |&gt; 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |&gt; 
+  add_edge(
+    from = 1,
+    to = 3
+  ) |&gt; 
+  add_edge(
+    from = 1,
+    to = 4
+  ) |&gt; 
+  add_edge(
+    from = 2,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 3,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 4,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 5,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 6,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 7,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 7,
+    to = 1
+  ) 
+
+render_graph(school2_chart)</code></pre>
+<div id="htmlwidget-58344154193e6a226e32" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-58344154193e6a226e32">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Funding\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"2\" [label = \"Allocation\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"2,2!\"] \n  \"3\" [label = \"NumTeachers\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"4,2!\"] \n  \"4\" [label = \"StudentResources\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,0!\"] \n  \"5\" [label = \"NumStudents\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"4,-2!\"] \n  \"6\" [label = \"Tutoring\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"4,-4!\"] \n  \"7\" [label = \"DistrictSES\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"2,-3!\"] \n  \"8\" [label = \"StudentAchieve\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"6,0!\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n  \"1\"->\"4\" \n  \"2\"->\"8\" \n  \"3\"->\"8\" \n  \"4\"->\"8\" \n  \"5\"->\"8\" \n  \"6\"->\"8\" \n  \"7\"->\"8\" \n  \"7\"->\"1\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<ol start="6" style="list-style-type: lower-alpha">
 <li>Simplify the diagram from part e.</li>
 </ol>
+<p>To simplify this, I will take out number of students and tutoring as they only impact the outcome, so are less relevant for this causal relationship. I will also remove Number of teachers as it is somewhat redundant with student resources.</p>
+<pre class="r"><code>school2rev &lt;- 
+  create_graph() |&gt; 
+  add_n_nodes(
+    n = 5,
+    type = &quot;path&quot;,
+    label = c(&quot;Funding&quot;,&quot;Allocation&quot;,&quot;StudentResources&quot;,&quot;DistrictSES&quot;,&quot;StudentAchieve&quot;),
+    node_aes = node_aes(
+      shape = &quot;square&quot;,
+      height = 0.5,
+      width = 1.5,
+      x = c(0,3,3,3,6),
+      y = c(0,2,0,-2,0),
+      fill = c(&quot;purple&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;purple&quot;))) |&gt; 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |&gt; 
+  add_edge(
+    from = 1,
+    to = 3
+  ) |&gt; 
+  add_edge(
+    from = 2,
+    to = 5
+  ) |&gt;  
+  add_edge(
+    from = 3,
+    to = 5
+  ) |&gt; 
+  add_edge(
+    from = 4,
+    to = 5
+  ) |&gt; 
+  add_edge(
+    from = 4,
+    to = 1
+  ) 
+
+render_graph(school2rev)</code></pre>
+<div id="htmlwidget-de1999d7169d96fec444" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-de1999d7169d96fec444">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Funding\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"2\" [label = \"Allocation\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,2!\"] \n  \"3\" [label = \"StudentResources\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,0!\"] \n  \"4\" [label = \"DistrictSES\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"3,-2!\"] \n  \"5\" [label = \"StudentAchieve\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A020F0\", fontcolor = \"#FFFFFF\", pos = \"6,0!\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n  \"2\"->\"5\" \n  \"3\"->\"5\" \n  \"4\"->\"5\" \n  \"4\"->\"1\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="question-4-1" class="section level2">
 <h2>Question 4</h2>
 <p>Describe the kinds of situations that each of the following could be applied to in order to simplify a casual diagram</p>
+<ol style="list-style-type: lower-alpha">
+<li><p><strong>Unimportance</strong> – if the presence of a variable has a very small and relatively weak effect on the variables of interest we can remove the variable</p></li>
+<li><p><strong>Redundancy</strong> – if multiple variables occupy the same space (i.e., are in the same location of the causal mechanism and have cause and effects to the same variables) they can likely be combined and described together</p></li>
+<li><p><strong>Mediators</strong> – if a variable is only in the graph to show the mechanism between two other variables, with no other arrow coming in or out of B then it can likely be removed</p></li>
+<li><p><strong>Irrelevance</strong> – if a variable is important to the DGP but irrelevant to the research question of interest then it can probably be taken out of the diagram</p></li>
+</ol>
+</div>
+<div id="question-5-1" class="section level2">
+<h2>Question 5</h2>
+<p>How can a causal diagram be modified so as to avoid cyclic relationships?</p>
+<p>To get out of a cycle you can add a time component. Time only moves in one direction, which will prevent a cycle. You can also find a source of random variation. If you focus on random variation, the effect can’t loop back on itself.</p>
+</div>
+<div id="question-6-1" class="section level2">
+<h2>Question 6</h2>
+<p>Research Question: Does exposure to information about income inequality make college students more likely to support wealth redistribution policies?</p>
+<ol style="list-style-type: lower-alpha">
+<li>What is the cause variable and what is the outcome variable?</li>
+</ol>
+<p><strong>Cause</strong>: exposure to income inequality information</p>
+<p><strong>Outcome</strong>: support of wealth redistribution policies</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Write down a list of between 5 and 10 relevant variables in the data generating process.</li>
+</ol>
+<ul>
+<li>exposure to income inequality info</li>
+<li>support of wealth redistribution policy</li>
+<li>self-reported political affiliation</li>
+<li>self-reported class status</li>
+<li>household SES / income</li>
+<li>experience in the workforce</li>
+<li>parents level of tuition contribution</li>
+<li>network class heterogeneity</li>
+</ul>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Draw a causal diagram incorporating all the variables from part b.</li>
+</ol>
+<pre class="r"><code>wealth_chart &lt;- 
+  create_graph() |&gt; 
+  add_n_nodes(
+    n = 8,
+    type = &quot;path&quot;,
+    label = c(&quot;InfoExposure&quot;,&quot;WorkforceExp&quot;,&quot;ParentPayTuition&quot;,&quot;NetworkHeterogeneity&quot;,&quot;ClassStatus&quot;,&quot;PoliticalAffil&quot;,&quot;SES&quot;,&quot;SupportRedistribution&quot;),
+    node_aes = node_aes(
+      shape = &quot;square&quot;,
+      height = 0.5,
+      width = 1.5,
+      x = c(0,2,2,2,4,6,5,4),
+      y = c(0,2,0,-2,3,3,-3,0),
+      fill = c(&quot;orange2&quot;,&quot;gray&quot;,&quot;gray&quot;,&quot;gray&quot;,&quot;gray&quot;,&quot;gray&quot;,&quot;gray&quot;,&quot;orange2&quot;))) |&gt; 
+  add_edge(
+    from = 1,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 2,
+    to = 1
+  ) |&gt; 
+  add_edge(
+    from = 2,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 3,
+    to = 1
+  ) |&gt; 
+  add_edge(
+    from = 3,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 4,
+    to = 1
+  ) |&gt; 
+  add_edge(
+    from = 4,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 5,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 6,
+    to = 8
+  ) |&gt; 
+  add_edge(
+    from = 7,
+    to = 8
+  ) 
+
+render_graph(wealth_chart)</code></pre>
+<div id="htmlwidget-2acecbc41813ac49d7f5" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2acecbc41813ac49d7f5">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"InfoExposure\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#EE9A00\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"2\" [label = \"WorkforceExp\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#C0C0C0\", fontcolor = \"#FFFFFF\", pos = \"2,2!\"] \n  \"3\" [label = \"ParentPayTuition\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#C0C0C0\", fontcolor = \"#FFFFFF\", pos = \"2,0!\"] \n  \"4\" [label = \"NetworkHeterogeneity\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#C0C0C0\", fontcolor = \"#FFFFFF\", pos = \"2,-2!\"] \n  \"5\" [label = \"ClassStatus\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#C0C0C0\", fontcolor = \"#FFFFFF\", pos = \"4,3!\"] \n  \"6\" [label = \"PoliticalAffil\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#C0C0C0\", fontcolor = \"#FFFFFF\", pos = \"6,3!\"] \n  \"7\" [label = \"SES\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#C0C0C0\", fontcolor = \"#FFFFFF\", pos = \"5,-3!\"] \n  \"8\" [label = \"SupportRedistribution\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#EE9A00\", fontcolor = \"#FFFFFF\", pos = \"4,0!\"] \n  \"1\"->\"8\" \n  \"2\"->\"1\" \n  \"2\"->\"8\" \n  \"3\"->\"1\" \n  \"3\"->\"8\" \n  \"4\"->\"1\" \n  \"4\"->\"8\" \n  \"5\"->\"8\" \n  \"6\"->\"8\" \n  \"7\"->\"8\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Stop working on this problem for fifteen minutes and do something else. Then come back, look at your causal diagram from part c again, and describe one bad assumption you think it made, or something it left out</li>
+</ol>
+<p>A potential bad assumption is that political affiliation and SES do not have a direct effect on exposure to income inequality information. Also, that SES does not have a direct effect on parents tuition contribution. SES also likely has a bearing on network class heterogeneity that is missing as well. It’s also missing something about knowledge of or about policies that would be relevant for this causal mechanism.</p>
+</div>
+<div id="question-7-1" class="section level2">
+<h2>Question 7</h2>
+<p>Consider the diagram below.</p>
+<pre class="r"><code>stumo_chart &lt;- 
+  create_graph() |&gt; 
+  add_n_nodes(
+    n = 2,
+    type = &quot;path&quot;,
+    label = c(&quot;Student Achievement&quot;,&quot;Motivation&quot;),
+    node_aes = node_aes(
+      shape = &quot;square&quot;,
+      height = 0.5,
+      width = 1.5,
+      x = c(0, 4),
+      y = c(0,0),
+      fill = c(&quot;brown&quot;,&quot;brown&quot;))) |&gt; 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |&gt; 
+  add_edge(
+    from = 2,
+    to = 1
+  )
+
+render_graph(stumo_chart)</code></pre>
+<div id="htmlwidget-7cfce5cf4e74d2583dfa" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7cfce5cf4e74d2583dfa">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Student Achievement\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A52A2A\", fontcolor = \"#FFFFFF\", pos = \"0,0!\"] \n  \"2\" [label = \"Motivation\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A52A2A\", fontcolor = \"#FFFFFF\", pos = \"4,0!\"] \n  \"1\"->\"2\" \n  \"2\"->\"1\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>It depicts a cyclical relationship between student achievement and motivation. If students achieve more (i.e., score well on exams), then their motivation goes up, and if their motivation goes up, they achieve more. Change the diagram so that the relationship is not cyclic anymore</p>
+<p>To break this cycle, we can employ a time dimension. Motivation can come before student achievement or achievement can come before motivation.</p>
+<pre class="r"><code>stumo_2 &lt;- 
+  create_graph() |&gt; 
+  add_n_nodes(
+    n = 4,
+    type = &quot;path&quot;,
+    label = c(&quot;StudentAchieve_t&quot;,&quot;Motivation_t&quot;,&quot;Motivation_t+1&quot;,&quot;StudentAcheive_t+1&quot;),
+    node_aes = node_aes(
+      shape = &quot;square&quot;,
+      height = 0.5,
+      width = 1.5,
+      x = c(0,0,4,4),
+      y = c(2,-2,-2,2),
+      fill = c(&quot;brown&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;brown&quot;)
+    )
+  ) |&gt; 
+  add_edge(
+    from = 1,
+    to = 3
+  ) |&gt; 
+  add_edge(
+    from = 2,
+    to = 4
+  )
+
+render_graph(stumo_2)</code></pre>
+<div id="htmlwidget-321704dd886db26bbc6b" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-321704dd886db26bbc6b">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"StudentAchieve_t\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A52A2A\", fontcolor = \"#FFFFFF\", pos = \"0,2!\"] \n  \"2\" [label = \"Motivation_t\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"0,-2!\"] \n  \"3\" [label = \"Motivation_t+1\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#0000FF\", fontcolor = \"#FFFFFF\", pos = \"4,-2!\"] \n  \"4\" [label = \"StudentAcheive_t+1\", shape = \"square\", height = \"0.5\", width = \"1.5\", fillcolor = \"#A52A2A\", fontcolor = \"#FFFFFF\", pos = \"4,2!\"] \n  \"1\"->\"3\" \n  \"2\"->\"4\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 

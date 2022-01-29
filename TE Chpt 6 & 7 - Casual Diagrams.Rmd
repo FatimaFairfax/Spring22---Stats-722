@@ -16,14 +16,14 @@ In a conversation with your friend, you mention a study you read that found that
 
 ## Question 2
 
-Consider the diagram: [[INSERT DIAGRAM LIKE PATH MODELS]]
+Consider the diagram:
 
 ```{r}
 library(DiagrammeR)
 library(tidyverse)
 ```
 
-```{r}
+```{r Terry Flip Chart}
 flip_chart <- 
   create_graph() |> #initiate graph
   add_n_nodes(
@@ -54,20 +54,16 @@ render_graph(flip_chart)
 ```
 
 
-Which variables have a direct effect on money?
+Which variables have a direct effect on money? -- CoinFlip and TerryInRoom have direct effects on money.
 
-  CoinFlip and TerryInRoom have direct effects on money.
-
-Which variables have an indirect effect on money?
-
-  Terry's Mood has an indirect effect on Money
+Which variables have an indirect effect on money? -- Terry's Mood has an indirect effect on Money
   
 
 ## Question 3
 
 "Does reading Harry Potter as a child make you read more as an adult?"
 
-```{r}
+```{r Potter Chart}
 hp_chart <- 
   create_graph() |> #initiate graph
   add_n_nodes(
@@ -76,8 +72,8 @@ hp_chart <-
     label = c("AgePotterReleased", "HarryPotterAsKid", "LikesReading", "ReadOtherRowlingBooks", "ReadingAsAdult"), #Labels for each node
     node_aes = node_aes(
       shape = "circle",
-      height = 1,
-      width = 1,
+      height = 0.5,
+      width = 1.5,
       x = c(0,0,3,3,6), #Just the heights of each node (so it looks like a tree)
       y = c(3,0,2,-2,0),
       fill = c("blue", "blue", "grey", "blue", "blue"))) |> 
@@ -112,7 +108,7 @@ render_graph(hp_chart)
 
 a.	What direct effects should be included when trying to answer your research question of interest?
 
-The direct effects included in this diagram include "likesreading," "readotherrowlingbooks," and "harrypotteraskid."
+The direct effects included in this diagram are "likesreading," "readotherrowlingbooks," and "harrypotteraskid." Another thing that could be included is "liked harry potter" or books of that genre. If a child reads harry potter and does not like the book, it might deter them from reading more books. 
 
 b.	What indirect effects should be included when trying to answer your research question of interest?
 
@@ -123,7 +119,7 @@ Another thing to be considered is language. If harry potter was not available in
 
 c.	What is a likely alternative explanation of why we might see a relationship between reading Harry Potter and reading more as an adult?
 
-Besides generally liking reading...
+Besides generally liking reading, reading more as an adult and reading Harry Potter could be due to engagement in a school. Perhaps schools assign books, including Harry Potter, and formal education also leads to adults being in positions where they have to read as an adult. 
 
 
 ## Question 4
@@ -139,44 +135,157 @@ Liking reading would make it more likely that a child would read a lot of things
 
 ## Question 5
 
-Consider the research question: "do government fire-safety ads reduct forest fires?"
+Consider the research question: "do government fire-safety ads reduce forest fires?"
 
 a. Draw a causal diagram with:
     (a) ForestFires is caused by FireSafetyAds
     (b) FireSafetyAds and ParkRangers are caused by GovtBudget (the government has to pay for this stuff!)
     (c) GovtBudget is caused by TimeSinceLastFire— a recent fire might get more money sent to the parks department
 
+```{r Fire Chart}
+fire_chart <- 
+  create_graph() |> #initiate graph
+  add_n_nodes(
+    n = 5,
+    type = "path",
+    label = c("TimeSinceLastFire", "GovtBudget", "FireSafetyAds", "ParkRangers", "ForestFires"), #Labels for each node
+    node_aes = node_aes(
+      shape = "circle",
+      height = 1,
+      width = 1,
+      x = c(0,2,4,4,6), #Just the heights of each node (so it looks like a tree)
+      y = c(0,0,2,-2,0),
+      fill = c("purple", "purple", "purple", "purple", "purple"))) |> 
+  add_edge(
+    from = 1,
+    to = 2) |> 
+  add_edge(
+      from = 2,
+      to = 3) |> 
+  add_edge(
+      from = 2,
+      to = 4) |>
+  add_edge(
+    from = 3,
+    to = 5)
+
+render_graph(fire_chart)
+```
+
+
 
 b. Suggest one omitted arrow or variable that should be on the diagram
+
+In methods, we would have signs on these arrows and in that scenario there would be a negative arrow between ParkRangers and ForestFires. 
+
+Another (positive) arrow that might exist is between TimeSinceLastFire and ForestFires. Perhaps there are down periods after fires where the conditions are better or worse from more fires. 
+
+Another variable might be gender reveal parties...
 
 
 ## Question 6
 
-Think of a research question:
+Think of a research question: Does parental income have a positive effect on child's high school GPA?
 
-a. The DGP for this question is:
+a. Describe the DGP for this question:
 
-b. The cause of interest is _____ and the outcome is _____.
+Parents likely contribute whatever resources they have to their child's education. The more resources they have, the more parents can contribute. A child's GPA is not just dependent on inherent ability, but resources make a difference in a child's academic achievement. Parent's with resources live in like places which may have an effect on the overall environment that a child learns in. 
+
+
+b. The cause of interest is **Parental income** and the outcome is **Child's High School GPA**.
 
 c. What other variables are in play?
 
-d. Draw a causal diagram depicting the relationship between all of the variables?
+  - school quality
+  - teacher student ratios
+  - school district
+  - tutoring opportunities
+  - parental education level
+  - intelligence
+
+d. Draw a causal diagram depicting the relationship between all of the variables
+
+```{r Income to GPA diagram}
+ed_chart <- 
+  create_graph() |> 
+  add_n_nodes(
+    n = 7,
+    type = "path",
+    label = c("ParentalEducation","ParentalIncome","SchoolDistrict","Tutoring","TeacherRatios","ChildGPA","Intelligence"),
+    node_aes = node_aes(
+      shape = "circle",
+      height = 0.5,
+      width = 1.5,
+      x = c(0,0,3,3,3,6,3),
+      y = c(2,0,0,2,-2,0,-4),
+      fill = c("darkgreen","darkgreen","darkgreen","darkgreen","darkgreen","darkgreen","gray"))) |> 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |> 
+  add_edge(
+    from = 2,
+    to = 3
+  ) |> 
+  add_edge(
+    from = 2,
+    to = 5
+  ) |> 
+  add_edge(
+    from = 3,
+    to = 4
+  ) |> 
+  add_edge(
+    from = 3,
+    to = 5
+  ) |> 
+  add_edge(
+    from = 4,
+    to = 6
+  ) |> 
+  add_edge(
+    from = 5,
+    to = 6
+  ) |> 
+  add_edge(
+    from = 7,
+    to = 2
+  ) |> 
+  add_edge(
+    from = 7,
+    to = 6
+  )
+
+render_graph(ed_chart)
+```
+
 
 e. Can there be any unobserved or latent variables? Include them in the diagram.
+
+One unobserved variable might be intelligence. In a meritocracy, intelligence may lead to  a parent being in a position to have a high income and if intelligence can be passed down to children / is an innate trait, that would also be relevant in the relationship between income and GPA. 
 
 
 ## Question 7
 
-Consider the research question: "Does the inclusion of 'free shipping' cause problem to buy items from an online store more?"
+Consider the research question: "Does the inclusion of 'free shipping' cause people to buy items from an online store more?"
 
 a. Six variables that should be included in a causal diagram
 
+  - 'free shipping' label
+  - purchase of online items
+  - disposable income
+  - distance from physical store
+  - public transportation availability
+  - owning a car
+
 b. Is it feasible to collect data on all the variables that you listed in part a? Can the variables be measured easily?
+
+You could collect data on all of these variables through a survey and/or online purchase history. They are all reasonably easy to measure. The presence or absence of 'free shipping' and the subsequent purchase can be taken from the purchase history. Income and car possession could be self reported. The public transportation availability and distance from the physical store could be measured if the respondent provides an address, though these two would likely take the most work. 
 
 
 ## Question 8
 
-Casuality is...
+There is no single definition for causality. However, causality can be understood as the relationship between the cause and effect, or the change in probability of an outcome as a result of the change in a condition. Causality is important and interesting because it can help us understand the mechanisms through which outcomes occur which can help us understand the world better and interfere at the right places when we want to change outcomes.
 
 
 ## Question 9
@@ -186,12 +295,23 @@ Which of the following describes a representation of a data generating process (
     d. Casusal diagram
     
 
+
+
+
+
 # Drawing Causal Diagrams - Chapter 7
 
 ## Question 1
 
-In a simplified casual diagram about the DGP of viewership for a TV show:
+In a simplified casual diagram about the DGP of viewership for a TV show, which of these is true?
 
+a.	The diagram should include a variable for “number of celebrities in the cast” -- **True**. This would be a relevant variable to include.
+
+b.	The diagram should contain one variable for “show airs in the evening” and another for “show doesn’t air in the evening” -- **False** this would be redundant information.
+
+c.	The diagram should not contain a variable for “show budget” because budgets are often secret and the researcher can’t measure them -- **False** even if this can't be measured, it is still likely a part of the causal mechanism so it's appropriate to include it in the diagram
+
+d.	The diagram should contain the variable “review score in the Jefferson Weekly,” which is the newspaper published by the students at Jefferson High School, with a readership of about 120 people. -- **False** this variable would be unimportant because the effect, if existent at all, would be very weak since it's only relevant for 120 people. 
 
 
 ## Question 2
@@ -203,24 +323,372 @@ b.	How long shifts are is often decided by the hospital the doctor works at. The
 c.	New policies that reduce shift times may be implemented at the same time (with the timing determined by some unobservable change in policy preferences) as other policies that also attempt to improve the quality of care
 
 
+```{r Hospital Diagram}
+
+hosp_chart <- 
+  create_graph() |> 
+  add_n_nodes(
+    n = 6,
+    type = "path",
+    label = c("LongHours","Tiredness","Experience","HospitalConditions","HealthcarePolicies","LowQualityCare"),
+    node_aes = node_aes(
+      shape = "square",
+      height = 0.5,
+      width = 1.5,
+      x = c(0,3,3,3,3,6),
+      y = c(0,3,1,-1,-3,0),
+      fill = c("purple","lightblue","lightblue","lightblue","lightblue","purple"))) |> 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |> 
+  add_edge(
+    from = 1,
+    to = 3
+  ) |> 
+  add_edge(
+    from = 2,
+    to = 6
+  ) |> 
+  add_edge(
+    from = 3,
+    to = 6
+  ) |> 
+  add_edge(
+    from = 1,
+    to = 6
+  ) |> 
+  add_edge(
+    from = 4,
+    to = 1
+  ) |> 
+  add_edge(
+    from = 4,
+    to = 6
+  ) |> 
+  add_edge(
+    from = 5,
+    to = 1
+  ) |> 
+  add_edge(
+    from = 5,
+    to = 6
+  )
+
+render_graph(hosp_chart)
+
+```
+
+
 
 ## Question 3
 
 Consider the question: Does funding level of public schools affect student achievement for students in your country?
 
 a.	What is the treatment and what is the outcome of interest? 
+
+The treatment is **funding for public schools** and the outcome is **student achievement**
+
 b.	Write down a list of relevant variables. 
-c.	Which of the variables in your list in part b are causes of both treatment and outcome? 
+
+  - funding allocation within schools
+  - number of teachers
+  - student resources (like books, laptops etc)
+  - number of students
+  - outside tutoring
+  - SES of the school district
+  - tutoring
+
+c.	Which of the variables in your list in part b are causes of both treatment and outcome?
+
+SES of the school district has an effect on both the treatment and the outcome. Funding for schools are usually driven by property tax, which is higher in more expensive neighborhoods. Also, higher SES families will be able to afford things like tutors for their kids to raise their achievement. They also have resources and influence over how schools function that might increase their child's achievement (deserved or otherwise).
+
+
 d.	Why might we want to pay extra attention to the variables listed in part c?
+
+The variables in c are confounders which means that they effect both the treatment and outcome. If we don't account for these variables we might be overstating the causal relationship between the treatment and the outcome.
+
 e.	Draw a causal diagram of the variables listed in part b.
+
+```{r school 2 chart}
+school2_chart <- 
+  create_graph() |> 
+  add_n_nodes(
+    n = 8,
+    type = "path",
+    label = c("Funding","Allocation","NumTeachers","StudentResources","NumStudents","Tutoring","DistrictSES","StudentAchieve"),
+    node_aes = node_aes(
+      shape = "square",
+      height = 0.5,
+      width = 1.5,
+      x = c(0,2,4,3,4,4,2,6),
+      y = c(0,2,2,0,-2,-4,-3,0),
+      fill = c("purple","blue","blue","blue","blue","blue","blue","purple"))) |> 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |> 
+  add_edge(
+    from = 1,
+    to = 3
+  ) |> 
+  add_edge(
+    from = 1,
+    to = 4
+  ) |> 
+  add_edge(
+    from = 2,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 3,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 4,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 5,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 6,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 7,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 7,
+    to = 1
+  ) 
+
+render_graph(school2_chart)
+```
+
+
 f.	Simplify the diagram from part e.
+
+To simplify this, I will take out number of students and tutoring as they only impact the outcome, so are less relevant for this causal relationship. I will also remove Number of teachers as it is somewhat redundant with student resources. 
+
+```{r school 2 revised}
+
+school2rev <- 
+  create_graph() |> 
+  add_n_nodes(
+    n = 5,
+    type = "path",
+    label = c("Funding","Allocation","StudentResources","DistrictSES","StudentAchieve"),
+    node_aes = node_aes(
+      shape = "square",
+      height = 0.5,
+      width = 1.5,
+      x = c(0,3,3,3,6),
+      y = c(0,2,0,-2,0),
+      fill = c("purple","blue","blue","blue","purple"))) |> 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |> 
+  add_edge(
+    from = 1,
+    to = 3
+  ) |> 
+  add_edge(
+    from = 2,
+    to = 5
+  ) |>  
+  add_edge(
+    from = 3,
+    to = 5
+  ) |> 
+  add_edge(
+    from = 4,
+    to = 5
+  ) |> 
+  add_edge(
+    from = 4,
+    to = 1
+  ) 
+
+render_graph(school2rev)
+
+```
 
 
 ## Question 4
 
 Describe the kinds of situations that each of the following could be applied to in order to simplify a casual diagram
 
+a. **Unimportance** -- if the presence of a variable has a very small and relatively weak effect on the variables of interest we can remove the variable
+
+b. **Redundancy** -- if multiple variables occupy the same space (i.e., are in the same location of the causal mechanism and have cause and effects to the same variables) they can likely be combined and described together
+
+c. **Mediators** -- if a variable is only in the graph to show the mechanism between two other variables, with no other arrow coming in or out of B then it can likely be removed
+
+d. **Irrelevance** -- if a variable is important to the DGP but irrelevant to the research question of interest then it can probably be taken out of the diagram
 
 
+## Question 5
+
+How can a causal diagram be modified so as to avoid cyclic relationships?
+
+To get out of a cycle you can add a time component. Time only moves in one direction, which will prevent a cycle. You can also find a source of random variation. If you focus on random variation, the effect can't loop back on itself.
+
+
+## Question 6
+
+Research Question: Does exposure to information about income inequality make college students more likely to support wealth redistribution policies?
+
+
+a.	What is the cause variable and what is the outcome variable? 
+
+  **Cause**: exposure to income inequality information
+  
+  **Outcome**: support of wealth redistribution policies
+  
+b.	Write down a list of between 5 and 10 relevant variables in the data generating process. 
+
+  - exposure to income inequality info
+  - support of wealth redistribution policy
+  - self-reported political affiliation
+  - self-reported class status
+  - household SES / income
+  - experience in the workforce
+  - parents level of tuition contribution
+  - network class heterogeneity
+
+c.	Draw a causal diagram incorporating all the variables from part b.
+
+```{r wealth chart}
+wealth_chart <- 
+  create_graph() |> 
+  add_n_nodes(
+    n = 8,
+    type = "path",
+    label = c("InfoExposure","WorkforceExp","ParentPayTuition","NetworkHeterogeneity","ClassStatus","PoliticalAffil","SES","SupportRedistribution"),
+    node_aes = node_aes(
+      shape = "square",
+      height = 0.5,
+      width = 1.5,
+      x = c(0,2,2,2,4,6,5,4),
+      y = c(0,2,0,-2,3,3,-3,0),
+      fill = c("orange2","gray","gray","gray","gray","gray","gray","orange2"))) |> 
+  add_edge(
+    from = 1,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 2,
+    to = 1
+  ) |> 
+  add_edge(
+    from = 2,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 3,
+    to = 1
+  ) |> 
+  add_edge(
+    from = 3,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 4,
+    to = 1
+  ) |> 
+  add_edge(
+    from = 4,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 5,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 6,
+    to = 8
+  ) |> 
+  add_edge(
+    from = 7,
+    to = 8
+  ) 
+
+render_graph(wealth_chart)
+```
+
+
+d.	Stop working on this problem for fifteen minutes and do something else. Then come back, look at your causal diagram from part c again, and describe one bad assumption you think it made, or something it left out
+
+A potential bad assumption is that political affiliation and SES do not have a direct effect on exposure to income inequality information. Also, that SES does not have a direct effect on parents tuition contribution. SES also likely has a bearing on network class heterogeneity that is missing as well. It's also missing something about knowledge of or about policies that would be relevant for this causal mechanism.
+
+
+## Question 7
+
+Consider the diagram below. 
+
+```{r Achievement Motivation Cycle}
+stumo_chart <- 
+  create_graph() |> 
+  add_n_nodes(
+    n = 2,
+    type = "path",
+    label = c("Student Achievement","Motivation"),
+    node_aes = node_aes(
+      shape = "square",
+      height = 0.5,
+      width = 1.5,
+      x = c(0, 4),
+      y = c(0,0),
+      fill = c("brown","brown"))) |> 
+  add_edge(
+    from = 1,
+    to = 2
+  ) |> 
+  add_edge(
+    from = 2,
+    to = 1
+  )
+
+render_graph(stumo_chart)
+
+```
+
+
+It depicts a cyclical relationship between student achievement and motivation. If students achieve more (i.e., score well on exams), then their motivation goes up, and if their motivation goes up, they achieve more. Change the diagram so that the relationship is not cyclic anymore
+
+To break this cycle, we can employ a time dimension. Motivation can come before student achievement or achievement can come before motivation. 
+
+```{r Achievement Motivation Corrected Diagram}
+
+stumo_2 <- 
+  create_graph() |> 
+  add_n_nodes(
+    n = 4,
+    type = "path",
+    label = c("StudentAchieve_t","Motivation_t","Motivation_t+1","StudentAcheive_t+1"),
+    node_aes = node_aes(
+      shape = "square",
+      height = 0.5,
+      width = 1.5,
+      x = c(0,0,4,4),
+      y = c(2,-2,-2,2),
+      fill = c("brown","blue","blue","brown")
+    )
+  ) |> 
+  add_edge(
+    from = 1,
+    to = 3
+  ) |> 
+  add_edge(
+    from = 2,
+    to = 4
+  )
+
+render_graph(stumo_2)
+```
 
 

@@ -11,7 +11,7 @@ output: html_document
 
 In a conversation with your friend, you mention a study you read that found that being tall causally makes you more likely to earn above $100,000 per year. Your friend says the study must be wrong, since they know several tall people who make much less than that, and several short people who do earn that much. Does your friend’s reasoning make sense or not, and why?
 
-  My friend does not have the right reasoning, though they are right to be skeptical of the conclusion of the study. The fact that they know some tall people who make less money and short people that make more doesn't have any bearing on the fact that at the aggregate, being tall makes it *more* likely that you make over $100k a year. There are definitely other factors that contribute to the likelihood that any individual person makes over $100k, so her short friends make have other features that positively correlate with money and her tall friends may have other ones that negatively correlate with money. If she were to look across her friends and control for other types of variation (e.g., family wealth, education attainment, occupation) then she might be able to challenge the study I found.
+  My friend does not have the right reasoning, though they are right to be skeptical of the conclusion of the study. The fact that they know some tall people who make less money and short people that make more doesn't have any bearing on the fact that at the aggregate, being tall makes it *more* likely that you make over $100k a year. There are definitely other factors that contribute to the likelihood that any individual person makes over $100k, so her short friends may have other features that positively correlate with money and her tall friends may have other ones that negatively correlate with money. If she were to look across her friends and control for other types of variation (e.g., family wealth, education attainment, occupation) then she might be able to challenge the study I found.
 
 
 ## Question 2
@@ -54,9 +54,9 @@ render_graph(flip_chart)
 ```
 
 
-Which variables have a direct effect on money? -- CoinFlip and TerryInRoom have direct effects on money.
+Which variables have a direct effect on money? -- *CoinFlip and TerryInRoom have direct effects on money.*
 
-Which variables have an indirect effect on money? -- Terry's Mood has an indirect effect on Money
+Which variables have an indirect effect on money? -- *Terry's Mood has an indirect effect on money*
   
 
 ## Question 3
@@ -108,29 +108,30 @@ render_graph(hp_chart)
 
 a.	What direct effects should be included when trying to answer your research question of interest?
 
-The direct effects included in this diagram are "likesreading," "readotherrowlingbooks," and "harrypotteraskid." Another thing that could be included is "liked harry potter" or books of that genre. If a child reads harry potter and does not like the book, it might deter them from reading more books. 
+The direct effect in this diagram is our research question. I.e., reading harry potter as a child to reading as an adult. 
 
 b.	What indirect effects should be included when trying to answer your research question of interest?
 
-The indirect effect in this diagram is "agepotterreleased." This is relevant because Harry Potter may have been released when people are already out of childhood, so this would have an effect on if there is a relationship. 
+The main indirect effect displayed in this diagram is "read other rowling books." There is also a prior indirect effect of "age when potter was released." This is relevant because Harry Potter may have been released when people are already out of childhood, so this would have an effect on if there is a relationship. 
 
 Another thing to be considered is language. If harry potter was not available in a child's native language during childhood then that would have an effect on this diagram as well. 
 
 
 c.	What is a likely alternative explanation of why we might see a relationship between reading Harry Potter and reading more as an adult?
 
-Besides generally liking reading, reading more as an adult and reading Harry Potter could be due to engagement in a school. Perhaps schools assign books, including Harry Potter, and formal education also leads to adults being in positions where they have to read as an adult. 
+In this diagram, an alternative explanation is "likes reading." This is an alternative explanation because it affects both the treatment (reading Harry Potter) and the outcome (reads as an adult) of interest. Is a person likes reading as a feature of their personality, then they would be more likely to have both the treatment and the outcome. This wouldn't necessarily mean that the treatment had any bearing on the outcome. 
+
 
 
 ## Question 4
 
 a. Why do we bother to include variables on our diagram if we can't observe them?
 
-There is no way we can see all of the variables that might be part of the causal mechanism between two variables, but even if we can't see or measure it we know that there are many factors that may reasonably have an effect on the variables of interest. We include them in the diagram to account for the fact that we know there may be other influences that we can identify but can't observe.
+There is no way we can see all of the variables that might be part of the causal mechanism between two variables, but even if we can't see or measure it we know that there are many factors that may reasonably have an effect on the variables of interest. We include them in the diagram to account for the fact that we know there may be other important influences that we can identify but can't observe.
 
 b. Why might we think that LikesReading is an unobserved or latent variable?
 
-Liking reading would make it more likely that a child would read a lot of things, including something as popular as Harry Potter, and that trait would likely also carry them through life where they read more as an adult. This variable would effect both variables and would overstate the effect of of reading Harry Potter on reading as adult.
+Liking reading would make it more likely that a child would read a lot of things, including something as popular as Harry Potter, and that trait would likely also carry them through life where they read more as an adult. This variable would effect both variables and would overstate the effect of of reading Harry Potter on reading as adult. It might be harder to capture in an observational study if a person likes reading, but we know it might have this effect. 
 
 
 ## Question 5
@@ -138,7 +139,7 @@ Liking reading would make it more likely that a child would read a lot of things
 Consider the research question: "do government fire-safety ads reduce forest fires?"
 
 a. Draw a causal diagram with:
-    (a) ForestFires is caused by FireSafetyAds
+    (a) ForestFires is caused by FireSafetyAds and ParkRangers
     (b) FireSafetyAds and ParkRangers are caused by GovtBudget (the government has to pay for this stuff!)
     (c) GovtBudget is caused by TimeSinceLastFire— a recent fire might get more money sent to the parks department
 
@@ -167,7 +168,11 @@ fire_chart <-
       to = 4) |>
   add_edge(
     from = 3,
-    to = 5)
+    to = 5) |> 
+  add_edge(
+    from = 4,
+    to = 5
+  )
 
 render_graph(fire_chart)
 ```
@@ -176,16 +181,14 @@ render_graph(fire_chart)
 
 b. Suggest one omitted arrow or variable that should be on the diagram
 
-In methods, we would have signs on these arrows and in that scenario there would be a negative arrow between ParkRangers and ForestFires. 
-
-Another (positive) arrow that might exist is between TimeSinceLastFire and ForestFires. Perhaps there are down periods after fires where the conditions are better or worse from more fires. 
+Another arrow that might exist is between TimeSinceLastFire and ForestFires. Perhaps there are down periods after fires where the environmental conditions are better or worse from more fires. 
 
 Another variable might be gender reveal parties...
 
 
 ## Question 6
 
-Think of a research question: Does parental income have a positive effect on child's high school GPA?
+Think of a research question: *Does parental income have a positive effect on child's high school GPA?*
 
 a. Describe the DGP for this question:
 
@@ -196,7 +199,6 @@ b. The cause of interest is **Parental income** and the outcome is **Child's Hig
 
 c. What other variables are in play?
 
-  - school quality
   - teacher student ratios
   - school district
   - tutoring opportunities
@@ -262,7 +264,7 @@ render_graph(ed_chart)
 
 e. Can there be any unobserved or latent variables? Include them in the diagram.
 
-One unobserved variable might be intelligence. In a meritocracy, intelligence may lead to  a parent being in a position to have a high income and if intelligence can be passed down to children / is an innate trait, that would also be relevant in the relationship between income and GPA. 
+One unobserved variable might be intelligence. In a meritocracy, intelligence may lead to a parent being in a position to have a high income and if intelligence can be passed down to children / is an innate trait, that would also be relevant in the relationship between income and GPA. 
 
 
 ## Question 7
@@ -305,7 +307,7 @@ Which of the following describes a representation of a data generating process (
 
 In a simplified casual diagram about the DGP of viewership for a TV show, which of these is true?
 
-a.	The diagram should include a variable for “number of celebrities in the cast” -- **True**. This would be a relevant variable to include.
+a.	The diagram should include a variable for “number of celebrities in the cast” -- **True**. This would be a relevant variable to include. You could assume that more celebrities in a show would draw a larger viewership.
 
 b.	The diagram should contain one variable for “show airs in the evening” and another for “show doesn’t air in the evening” -- **False** this would be redundant information.
 
@@ -330,7 +332,7 @@ hosp_chart <-
   add_n_nodes(
     n = 6,
     type = "path",
-    label = c("LongHours","Tiredness","Experience","HospitalConditions","HealthcarePolicies","LowQualityCare"),
+    label = c("LongHours","Tiredness","Experience","HospitalCultureAndConditions","HealthcarePolicies","LowQualityCare"),
     node_aes = node_aes(
       shape = "square",
       height = 0.5,
@@ -471,7 +473,7 @@ render_graph(school2_chart)
 
 f.	Simplify the diagram from part e.
 
-To simplify this, I will take out number of students and tutoring as they only impact the outcome, so are less relevant for this causal relationship. I will also remove Number of teachers as it is somewhat redundant with student resources. 
+To simplify this, I will take out number of students and tutoring as they only impact the outcome, so are less relevant for this causal relationship. I will also remove number of teachers as it is somewhat redundant with student resources. 
 
 ```{r school 2 revised}
 
@@ -535,7 +537,7 @@ d. **Irrelevance** -- if a variable is important to the DGP but irrelevant to th
 
 How can a causal diagram be modified so as to avoid cyclic relationships?
 
-To get out of a cycle you can add a time component. Time only moves in one direction, which will prevent a cycle. You can also find a source of random variation. If you focus on random variation, the effect can't loop back on itself.
+  To get out of a cycle you can add a time component. Time only moves in one direction, which will prevent a cycle. You     can also find a source of random variation. If you focus on random variation, the effect can't loop back on itself.
 
 
 ## Question 6
@@ -548,6 +550,7 @@ a.	What is the cause variable and what is the outcome variable?
   **Cause**: exposure to income inequality information
   
   **Outcome**: support of wealth redistribution policies
+  
   
 b.	Write down a list of between 5 and 10 relevant variables in the data generating process. 
 

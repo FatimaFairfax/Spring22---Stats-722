@@ -1,0 +1,267 @@
+---
+title: "TE 8&9 Front and Back Doors"
+author: "Fatima Fairfax"
+date: "2/2/2022"
+output: html_document
+---
+
+# Chapter 8: Causal Paths and Closing Back Doors
+
+## Question 8.1
+
+Assuming that a path has no colliders on it, what is the difference between a path being Open and Closed?
+
+    A path is open if all the variables along the path are able to vary. A path is closed if at least one variable along the path has no variation. 
+    
+
+## Question 8.2
+
+In the generic diagram provided:
+
+  a. List every path from X to Y
+  
+    1. X -> A -> Y
+    2. X -> C <- D -> Y
+    3. X -> C <-D -> B -> Y
+    4. X <- B -> Y
+    5. X <- B <- D -> Y
+    
+  
+  b.	Which of the paths are front-door paths?
+  
+    The first path is the only front door path.
+    
+  c.	Which of the paths are open back-door paths?
+  
+    Paths 2, 3, 4 and 5 are open back-door paths.
+  
+  d.	What variables must be controlled for in order to identify the effect of X on Y? (only list what must be controlled for, not anything that additionally could be controlled for).
+  
+    Variables E, B and D should be controlled for to identify the effect of X on Y.
+
+## Question 8.3
+
+Consider the research question: "Does having higher income cause better health?"
+
+a.	Draw a causal diagram depicting the data generating process for this relationship with 5-10 variables on it. 
+
+![Income and Health Image](/Users/fatimafairfax/Desktop/Stats - Complete HW Files/Spring22---Stats-722/Q8.3.png)
+
+b.	Identify the Front Door paths.
+
+    1. Income -> Health
+    2. Income -> Regular check-ups -> Health
+    3. Income -> education -> occupational security -> stress -> health
+    4. Income -> education -> regular check-ups -> health 
+    5. Income -> education -> occupational security -> regular checkups -> health
+
+c.	Identify the Back Door paths. 
+
+    1. Income <- Occupational security -> regular check ups -> health
+    2. Income <- occupational security -> stress -> health
+    3. Income -> regular check ups <- occupational security -> stress -> health
+    4. Income -> education -> regular checkups <- occupational security -> stress -> health
+
+d.	Identify the paths that represent direct effects. 
+
+    1. Income -> Health
+    2. Income -> Regular check ups
+    3. Income -> Education
+    4. Education -> regular check ups
+    5. Education -> Occupational security
+    6. Regular check ups -> health
+    7. Stress -> health
+    8. Occupational security -> stress
+    9. Occupational security -> regular check-ups
+    10. Occupational security -> income
+    
+
+e.	Identify the Good Paths and the Bad Paths.
+  
+    Good Paths: 
+      1. Income -> Health
+      2. Income -> regular check-ups -> health
+      3. Income -> education -> regular check-ups -> health
+      4. Income -> education -> occupational security -> regular check ups -> health
+      5. Income -> education -> occupational security -> stress -> health
+
+    Bad Paths:
+      1. Income <- Occupational security -> regular check ups -> health
+      2. Income <- occupational security -> stress -> health
+      3. Income -> regular check ups <- occupational security -> stress -> health
+      4. Income -> education -> regular checkups <- occupational security -> stress -> health
+
+
+## Question 8.4
+
+What describes a causal path where all the arrows point away from the treatment?
+
+    Front door path
+    
+
+## Question 8.5
+
+Consider the figure relating teaching quality, popularity, and number of publications:
+
+a.	What type of variable is Popularity in one path on this diagram? 
+
+    Popularity is a *collider* variable.
+
+b.	Discuss what would happen if you controlled for Popularity.
+
+    If you control for a collider variable, it opens up an otherwise closed path. So controlling for Popularity would open the path between Teaching Quality and Number of Publications. 
+
+
+## Question 8.6
+
+Consider the figure which depicts the relationship between a pandemic-related lockdown and an economic recession. The research question of interest is: Does a pandemic-related lockdown cause recession?
+
+a.	Write down all the paths in the diagram from Lockdown to Recession. To make our lives simpler (there are a lot of paths in this diagram), ignore any path that goes through Stimulus. 
+
+    1. Lockdown -> Recession
+    2. Lockdown -> Unemployment -> Recession
+    3. Lockdown <- PriorEconomy -> Recession
+    4. Lockdown <- PriorEconomy -> Unemployment -> Recession
+
+b.	List all of the paths that are Front Door Paths. 
+
+    Paths 1 and 2 are front door paths.
+  
+c.	What would happen if we controlled for unemployment? 
+
+    If you control for unemployment we would close two paths (path 2 and 4). 
+
+d.	Is it possible to measure each of the variables adequately?
+
+    I'm a little uncertain on how you would adequately measure prioreconomy and you would also need to define recession.  It is easy to measure the presence of a pandemic related lockdown. For unemployment, I'm assuming they are thinking to use something like the unemployment rate which likely has its own issues, but is a number that reasonably attainable. 
+
+e.	Can you think of any variables and paths not depicted in the diagram that may be relevant to identify the answer to the research question? List at least one and no more than three.
+
+    A missing variable is health. A main factor in all of this is what the health consequences of a pandemic do to the economy. It induces the lockdown and increases unemployment through other paths.  
+    
+
+## Question 8.7
+
+Consider the question: Does obtaining a higher education improve income? Think of a couple of examples of Bad Paths in a causal diagram depicting the data generating process for this research question
+
+    A few bad paths would include confounders that affect both higher education and income. For example, parents income would affect both of these variables. Simialarly, race / racism and/or sex/sexism have affects on the ability to obtain higher education and income. These bad paths would look like:
+    
+    1. HigherEd <- parent income -> Income
+    2. HigherEd <- racism -> Income
+    3. HigherEd <- sexism -> Income
+
+
+# Chapter 9 - Finding Front Doors
+
+## Question 9.1
+
+Which of the following describes when randomization of treatment occurs without a researcher controlling the randomization? 
+
+a.	Exogenous variation 
+
+**b.	Natural experiment**
+
+c.	Instrumental variable 
+
+d.	Randomized experiment
+
+## Question 9.2
+
+Necessary conditions:
+a.	What needs to be true about the variation we need to isolate when we’re trying to isolate front door paths?
+
+    To isolate front door paths, effective variation must have no back doors. This allows us to know that the back doors are unrelated to assignment to a treatment or control, which means that they are all closed.
+
+b.	How do we know that the variation we get from a randomized controlled experiment fulfills the condition(s) from part a?
+
+    Randomized control experiments fulfills the condition above because assignment is independent of any other characteristics of the treatment and control group. This means that variation in the treatment is random and closes any backdoors between the treatment and outcome. 
+
+
+## Question 9.3
+
+Describe the four major differences between randomized experiments and natural experiments discussed in the chapter. As a bonus, there’s a fifth difference described in the chapter having to do with sample size and representativeness.
+
+    1. Sometimes there are back doors from NaturalRandomness and the Outcome that don't happen with experimental randomness. 
+    
+    2. Natural experiments occur naturally so may produce more realistic observations, larger sample sizes, and less bias in who is involved in the experiment (e.g., psych college students)
+    
+    3. Natural experiments only isolate the variation in the treatment of the natual randomness. We cannot evaluate any treatment that occurs for any other reason. 
+    
+    4. People often beleive the exogeneity of pure randomization but need to be convinced of exogenous variation in a natural experiment.
+    
+    Bonus: Similar to difference #2, natural experiments likely attract a more representative sample because it occurs naturally and effects those who you are likley trying to generalize to. There is also the fact that sample size will tend to be larger because you don't have to recruit. This also influences representativeness again because recruitment processes may be biased towards a particular kind of person who is more prone to participate in studies. 
+
+## Question 9.4
+
+Provide an example of a of research question that is causal in nature but cannot be feasibly answered by a randomized experiment. Explain your reasoning.
+
+    RQ: Does time incarcerated decrease lifespan?
+    
+    This can't be answered by a randomized experiment because ethically, you cannot assign people to spend time in jail, epecially if you suspect there is a harmful consequence of doing so.
+
+## Question 9.5
+
+Define the concept of exogenous variation.
+
+    Exogenous variation is a source of variation in treatment that has no open back doors. Paths from exogenous variation to the outcome must be either closed or contain the treatment. Ideal exogenous variation does not come from a variable otherwise on the causal diagram. 
+
+## Question 9.6
+
+Provide an example of a natural experiment. It could be an idea of your own, from the book, or from a study you read.
+
+**Natural Experiment**: 2020 Witteman et al conducted a natural experiment about gender gaps in scientific funding in Canada. They wanted to investigate the causal mechanism between gender of the principal investigator and funding. In 2014 the Canadian Institutes of Health Research divided investigator-initiated funding into two gramt programs: one that explicitly focused on the calibre of the principal investigator and the other that focused explicitly on the quality of the proposal. [https://www.sciencedirect.com/science/article/pii/S0140673618326114?casa_token=amrhmbi5ih0AAAAA:Q2M2rqwKxTDu1mBcRHT3btuKtG1sq4T7GveMj5TN3teWQFZ2aaEARO-uVCwpxFxu0curFQk]
+
+a.	Draw a causal diagram using 5-10 variables. 
+
+    The main variables in this diagram are:
+      1. Female Principal Investigator
+      2. Domain of research
+      3. Prestige of training institution
+      4. Number of previous publications
+      5. Funding approval
+
+
+![Principal Investigator and Funding](/Users/fatimafairfax/Desktop/Stats - Complete HW Files/Spring22---Stats-722/Q9.6.png)
+
+
+b.	List the paths from the source of exogenous variation to the outcome. 
+
+    1. Investigator blind applications -> female principal investigator -> funding
+    2. Blind applications -> female principal investigator <- prestige of training instituion -> funding
+    3. Blind applications -> female principal -> previous publications -> funding
+    4. Blind apps -> female principal <- domain of research -> funding
+
+
+c.	Which paths need to be closed?
+
+    For this experiment you would need to close path 4 (with domain of research) as that would still have a bearing on the outcome of funding. The authors of this study do control for research domain in their final analysis (and find that blind applications does yeild higher funding for female principal investigators compared to investigator conscious applications)
+
+d.	Is it believable in this context that you haven’t missed any paths and that you can close all the paths you need? Why or why not?
+
+    It is not (really ever) believable that I've identified every path between the treatment and outcome or that I will be able to truly close every path. There are many factors about this process that I simply don't know, which could constitute variables that I'm missing. 
+
+
+## Question 9.7
+
+Which of the following best explains how “using exogenous variation to predict treatment, and then using the prediction instead of the treatment itself” lets you isolate just the front door from treatment to outcome?
+
+a.	Because it allows you to control for treatment assignment
+
+**b.	Because the exogenous variation has no back doors, so nothing it predicts can have back doors either**
+
+c.	Because it takes the relationship between treatment and outcome and, by controlling for the exogenous variation, removes the back doors
+
+d.	It can’t unless the treatment itself is also exogenously assigned
+
+## Question 9.8
+
+Consider the following natural experiment design: in 2019, United States president Donald Trump increased tariffs on Chinese imports considerably. This made United States consumers want to switch to non-Chinese sources of imports. If you are an exporter to the US, like Brazil, then demand for your products just went up if China is a competitor of yours. So Brazilian manufacturers of machinery saw their exports increase by a lot, but Brazilian pop musicians didn’t. You want to know whether exporting to a country makes you like it more. You plan to isolate the variation in Brazilian exports driven by the tariffs to see if industries with more exports have a higher opinion of the United States.
+
+a.	What potential back doors might remain between the tariffs and the opinion of the United States?
+
+    There might be resentment or fear for the US power over tariffs that would affect the opinion of the US. There is also the opinion of the US leadership to consider who both control these tariffs and the opion of the US as a whole. There are also industries that might have more connections to US actors regardless of the tarrifs. For example, I would guess that the intertainment industry might have more and different kinds of ties to the US than a manufacterer. 
+
+*b.	If someone told you that they performed this study as described, and found that increased exports had no effect on opinion of the US, would you believe the result? Why or why not?* 
+
+  This result under these conditions would be evidence towards the fact that increased exports have no effect on the opinion of the US *in Brazil*. They have not completely addressed factors that might make Brazil different than other countries. They also...
+

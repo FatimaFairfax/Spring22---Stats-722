@@ -33,7 +33,7 @@ In the generic diagram provided:
     
   c.	Which of the paths are open back-door paths?
   
-    Paths 2, 3, 4 and 5 are open back-door paths.
+    Paths 4 and 5 are open back-door paths.
   
   d.	What variables must be controlled for in order to identify the effect of X on Y? (only list what must be controlled for, not anything that additionally could be controlled for).
   
@@ -111,6 +111,7 @@ b.	Discuss what would happen if you controlled for Popularity.
 
     If you control for a collider variable, it opens up an otherwise closed path. So controlling for Popularity would open the path between Teaching Quality and Number of Publications. 
 
+*add what a collider does*
 
 ## Question 8.6
 
@@ -122,6 +123,7 @@ a.	Write down all the paths in the diagram from Lockdown to Recession. To make o
     2. Lockdown -> Unemployment -> Recession
     3. Lockdown <- PriorEconomy -> Recession
     4. Lockdown <- PriorEconomy -> Unemployment -> Recession
+    5. Lockdown -> Unemployment <- PriorEconomy > Recession
 
 b.	List all of the paths that are Front Door Paths. 
 
@@ -129,11 +131,11 @@ b.	List all of the paths that are Front Door Paths.
   
 c.	What would happen if we controlled for unemployment? 
 
-    If you control for unemployment we would close two paths (path 2 and 4). 
+    If you control for unemployment we would close paths 2 and 4 by eliminating the variation of a variable. In path 5, unemployment is a collider variable. Controlling for a collider has the potential to misrepresent the relationship between lockdown and prioreconomy.
 
 d.	Is it possible to measure each of the variables adequately?
 
-    I'm a little uncertain on how you would adequately measure prioreconomy and you would also need to define recession.  It is easy to measure the presence of a pandemic related lockdown. For unemployment, I'm assuming they are thinking to use something like the unemployment rate which likely has its own issues, but is a number that reasonably attainable. 
+    I'm a little uncertain on how you would adequately measure prioreconomy and you would also need to define recession.  It is easy to measure the presence of a pandemic related lockdown. For unemployment, I'm assuming they are thinking to use something like the unemployment rate which likely has its own issues, but is a number that is reasonably attainable. 
 
 e.	Can you think of any variables and paths not depicted in the diagram that may be relevant to identify the answer to the research question? List at least one and no more than three.
 
@@ -164,6 +166,7 @@ a.	Exogenous variation
 c.	Instrumental variable 
 
 d.	Randomized experiment
+
 
 ## Question 9.2
 
@@ -197,13 +200,14 @@ Provide an example of a of research question that is causal in nature but cannot
 
     RQ: Does time incarcerated decrease lifespan?
     
-    This can't be answered by a randomized experiment because ethically, you cannot assign people to spend time in jail, epecially if you suspect there is a harmful consequence of doing so.
+    This can't be answered by a randomized experiment because ethically, you cannot assign people to spend time in jail, especially if you suspect there is a harmful consequence of doing so.
 
 ## Question 9.5
 
 Define the concept of exogenous variation.
 
     Exogenous variation is a source of variation in treatment that has no open back doors. Paths from exogenous variation to the outcome must be either closed or contain the treatment. Ideal exogenous variation does not come from a variable otherwise on the causal diagram. 
+
 
 ## Question 9.6
 
@@ -257,11 +261,18 @@ d.	It can’t unless the treatment itself is also exogenously assigned
 
 Consider the following natural experiment design: in 2019, United States president Donald Trump increased tariffs on Chinese imports considerably. This made United States consumers want to switch to non-Chinese sources of imports. If you are an exporter to the US, like Brazil, then demand for your products just went up if China is a competitor of yours. So Brazilian manufacturers of machinery saw their exports increase by a lot, but Brazilian pop musicians didn’t. You want to know whether exporting to a country makes you like it more. You plan to isolate the variation in Brazilian exports driven by the tariffs to see if industries with more exports have a higher opinion of the United States.
 
+
+  To visualize this experiment, we're looking at the relationship between type of industry and opinion of the United States. A point of variation in the industry variable is the amount of exports, which has many causes. But the natural experiment of increased tariffs in China is exogenous variation on the exports of industries based on if they are in competition with China or not, which we can see as random in this system of relationships. 
+
+  *Tariffs for China -> Industry exports -> Opinion of the US*
+
+
 a.	What potential back doors might remain between the tariffs and the opinion of the United States?
 
-    There might be resentment or fear for the US power over tariffs that would affect the opinion of the US. There is also the opinion of the US leadership to consider who both control these tariffs and the opion of the US as a whole. There are also industries that might have more connections to US actors regardless of the tarrifs. For example, I would guess that the intertainment industry might have more and different kinds of ties to the US than a manufacterer. 
+    One backdoor is the US leadership, who both controls tariffs and represents the US and who's actions are reflected in the opinions of others around the world. There might be global politics at play that would affect the tariffs and the opinion of the US. There is also power of exporting countries that might play a role in if tariffs are imposed and the opinion of the US. There is also the prerequisite for a relationship with the US at all that would affect all trade relations, including tariffs, as well as the opinion of the US.
+    
 
-*b.	If someone told you that they performed this study as described, and found that increased exports had no effect on opinion of the US, would you believe the result? Why or why not?* 
+b.	If someone told you that they performed this study as described, and found that increased exports had no effect on opinion of the US, would you believe the result? Why or why not?
 
-  This result under these conditions would be evidence towards the fact that increased exports have no effect on the opinion of the US *in Brazil*. They have not completely addressed factors that might make Brazil different than other countries. They also...
+    This result under these conditions would be evidence towards the fact that increased exports have no effect on the opinion of the US *in Brazil*. They have not completely addressed factors that might make Brazil different than other countries. They also are likely to have missed other backdoor paths like some of the ones listed above, so I would have a hard time believing that this was completely the case. 
 

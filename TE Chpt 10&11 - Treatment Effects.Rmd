@@ -1,0 +1,234 @@
+---
+title: "TE Chpt 10&11"
+author: "Fatima Fairfax"
+date: "2/7/2022"
+output: html_document
+---
+
+
+# Chapter 10 - Treatment Effects
+
+## Question 10.1
+
+Define in your own words (i.e., don’t just copy down what’s written in the glossary) each of the following terms: 
+      
+    a.	Conditional average treatment effect - the average treatment effect when you select or segment your sample of interest so that they have the same value for a particular variable of interest
+    b.	Average treatment on the treated - the average treatment effect for those in the sample who have received the treatment 
+    c.	Average treatment on the untreated - the average treatment effect for those in the sample who did not receive the treatment
+
+## Question 10.2 
+
+Provide an example of a treatment effect that you would expect to be highly heterogeneous, and explain why you think it is likely to be heterogeneous
+
+    K-12 education could be seen as a highly heterogenous treatment effect. You could provide the same curriculum to all children in the K-12 education system and the effects of education on any outcome like income or college admittance or college completion etc. will vary greatly based on a number of factors like income, neighborhood, exposure to racism or sexism, family household etc. 
+
+
+## Question 10.3 
+
+Consider the data in the table below that shows the hypothetical treatment effect of cognitive behavioral therapy on depression for six participants. For the sake of this example, the six participants represent the population of interest.
+
+
+```{r Table 10.3}
+case <- c("A","B","C","D","E","F")
+age <- c(15,40,30,20,15,25)
+gender <- c("man", "woman", "woman", "non-binary","man", "woman")
+effect <- c(7,3,7,8,7,4)
+
+q3 <- data.frame(case,age,gender,effect)
+
+q3
+```
+
+
+a.	What is the overall average treatment effect for the population? 
+
+```{r}
+mean(q3$effect)
+```
+
+
+    The average treatment effect is 6.
+
+b.	What is the average treatment effect for Women? 
+
+*Note to Nico: I ran the following code in R script to get this number, but for whatever reason it's halting my knit execution, so I'm going to reproduce the code and result here, but take it out of R script so I can knit the file*
+
+'''{r}
+
+q3_woman <- q3 |> filter(gender == "woman")
+
+mean(q3_woman$effect)
+
+'''
+
+output: 4.66667
+
+
+    The average treatment effect for women is 4.7
+
+
+c.	If nearly all Non-binary people get treated, and about half of all Women get treated, and we control for the differences between Women and Non-binary people, what kind of treatment effect average will we get, and what can we say about the numerical estimate we’ll get?
+
+    This would produce a variance weighted average treatment effect. Given the lack of variance in the non-binary population, they would be weighted lower due to lack of explanatory power on the treatment effect within this population. On the other hand, the variance in women and the representation of women in both the treated and untreated populations provide more explanatory power for this group which would weight the effects for women more heavily. So overall, the numerical estimate will more closely represent the average treatment effect of women. 
+    
+
+d.	If we assume that, in the absence of treatment, everyone would have had the same outcome, and also only teenagers (19 or younger) ever receive treatment, and we compare treated people to control people, what kind of treatment effect average will we get, and what can we say about the numerical estimate we’ll get?
+
+    We would have a distirbution weighted average treatment effect in this case. The way the sample is constructed provides a population that is homogenous on a variable (age) within the treated population. Thus the ATE would be weighted based on the skewdd distribution of those in the treated v untreated. The numerical estimate would be completely biased towards the teenagers in the who both have a value of 7. 
+    As a side note, this seems like a poorly constructed experiment. If you only have treatment information on one subgroup, it is hard / impossible to provide a reasonable ATE for any group that is not a teenager. 
+  
+
+## Question 10.4
+
+Give an example where the average treatment effect on the treated would be more useful to consider than the overall average treatment effect, and explain why
+
+    The ATT is more useful for resarch questions attempting to understand the effect some phenomenon had on a specific population. For example, if you want to understand the effects of commerical campaigns on teenage smokers, it doesn't make sense to try and obtain an average treatment effect on all teenage smokers. It makes more sense to try and get the average treatment effects on those who received the treatment (i.e., saw the commerical campaigns) to see how much that intervention benefitted teenager smokers. 
+
+
+## Question 10.5	
+
+Which of the following describes the average treatment effect of assigning treatment, whether or not treatment is actually received? 
+
+a.	Local average treatment effect 
+
+b.	Average treatment on the treated 
+
+**c.	Intent-to-treat**
+
+d.	Variance-weighted average treatment effect
+
+
+## Question 10.6	
+
+On weighted treatment effects: 
+a.	Describe what a variance-weighted treatment effect is
+
+    Variance-weighted treatment effect is when you weight each individual based on the amount of variation exists in their treatment variable. If a group has more internal variation than others they will be weighted more because we will have more cases for that group with and without treatment, allowing us to see more of the treatment effect.
+
+b.	Describe what a distribution-weighted treatment effect is 
+
+    Dinstribution weighted treatment effect is when individuals with common values on relevant variables are weighted more than indivuduals with uncommon variables. For example, if some variable on a backdoor path has a common value of around 20 among treated and untreated groups, individuals with a value for this variable of or around 20 would be weighted more than individuals with variable values around 3 or 35.
+
+c.	Under what conditions/research designs would we get each of these?
+
+    You would get a variance-weighted treatment effect when some subgroup of people have more variance in treatment than another. We would weight the treatment effect in the group with more variance in treatment more heavily. 
+    
+    Distribution-weighted treatment effects happen when treated and untreated groups have similar values on particular variables. This could happen if you employ matching on your treated and untreated groups so that they have similar values on particular variables. The individuals who have values for that variable that are common are weighted more heavily. 
+
+
+## Question 10.7
+
+Suppose you are conducting an experiment to see whether pricing cookies at $1.99 versus $2 affects the decision to purchase the cookies. The population of interest is all adults in the United States. You recruit people from your university to participate and randomize them to either see cookies priced as $1.99 or $2, then write down whether they purchased cookies. What kind of average treatment effect can you identify from this experiment?
+
+    This experiment would produce a conditional average treatment effect. While we have both a control and treatment group (if the control is $1.99 and treatment is $2 or vis versa), there is a limited ability to generalize to the U.S. population at large. Likely, those within your university have variables of similar value that are not reflective of the larger population. Therefore, this treatment effect is conditional on being a member of the researchers university. 
+
+    Alternatively, this can be seen as the Sample Average Treatment Effect. We have a hypothesis about the population of US adults we are trying to generalize to, but we have a fairly restricted sample (only university members), so to make sure the way we convey results is the most accurate we can calcualte what would be a sample average treatment effect on this specific sample that was included in the experiment. 
+
+## Question 10.8
+
+For each of the following identification strategies, what kind of treatment effect(s) is most likely to be identified? 
+
+a.	A randomized experiment using a representative sample -- **average treatment effect**
+
+b.	True randomization within only a certain demographic group -- **conditional average treatment effect**
+
+c.	Closing back door paths connected to variation in treatment -- **weighted average treatment effect**
+
+d.	Isolating the part of the variation in treatment variable that is driven by an exogenous variable -- **intent to treat**
+
+e.	The control group is comparable to the treatment group, but treatment effects may be different across these groups -- **average treatment on the treated**
+
+
+
+# Chapter 11 - Causality with Less Modeling
+
+## Question 11.1
+
+Suppose that you are analyzing the effect of universities and colleges opening during a pandemic on increase in the number of positive cases. Name one strategy that you can use to avoid having to collect data on all types of campus characteristic variables that are constant over time that you may have to control for in your analysis.
+
+    To avoid collecting a ton of data on characteristics, I can look at changes over time in the treatment outcome average and control outcome average. This allows me to compare the treatment and control within certain parts of the variation since we just need the change over time variable to be comparable between the groups, rather than all other chracteristics. 
+
+
+## Question 11.2
+
+Intuitively, why would a method that isolates front doors allow you to ignore back doors related to unmeasured variables?
+
+    If you are isolating front doors you are only looking at the effects of a particular mechanism, accepting the variation in other unmeasured variables. This can be seem as, conditional of expected variation, what is the effect of this mechanism, which allows you to ignore the back door paths.
+
+
+## Question 11.3
+
+On robustness tests: 
+
+a.	What are robustness tests? 
+
+    Robustness tests are ways to check whether we can disprove an assumption or a way to redo analyses in a way that does not rely on assumption to see if the results we find change significantly. 
+    
+b.	What is the purpose of conducting a robustness test? 
+
+    Robustness tests are designed to test assumptions that were made in an analysis to see if they can be disproven. This is another way to eliminate backdoors and alternate explanations that can be made about the mechanism you are interrogating.
+
+c.	What are placebo tests?
+
+    A placebo test is a robustness check that examines if those who think they are recieving treatment but are in fact receiving the control show the same result as if the treatment was actually administered. If you find an effect then you are likely missing a variable or have made an faulty assumption. 
+
+
+## Question 11.4
+
+Suppose you want to study the effect of attending tutoring sessions on grade point averages (GPA). List at least five variables that impact both attendance of tutoring sessions and students’ GPA. Is it feasible to measure and control for all of the variables?
+
+    Five variables that would effect both attending tutoring and GPA are: student motivation, parent income, school resources, student health, and free time to devote to academics. 
+    
+    You could try to measure most of these, student motivation being the trickiest one to pin down. It might be hard / unfeasible to control for all of thes measures in a single study.
+
+
+## Question 11.5
+
+Describe partial identification in your own words.
+
+    Partial identification is a way to avoid testing all of the assumptions you make in your data analysis. Partial identification is providing a range of possibilites / possible explanations for assumptions or mechanisms you are unclear about. Then you can figure out an estimate over the range of possibilities you have identified. (Note: this feels more in line with Bayesian analysis than frequentists). This allows you to bind the effect you find in your analysis to provide a range of reasonable values within which your estimate will fall. 
+
+
+## Question 11.6
+
+Pick any causal diagram from the book other than Figure 11.2.
+a.	Reproduce that diagram here. 
+
+  Here is the 10.1 diagram on going to driving school:
+  
+  ![Driving Dag](/Users/fatimafairfax/Desktop/Driving DAG.png)
+
+
+b.	Select two variables on the diagram without a direct link between them (i.e. no single arrow straight from one of them to the other).
+
+    Var1: OthersBadDriving
+    
+    Var2: YourBadDriving
+
+c.	What variables would you need to control for that will eliminate any relationship between the two variables (you might not need any).
+
+    You would need to control for Traffic school to eliminate any relationship between these two variables. 
+
+d.	If you looked at the relationship between your two variables from part b, while controlling for the variables from part c, and you got a nonzero result, what would you conclude?
+
+    I would conclude that there may be a relationship between OthersBadDriving and YourBadDriving that is not explained by TrafficSChool. There is some mechanism that I have failed to identify that matter in my casual diagram. 
+
+## Question 11.7
+
+What does it mean to say that the effect of financial deregulation on the rate at which firms go bankrupt is “bounded from above” at 2 percentage points?
+
+a.	The effect is 2 percentage points, and it’s a positive effect
+
+b.	The effect is 2 percentage points, and it’s a negative effect
+
+c.	The effect is at least as large as 2 percentage points
+
+**d.	The effect is no larger than 2 percentage points**
+
+e.	If we’re willing to make an additional, stronger set of assumptions, the effect would be larger than 2 percentage points, but without those assumptions it’s bounded to be lower.
+
+
+
+
+
+

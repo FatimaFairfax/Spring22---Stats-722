@@ -1,0 +1,491 @@
+---
+title: "TE Chpt 13 HW"
+author: "Fatima Fairfax"
+date: "2/17/2022"
+output: html_document
+---
+
+# Chapter HW
+
+```{r}
+library(tidyverse)
+library(modelsummary)
+```
+
+
+## Question 1
+
+You've generated some random data X, Y, and e where randomly generated X and e as normally distribution data, and then created Y using the formula Y = 2 + 3X + e. You look at some of the random data you generated, and see an observation with with X = 2 and Y = 9. Let's call that Observation A.
+
+  a. What is the error for Observation A?
+  
+    The error term represents the difference between the true best fit line (Y) and the actual observed value A.  This is represented by the term 'e' in line formula above at the observed values: 
+    
+    Y = 2 + 3X + e
+    
+    (9) = 2 + 3(2) + e
+    
+    9 = 2 + 6 + e
+    
+    9 = 8 + e
+    
+    **1 = e**
+  
+  b. You estimate the regression $Y = \beta_0 + \beta_1X + e$ using the data you generated and get the estimates $\hat{\beta_0} = 1.9$, $\hat{\beta_1} = 3.1$. What is the residual for Observation A?
+
+    The residual is the difference between the prediction we make with our fitted line and the actual observed value, or the value of Y - Y_hat. The residual in this case, will be the error term in the above equation using our beta_hat values and the "actual" Y value provided in question a:
+    
+    Y = beta_0 + beta_1 X + e (residual)
+    
+    Y = 1.9 + 3.1 (X) + e
+    
+    9 = 1.9 + 3.1 (2) + e
+    
+    9 = 1.9 + 6.2 + e
+    
+    9 = 8.1 + e
+    
+    0.9 = e
+
+
+
+## Question 2
+
+Write the regression equation that you would use to estimate the effect of X on Y, if you think the correct causal diagram is the one below.
+
+![DAG](/Users/fatimafairfax/Desktop/Stats - Complete HW Files/Spring22---Stats-722/Q13.2.png)
+
+The regression equation for the effect of X on Y following the diagram would be:
+
+$Y = \beta_0 + \beta_1X + \beta_2A + \beta_3B + e$
+
+To get to the effect of X on Y, according to the diagram provided, we would need to control for A and B, which are both confounders. Because C doesn't effect Y, this does not have to be controlled for in this equation and will be covered in the error term.
+
+This can also be shown in the following code:
+
+```{r}
+obs <- 1e4
+
+d <- tibble(
+  c = rnorm(obs,0,1),
+  b = rnorm(obs,0,1),
+  a = rnorm(obs,b,1),
+  x = rnorm(obs,c + a + b,1),
+  y = x + b + a
+)
+```
+
+
+```{r}
+d1 <- lm(y ~ x,
+         data = d)
+
+print(d1,digits=3)
+```
+
+```{r}
+d2 <- lm(y ~ x + b,
+         data = d)
+
+print(d2,digits=3)
+```
+
+```{r}
+d3 <- lm(y~x+b+a,
+         data = d)
+
+print(d3,digits=3)
+```
+
+This shows that controlling for B and A get us to the coefficients that represent the "true" relationship of 1 for each. 
+
+
+
+## Question 3
+
+You use regression to estimate the equation $Y = \beta_0 + \beta_1X + e$ and get an estimate of $\hat{\beta_1} = 3$ and the standard error = 1.3
+
+  a. Interpret the coefficient $\hat{\beta_1}$
+  
+    Beta_hat_1 of 3 means that every one-unit increase in X is associated with a 3 unit increase in Y.
+  
+  b. Calculate where $\hat{\beta_1}$ is statistically significantly different from 0 at the 95% level
+
+    For this value we have, we can calculate statistical significance by using the t-statistic, which is the coefficient divided by its standard error: beta_hat_1 / se(beta_hat_1) = 3 / 1.3 = 2.31. This t-statistic is above the 97.5th percentile (t-statistic above 1.96), which means that it's statistically significant at the 95% level. 
+
+  c. What does it mean to say that this coefficient is statistically significantly different from 0?
+
+    At the alpha = .05 level, this means that the probability of this coefficient or some further value from 0 occuring is less than 5%. In other words, the probability that there is a zero relationship (no relationship) at the alpha = 0.05 level is extremely low; so we can assume that there is a non-zero relationship based on this test. This doesn't, however, give us information on if this is a meaningful relationship. 
+
+
+## Question 4
+
+Consider the below conventional OLS regression table, which uses data from 1987 on how many hours women work in paid jobs.  In the table, hours worked is predicted using the number of children under the age of 5 in the household and the number of years of education the woman has.
+
+![Table Q4](/Users/fatimafairfax/Desktop/Stats - Complete HW Files/Q13.4.png)
+
+  a.	How many additional hours worked is associated with a one-unit increase of years of education when controlling for number of children?
+  
+    This value would be the value of beta_1 in the third model. A one-unit increase of years of education is associated with 76.185 additional hours of work when you control for number of children under 5.
+  
+  b.	What is the standard error on the “children under 5” coefficient when not controlling for years of education?
+  
+    The standard error on "children under 5" withou controlling for years of education is 19.693, the value in the parantheses in the second model.
+  
+  c.	In the third model, what is the predicted number of hours worked for a woman with zero children and zero years of education?
+  
+    This value is the beta_0 value, or the intercept. The predicted number of hours worked for a woman with zero children (under 5) and zero years of education is 306.553.
+  
+  d .	How many observations are used in each of the three regressions?
+  
+    In each of the models, there are 3382 observaitons used. 
+  
+  e.	Is the coefficient on “children under 5” statistically significantly different from 0 at the 95% level?
+
+    Yes. The coefficient on "children under 5" in both model 2 and 3 are signified with three stars, which we can see at the bottom of the output means they have a p value of less than 0.01, which is inclusive of the 0.05 level. We can also take a quick t-statistic with the coefficient and the provided standard error which gives a t-statistic of -12.79, which is quite a bit below the significance threshold of -1.96 at the 97.5th percentile.
+
+
+## Question 5
+
+Using the same data above, we estimate the following model:
+
+AnnualHoursWorked = 10.145 + 110.230 YearsEducation - 1.581 YearsEducation^2
+
+  a.	What is the relationship between a one-year increase in YearsEducation and AnnualHoursWorked? (hint: your answer will not just be a single number, it will still include a YearsEducation term)
+
+    This model includes a polynomial for YearsEducation. This means that the interpretation of the effect of YearsEducation on AnnualHoursWorked has to include a YearsEducation term. To get this, we can take the derivative of the above equation to see how YearsEducation effects AnnualHours Worked:
+    
+    deriv w.r.t YearsEducation(AnnualHoursWorked) = 110.23 - 2 * (1.581) * YearsEducation = 110.23 - 3.162 * YearsEducation
+    
+    Therefore, a one unit change in YearsEducation is associated with a 110.23 - 3.162*YearsEducation change in AnnualHourWorked. This means that there is no single effect of YearsEducation on AnnualHoursWorked, the relationship varies with different values of YearsEducation.
+    
+
+  b. What is the relationship between a one-year increase in YearsEducation and AnnualHoursWorked if the current level of YearsEducation is 16?
+	
+    If the current level is YearsEducation is 16, we can plug it in to the derivative we found above:
+    
+    = 110.23 - 3.162 * (16) = 59.638
+    
+    If you have 16 YearsEducation, a one unit increase in YearsEducation is associated with 59.638 additional annual hours of work.
+	
+	
+	c. Is the relationship between YearsEducation and AnnualHoursWorked getting more or less positive for higher values of YearsEducation?
+	
+    The relationship between YearsEducation and AnnualHoursWorked gets less positive for higher values of YearsEducation. We can see this because the term associated with YearsEducation in the derivative has a negative sign. The larger the value of YearsEducation, the less positive the effect. 
+ 
+ d. What would be one reason not to include a whole bunch of additional powers of YearsEducation in this model (YearsEducation^3, YearsEducation^4, YearsEducation^5, and so on)
+
+    Overloading the regression with polynomials makes the effect much harder to interpret and after a certain point, usually 2 or 3, it doesn't add much to the analysis. Additionally, it could overfit the data so that the model fits your observed data very well but would not be able to predict new data well. 
+
+
+## Question 6
+
+![Table Q6](/Users/fatimafairfax/Desktop/Stats - Complete HW Files/Q13.6.png)
+
+The following table uses the same data from question 4, but this time all of the predictors are binary. The first model predicts working hours using whether the family owns their home, and the second uses the number of children under 5 again, but this time treating it as a categorical variable
+
+  a.	Interpret the coefficient on “Homeowner”
+
+    The coefficient on "Homeowner," 50.174, means that for a one-unit increase in homeowner status (i.e., owning a home since this is a binary variable) is associated with a 50.174 increase in annual hours worked.
+
+  b.	On average, how many fewer hours do people with 4 children under the age of 5 work than people with 3 children under the age of 5?
+
+    Since these are all binary variables, we can set up a nice equation that let's us hold all but the relevant variables constant. The full equation for model 2 is:
+    
+    AHW = 1242.904 - 158.164 * beta_1 - 526.006 * beta_2 - 773.412 * beta_3 - 923.904 * beta_4
+    
+    With 3 children under 5, the estimated hours are: AHW = 1242.904 - 773.412 = 469.492
+    
+    With 4 children under 5, the estimated hours are: AHW = 1242.904 - 923.904 = 319
+    
+    The difference between the two are: 469.492 - 319 = 150.492, meaning that people with 4 children under the age of 5 work 150.5 hours less than people with 3 children under the age of 5. 
+    
+    An easier way to do this is simply to take the difference between the coefficients: 923.904 - 773.412 = 150.492
+
+
+  c.	From this table alone can we tell whether there’s a statistically significant difference in hours worked between having 2 children and having 3? What additional test would we need to perform?
+
+    No, this table alone is not sufficient to determine if there's a staitiscally significant difference in AHW between having 2 and 3 children. To determine this, you would need to perform a joint F test, which allows you to compare the predictive power of a model against another model where the categorical variable (e.g., having 2 children) becomes the new reference category and you can assess the statistical significance between that new reference and the variable of having 3 children. 
+    
+
+## Question 7
+
+![Table Q7](/Users/fatimafairfax/Desktop/Stats - Complete HW Files/Q13.7.png)
+
+  a.	In Model 1, what is the relationship between a one-unit increase in Education and annual hours worked?
+
+    In Model 1, a one-unit increase in education is associated with a 110.073 increase in annual hours worked. 
+    
+    However, there is a negative association with the interaction term between Education and Homeowner that weakens the relationship between Education and annual hours worked (which is addressed in question c!)
+
+  b.	Do annual **earnings** rise more quickly for homeowning families or non-homeowning families? Is the difference between the two statistically significant at the 95% level?
+
+    Annual earnings (which I will interpret as annual hours worked as they should rise with hours), would rise more quickly for homeowners, since the coefficient on homeowners is quite large and positive (682.992).
+    
+    Interpretting the stars on the table, this would be significant at the 99% percent level, which is inclusive of the 95% level. 
+
+  c.	Interpret the coefficient on Homeowner x Education in Model 1.
+
+      The coefficient on Homeowner x Education in Model 1, -53.994. The interpretation of this term is that for every additional year of education, the relationship between a one-unit increase in homeowner (i.e., owning a home) and annual hours worked weakens by 53.994.
+    
+
+  d.	Interpret the coefficient on Education in Model 2. Note that the dependent variable is log annual hours worked.
+
+    The coefficient on Education in Model 2, 0.067, means that a one-unit increase in Education is associated with 0.067 increase in log(annual hours worked). We can also interpret this as a change in the proportion of annual hours worked. So that a one-unit increase in Education is associated with a 6.7% increase in annual hours worked. 
+
+  e.	Interpret the coefficient on log(Education) in Model 3, beginning with “a 10% increase in Education…”
+
+    A 10% increase in Education is associated with a .1 * 832.347 unit change in Annual Hours Worked. This translates to a 83.235 unit change in Annual Hours Worked.
+
+  f.	Why do you think the sample sizes are different in each of the three models? The only thing that really changed was the addition of the logarithms…
+
+    The sample size in model 3, where education is the only predictor, is likely the amount of people in the sample for which we hvae education data for, excluding any entries where education is 0, because log transformation cannot take zero values. In models 1 and 2, we could have similarly dropped values for any zero values and any entries for which we don't have both education and homeowner data on.
+
+
+## Question 8
+
+Which of the following is the most accurate definition of *autocorrelation* in an error term?
+
+    b. When error terms are correlated across time, such that knowing the error term in one period gives us some information about the error term in the next period
+    
+
+## Question 9
+
+You have run an OLS regression of Y on X, and you would like to figure out whether it would be a good idea to use heteroskedasticity-robust standard errors. Which of the following would help you figure this out? Select all that apply
+
+    b. 	Creating a plot with Y on the y-axis and X on the x-axis, and a line reflecting the predicted values of the regression, and seeing if the spread of the Y values around the predicted values change over the range of X
+    
+      This will allows you to see if the spread in Y changes along values of X, which would show a relationship between the error terms and the predictor variable X.  
+    
+    e. Asking whether Y is continuous or binary
+    
+        As it states in the chapter, the use of a binary outcome in OLS guarunteers the erorr terms are heteroskdastic, so checking the type of variable Y will give you information here. 
+
+
+## Question 10
+
+Political pollsters gather data by contacting people (by phone, knocking on their door, internet ads, etc.) and asking them questions. A common problem in political polling is that different kinds of people are more or less likely to respond to a poll. People in certain demographics that have historically been mistreated by pollsters, for example, might be especially unlikely to respond, and so the resulting data will not represent those groups well. If a pollster has information on the proportion of each demographic in a population, and also the proportion of each demographic in their data, what tool from Chapter 13 can they use to help address this problem, and how would they apply it?
+
+    In this scenario, pollsters can use sampling weights to help address the problem. Sampling weights are applied when you know the proportion of subgroups in your population and allows you to assign a weight, a measure of importance, to each observation. In this case, since there are groups that are harder to capture, any observation within that group will be weighted as more important. This will make it so the general proportionality of responses should resemble more representative responses. 
+
+
+## Question 11
+
+Which of the following is an example of measurement error where we can tell that the measurement error is non-classical?
+  
+  **a.	You’re doing research on unusual sexual practices. You ask people whether they’ve ever engaged in these weird practices, which many people might prefer to keep secret, even if they’ve actually done them.**
+  
+    This option would provide measurement error that is non-classical, because the error (potential underreporting) is related to the true value of having done unusual sexual practices. 
+
+  b.	You’re measuring temperature, but because the thermometer is imprecise, it only measures the actual temperature within a few degrees
+
+  *c.	You’re looking at the relationship between athleticism and how long you live. As your measure of how athletic someone is, you use their time from running a kilometer when they were age 18, since you happen to be studying a country where nearly everyone had to do that before leaving school.*
+  
+    This could potentially have non-classical measurement error as well. If you are collecting this data via self-report, those with horrible times may feel the need to overinflate their kilometer speeds. If there is a record of this somewhere written down, however, then you might only need to worry about classical measurement error.
+
+
+
+# Coding HW
+
+## Coding 1
+
+Load the file and save
+
+```{r load coding data}
+dengue <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/DAAG/dengue.csv")
+
+```
+
+```{r packages for stan regression}
+library(tidyverse)
+library(broom)
+library(rstanarm)
+library(broom.mixed)
+options(mc.cores = parallel::detectCores())
+
+```
+
+```{r}
+library(margins)
+```
+
+
+## Coding 2
+
+Run an OLS regression using average humidity to predict if dengue was observed in the area:
+
+```{r}
+m2 <- lm(NoYes ~ humid,
+         data = dengue)
+
+msummary(m2,
+         stars = TRUE)
+```
+
+
+Intercept of -0.416 and a beta_1 of 0.05 of humidity.
+
+I will also do this in stan_glm:
+
+```{r}
+b2 <- stan_glm(NoYes ~ humid,
+               data = dengue)
+
+print(b2,digits = 3)
+```
+
+This shows an intercept of -0.416 and beta_1 of 0.05 as well!
+
+
+## Coding 3
+
+Interpret the intercept and the slope of the above regression
+
+    The intercept is -0.416, meaning that at a humidity of 0, there is a -41.6% chance that dengue was observed. The beta_1 slope of 0.05 means that, for a one unit increase in humidity, there is a 5% increased chance that dengue was observed. 
+
+
+## Coding 4
+
+Get summary statistics for the humidity variable and write a comment on how this can help you make sense of the intercept in the above regression. 
+
+```{r}
+summary(m2)
+```
+
+    This shows the summary statistics for humid, providing a standard error of 0.001 and a t-value of 49.24. This value is well outside the range 1.96, which is the necessary threshold for statistical significant at the 95% level. This conveys a very high likelihood that this beta_1 value is significantly different from 0. 
+
+
+## Coding 5
+
+We might recognize that, if we're interested in the effect of humidity on Dengue, temperature might be on a back door. Add a control for temperature, rerun the regression, and show the results.
+
+```{r}
+#boring lm
+m5 <- lm(NoYes ~ humid + temp,
+         data = dengue)
+
+msummary(m5,
+         stars = TRUE)
+
+#stan_glm
+
+b5 <- stan_glm(NoYes ~ humid + temp,
+               data = dengue)
+
+print(b5,digits = 3)
+```
+
+
+    This model provides the following estimation equation: NoYes = -.407 + .053(Humid) - .003(Temp). The coefficient on Humid is statistically significant at the 99.9% level, and the coefficient on Temp is statistically significant at the 90% level.
+
+
+## Coding 6
+
+Our dependent variable is binary, and we're getting predictions below zero, which we might not want. Rerun the regression from question 5 but as a logit model, and report the marginal effects of both slope coefficients.
+
+```{r}
+m6 <- glm(NoYes ~ humid + temp,
+          data = dengue,
+          family = binomial(link = 'logit'))
+
+msummary(m6,
+         stars = TRUE)
+
+#note: I don't like msummary as much as tidy for displaying the responses :(
+
+b6 <- stan_glm(NoYes ~ humid + temp,
+               data = dengue,
+               family = binomial(link = 'logit'))
+
+print(b6,digits = 3)
+```
+
+Interesting that here we get very slightly different values, whereas before employing the logit, the values for intercept and coefficients between lm and stan_glm were exactly the same...
+
+
+Now to get the marginal effects of each slope:
+
+```{r}
+m6 |> 
+  margins(variables = 'humid') |> 
+  summary()
+
+m6 |> 
+  margins(variables = 'temp') |> 
+  summary()
+```
+
+This shows an average marginal effect of *humid* as 0.0317 and an average marginal effect of *temp* as 0.0042.
+
+
+## Coding 7
+
+A long one: Now let's say we're directly interested in the relationship between temperature and humidity. Run an OLS regression of humidity on temperature. Calculate the residuals of that regression, and then make a plot that will let you evaluate whether there is likely heteroskedasticity in the model. Rerun the model with heteroskedasticity-robust standard errors. Show both models, and say whether you think there is heteroskedasticity
+
+  - In both R and Python, save the model as `m7`, and `m7b` if you rerun with robust standard errors. 
+
+In R, use `fiter(!is.na(dengue$humid))` on the data before running the model so the residuals line up properly. Use the `msummary()` function from the **modelsummary** package to display the results with the `stars = TRUE` option. Also, if you're clever about `msummary()` usage, you can skip creating `m7b`. You can access residuals using `resid(m7)`.
+
+```{r}
+library(AER)
+library(sandwich)
+library(fixest)
+```
+
+
+
+First, the OLS regression of humidity on temp:
+
+```{r}
+dengue_r <- dengue |> filter(!is.na(dengue&humid))
+
+m7 <- lm(humid ~ temp,
+         data = dengue_r)
+
+msummary(m7,
+         stars = TRUE)
+```
+
+
+Now to calculate and plot the residuals: 
+
+```{r}
+m7_res <- resid(m7)
+
+plot(dengue_r$temp, m7_res,
+     ylab = "Residuals", xlab = "Temp")
+```
+
+Definitely see a heteroskedacticity problem here. The relationship between the residuals and Humidity are displaying a clear pattern. This means the variance of the error terms distribution is related to the variables in the model.
+
+Now to re-show the model with robust standard errors:
+
+```{r}
+msummary(m7, vcov = 'robust',
+         stars = TRUE)
+```
+
+We can now see above the significance stars we have robuts std. errors in the msummary. 
+
+
+
+## Coding 8
+
+In the graph in the last problem you may have noticed that for certain ranges of temperature, the errors were clearly nonzero on average. This can indicate a functional form problem. Run the model from question 7 again (with heteroskedasticity-robust standard errors), but this time use the logarithm of humidity in place of humidity. Add a sentence interpreting the coefficient on temperature. 
+
+- In Python and R, store the model as `m8`. In R, use the `msummary()` function from the **modelsummary** package to display the results with the `stars = TRUE` option. 
+
+
+```{r}
+m8 <- lm(log(humid) ~ temp,
+         data = dengue_r)
+
+msummary(m8, vcov = 'robust',
+         stars = TRUE)
+```
+
+    The coefficient on temp in model 8 is 0.056. This means that a 10% increase in temp is associated with a .0056 unit change in humidity. 
+
+
+
+

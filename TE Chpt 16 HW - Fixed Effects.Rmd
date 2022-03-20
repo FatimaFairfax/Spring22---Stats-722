@@ -1,0 +1,493 @@
+---
+title: "TE Chpt 16 HW  - Fixed Effects"
+author: "Fatima Fairfax"
+date: "3/3/2022"
+output: html_document
+---
+
+# Theory Homework
+
+## How Does it Work?
+
+### Question 1
+
+**You observe the number of vacations taken by Zac and Skylar in 2012, 2013, and 2014. In those years, Zac took 3, 7, and 5 vacations, respectively. Skylar took 2, 6, and 10.**
+
+```{r}
+#just to visualize this'
+yrs <- c(2012,2013,2014)
+zac_vc <- c(3,7,5)
+sky_vc <- c(2,6,10)
+
+q1 <- data.frame(yrs,zac_vc,sky_vc)
+
+q1
+```
+
+
+**a.	Isolate the numbers that represent the variation between Zac and Skylar in their vacation-taking.** 
+
+Between variation looks that the difference between individuals in the mean. So we can add another column that gets the average for each individual and get the difference between those averages: 
+
+```{r}
+avg_z <- mean(q1$zac_vc)
+
+avg_s <-  mean(q1$sky_vc)
+
+btwn <- avg_z - avg_s
+
+btwn
+```
+
+The mean for Zac is 5 vacations and the mean for Skylar is 6 vacations. So the between variation is -1. 
+
+
+**b.	Isolate the variation within Zac and within Skylar in their vacation-taking.** 
+
+The within variation looks at the difference between each indivual's mean and their observed value for the year. 
+
+```{r}
+q1 <- q1 |> 
+  mutate(zac_within = zac_vc - avg_z,
+         sky_within = sky_vc - avg_s)
+
+q1
+```
+
+So the within variation for Zac compares the fact that in 2012, he took 2 less vacations than average, in 2013 he took 2 more vacations than average, and in 2014 he took the average amount of vacations for him.
+
+For Skylar, it compares the fact that in 2012 she took 4 less vacations than average, in 2013 she took an average amount of vacations, and in 2014 took 4 more vacations than average. 
+
+**c.	(Difficult!) We perform a fixed effects analysis of the effect of vacations on happiness. A vacation increases Zac’s happiness by 1 “happiness point,” but it increases Skylar’s happiness by 2 “happiness points.” Will our fixed effects estimate likely give us an answer closer to 1, closer to 2, or exactly 1.5?**
+
+    
+
+
+
+
+### Question 2
+
+**You are interested in the effect of cultural events on the levels of trust in a city. Perhaps big events like concerts bring people together and they can trust each other more. You plan to look at the relationship between trust and number of events in a given year, with fixed effects for city. Draw a causal diagram for this research question with at least four back door paths. Which paths will be closed by fixed effects, and which will remain open?**
+
+The main relationship of interest here is between number of events in a year and trust within a city. Some factors that might influence number of events are:
+
+- population of the city (bigger cities might have more events)
+- navigability of the city (if it's easy to get around)
+- amount of creative or artistic people in the city (to stage events)
+- income of the city (populations that can spend money on events)
+- an effective city counsel (to sanction and help organize big events)
+
+All of those can also effect the level of trust in a city:
+
+- population (more people = more people you don't know / have a relationship with)
+- navigability (good public transit means you can build relationships)
+- amount of creative people (maybe creative people are more trusting?)
+- income of the city (people have different base levels of trust depending on how they perceive the communities)
+- effective city counsel (structures in place might make people more trusting)
+
+![Fixed Effects Q2](/Users/fatimafairfax/Desktop/HW16.Q2.jpeg)
+
+Using fixed effects, and a couple of assumptions, we can close a few of these backdoor paths. The assumption we will take is that over the time of our study data cities do not change too much structurally (i.e., new roads or sidewalks aren't being erected) and the population number and demographics stays fairly stable. These assumptions allow us to close more doors, whereas in reality all of these variables could be time-varying. But we will isolate the ones that seem more resistant to change in the intermediate term.
+
+Taking the above, the backdoor paths that we can close are 1) navigability of the city, 2) population of the city, 3) income of the city and 4) number of creative people. This last one seems the most tenuous, as you could have younger people growing up who are more creative or people moving in who are more creative, but under the assumption that creative people come about to a city at random and their numbers may stay fairly consistent in any one location we'll call this a time-constant variable for the sake of this study. 
+
+The city counsel variable is one that we cannot close, assuming that city counsel members get elected on cycles and predictably change with semi-frequency over the course of a few years. 
+
+
+### Question 3
+
+**Classify each of the following forms of variation as “between variation”, “within variation”, or a combination of both.**
+
+a.	(Individual = person) How a child’s height changes as they age. **within variation**
+
+b.	(Individual = person) In a data set tracking many people over many years, the variation in the number of children a person has in a given year. **within variation**
+
+c.	(Individual = city) Overall, Paris, France has more restaurants than Paris, Texas. **between variation**
+
+d.	(Individual = genre) The average pop music album sells more copies than the average jazz album **between variation**
+
+e.	(Individual = genre) Miles Davis’ Kind of Blue sold very well for a jazz album. **combination of within (within the jazz genre) and between (considering the genre against others)** 
+
+f.	(Individual = genre) Michael Jackson’s Thriller, a pop album, sold many more copies than Kind of Blue, a jazz album **between variation**
+
+
+### Question 4
+
+**Why does the process of taking each observation relative to its individual-level mean have the effect of “controlling for individual”?**
+
+When we take observations relative to the individual level mean we are only looking at the within unit variation. This has the effect of holding all observed and unobserved confounding time-constant variables constant, so that those factors specific to the individual are no longer influencing the dependent variable. 
+
+
+## How is it performed?
+
+### Question 5
+
+**You are interested in the effect of cultural events on the levels of trust in a city. You run a regression of trust levels (on a 0-100 scale) on the number of cultural events with city fixed effects and get a coefficient on cultural events of 3.6. Assume that there are still some back doors open, so do not interpret the result causally. Interpret the 3.6, explaining it in an English sentence**
+
+The coefficient of 3.6 in this fixed effects model means that, for a given city where trust levels is one unit higher than it typically is for that city, we'd expect there to be 3.6 more cultural events than is typical for that city. 
+
+
+### Question 6
+
+**You are interested in the effect of cultural events on the levels of trust in a city. You run a regression of trust levels (on a 0-100 scale) on the number of cultural events with city and year fixed effects and get a coefficient on cultural events of 2.4. Assume that there are still some back doors open, so do not interpret the result causally. Interpret the 2.4, explaining it in an English sentence**
+
+The coefficient of 2.4 in this fixed effects model means that, for a given city in a year where trust levels is one unit higher than it typically is for that city, we'd expect there to be 2.4 more cultural events than is typical for that city. 
+
+
+### Question 7
+
+**Two-way fixed effects with terms for both individual and time are often referred to as “controlling for individual and time effects”. Why might a researcher want to do this rather than just taking individual fixed effects and adding a linear/polynomial/etc. term for time?**
+
+Having two-way fixed effects for both individual and time allows us to look at the *within* variation for both the individual and the time period, again isolating within variation and closing backdoors. If we were to simply add a term for time...
+
+**CHECK**
+
+
+### Question 8
+
+**Which of the following explains why random effects is likely to do a better job of estimating the individual-level effects than fixed effects, if its assumptions hold?**
+
+a.	Because it makes the assumption that the individual effects are unrelated to the other predictors, which breaks that back door and thus reduces bias.
+
+**b.	Because random effects allows some amount of between variation into the model, and some of the real individual effect is that between variation.**
+
+c.	Because it uses the information from the entire data set to estimate each individual effect, rather than relying on only a few observations per individual.
+
+d.	It won’t. Enforcing Durbin-Wu-Hausman makes both methods produce the same estimates anyway
+
+
+# Coding Homework
+
+First, load the packages we'll need:
+
+```{r loading libraries}
+
+library(tidyverse)
+library(modelsummary)
+library(fixest)
+library(wooldridge)
+```
+
+
+
+
+## Coding 1
+
+**Load the data file as mp and limit the variables to: distid, year, math4, expp, and lunch**
+
+distid - district identifier
+year
+math4 - percentage of 4th grade students who are satisfactory or better in math
+expp - expenditure per pupil
+lunch - percentage of students eligible for free lunch
+
+
+```{r load the data}
+mp <- read.csv('https://raw.githubusercontent.com/NickCH-K/TheEffectAssignments/main/mathpnl.csv')
+
+mp <- mp |> select(distid,year,math4,expp,lunch)
+
+glimpse(mp)
+
+```
+
+
+
+## Coding 2
+
+**Panel data is often described as “N by T”. That is, the number of different individuals N and the number of time periods T. Write code that outputs what N and T are in this data**
+
+```{r}
+N <- nrow(mp)
+
+t_val <- unique(mp$year)
+
+t_len <- length(t_val)
+
+print(paste("N = ", N, "T = ", t_len))
+  
+```
+
+
+## Coding 3
+
+**A balanced panel is one in which each individual shows up in every single time period. You can check whether a data set is a balanced panel by seeing whether the number of unique time periods each individual ID shows up in is the same as the number of unique time periods, or whether the number of unique individual IDs in each time period is the same as the total number of unique individual IDs. Think to yourself a second about why these procedures would check that this is a balanced panel. Then, check whether this data set is a balanced panel**
+
+    This procedure would allow me to see that every individual is represented in each time frame and that each time frame is represented in each individual. Since we know the unique time periods, we know all time periods that occur in the dataset. So if an individual has the same number of unique time periods, and we know the number of unique time periods in the total set, we know those time periods for the indiviudal can only be the unique time periods for the full data set (because they are the only ones that exist).
+    
+    As we found above, there are 7 unique time periods in this data set. And with 3850 unique indiviudal rows, we should have 3850 / 7 unique indiviudals = 550. 
+    
+```{r}
+#check number of unique ids in the data set
+
+length(unique(mp$distid))
+```
+    
+    Yep, gives 550. 
+    
+```{r balanced panel check}
+
+#show how many observations are in the same year
+
+table(mp$year)
+
+```
+    
+    This shows that each year has the same amount of observations (550) which is a good sign, because that is the number of unique IDs we have.
+    
+```{r}
+#check the reverse (number of individuals)
+
+table(mp$distid)
+```
+
+    This shows that they are all 7, which is great. But I don't want to print this 550 times. So I'm going to try and think of a check that might get here as well
+    
+```{r}
+#check reverse without printing all 550 cases
+
+id_tab <- table(mp$distid)
+
+unique(id_tab)
+
+```
+    
+    This shows that the only value that occurs in the value of number of unique years for each distinct id is 7, which again confirms that this is a balanced panel. 
+
+
+## Coding 4
+
+**Run an OLS regression with no fixed effects of math4 on expp and lunch. Store the results as ml**
+
+```{r libraries for rstan}
+library(tidyverse)
+library(broom)
+library(rstanarm)
+library(broom.mixed)
+options(mc.cores = parallel::detectCores())
+```
+
+
+```{r model 1 - OLS}
+#regular linear
+
+m1 <- lm(math4 ~ expp + lunch,
+         data = mp)
+
+summary(m1)
+```
+
+    This shows an intercept of 29.53 meaning that for 0 expenditures for student and 0% students on free lunch programs, the average percent of 4th graders who are satisfactory in math are 29.53%. With every one unit increase in expenditure for students, that percentage increases by 0.007 percent and for every one unit increase in percentage of students on free lunch programs, that percentage decreases by 0.38.
+    
+
+```{r Bayesian OLS 1}
+#bayesian
+
+bl <- stan_glm(math4 ~ expp + lunch,
+               data = mp)
+
+summary(bl)
+```
+
+    Here the intercept and beta values on lunch and expp are very similar to the regular linear model. 
+    
+
+## Coding 5
+
+**Modify the model in step 4 to include fixed effects for distid “by hand”. That is, subtract out the within-distid mean of math4, expp, and lunch, creating new variables math4_demean, expp_demean, and lunch_demean, and re-estimate the model using those variables, storing the result as m2**
+
+
+```{r model 2 - fixed effects}
+
+#by hand fixed effects
+mp_fixed <- mp |> 
+  group_by(distid) |> 
+  mutate(math4_demean = math4 - mean(math4),
+         expp_demean = expp - mean(expp),
+         lunch_demean = lunch - mean(lunch)) |> 
+  ungroup()
+
+#analyze within variation
+
+m2 <- lm(math4_demean ~ expp_demean + lunch_demean,
+         data = mp_fixed)
+
+summary(m2)
+```
+
+
+    Here we have the first fixed effect model for our data. Here we have a coefficient on expenditures of 0.01203 meaning that for a given district, when expenditures per pupil is one unit higher than typical we'd expect the percentage of students performing satisfactory in math to be 0.01203 percentage points higher than typical for that district.
+    
+    Similarly, the coefficient on lunch programs is 0.3135, meaning that in a given district, when the percentage of students on a free lunch program is one unit higher than typical, we'd expect the percentage of students performing satisfactory in math to be 0.3135 percentage points higher.
+
+
+## Coding 6
+
+**Next we’re going to estimate fixed effects by including distid as a set of dummies. This can be extremely slow, so for demonstration purposes use only the first 500 observations of your data (don’t get rid of the other observations, though, you’ll want them for the rest of this assignment). Run the model from step 4 but with dummies for different values of distid, saving the result as m3. Then, do a joint F test on the dummies (see Chapter 13), and report if you can reject that the dummies are jointly zero at the 99% level**
+
+```{r save the first 500 only}
+
+short_mp <- head(mp,500)
+
+glimpse(short_mp)
+
+```
+
+
+```{r model 3 - dummies}
+m3 <- lm(math4 ~ factor(distid) + expp + lunch,
+         data = short_mp)
+
+summary(m3)
+```
+
+    Using the first 500 observations as dummy variables in this set, we get a coefficeint of 0.008839 on expenditures per pupil and a coefficient of 0.8007 on percent of students on free lunch. We can't really interpret these for the full data set because we're only using the first 500 observavtions, but if we used all we should see coefficients pretty similar to the last version of this model. 
+
+
+```{r}
+library(car)
+```
+
+```{r F test - dummy set}
+
+#found this command in Chapter 13 to conduct an F test. First I want to grab all the coefficients
+
+coef_m3 <- as.data.frame(m3$coefficients)
+
+```
+
+
+```{r}
+#then run the F test
+
+linearHypothesis(m3, hypothesis.matrix = coef_m3,
+                 test = "F")
+
+```
+
+    I got this error and after looking it up on stack overflow it looks like I need to convert the dataframe into a matrix format:
+    
+```{r}
+#convert the coefficients data into a matrix
+
+coef_m3 <- as.matrix(coef_m3)
+
+#run the F test
+
+linearHypothesis(m3,hypothesis.matrix = coef_m3,
+                 test = "F")
+
+```
+    
+
+
+
+## Coding 7
+
+**Now we will use a specially-designed function to estimate a model with fixed effects. (Using the whole data set once again), use feols() from the fixest package in R to estimate the model from step 4 but with fixed effects for distid. Save the result as m4. Include standard errors clustered at the distid level**
+
+```{r}
+library(fixest)
+```
+
+
+```{r model 4 - feols with fixed effects}
+
+m4 <- feols(math4 ~ expp + lunch | distid,
+              data = mp)
+
+#standard errors are clustered by the first fixed effect by default (which is distid, which is what we want)
+summary(m4)
+
+```
+
+    Here we get a coefficient on expp of 0.01203, which means that for a given district with a one unit higher value in expenditures per pupil than is typical, we would expect to see a 0.01203 increase in percent of 4th graders performing satisfactory in math.
+    
+    Similarly we have a coefficient of 0.094 for lunch, which means that for a given district with a one unit higher value in percent of students on free lunch than is typical, we would expect to see a 0.094 increase in percent of 4th graders performing satisfactory in math. Both of these results are statistically significant at the 95% level (if you're in to that sort of thing).
+
+
+## Coding 8
+
+**Now add fixed effects for year to your model from step 7 to create a two-way fixed effects model. Keep the standard errors clustered at the distid level. Save the results as m5.**
+
+```{r model 5 - fixed effects for year + distid}
+
+m5 <- feols(math4 ~ expp + lunch | distid + year,
+            data = mp)
+
+summary(m5)
+
+```
+
+    Now we have a two-way fixed effects model. Here we can interept the coefficients as follows:
+    
+    For a given district in a given year that has a one unit higher expenditure per pupil than typical, we would expect the percentage of 4th graders performing satisfactory in math to be 0.000168 lower than typical and for a one unit higher percentage of students on free lunch, we would expect the percentage of 4th graders perofmring satisfactory in math to be 0.018441 higher that typical. However, neither of these values are staitstically significant at the 95% level (if you're in to that sort of thing).
+
+
+## Coding 9
+
+**Using modelsummary() from modelsummary in R, make a regression table including m1 through m5 in the same table so you can compare them all. Read the documentation of your command to figure out how to include the expp, lunch, expp_demean, and lunch_demean predictors in the table without clogging the thing up with a bunch of dummy coefficients from m3.**
+
+**Write down two interesting things you notice from the table. Multiple possible answers here**
+
+```{r}
+library(modelsummary)
+```
+
+
+```{r model summary}
+modelsummary(list(m1,m2,m3,m4,m5),
+             coef_map = c('(Intercept)','expp','lunch','expp_demean','lunch_demean'),
+             stars = TRUE) 
+
+#keep the variables and don't clog up the model summary with the coefficeints from model 3
+```
+
+    Two interesting things about this model summary:
+    
+    1) Model 2 (fixed effects) and model 4 (fixed effects feols) give the exact same coefficients for expp_demean / expp and lunch_demean and lunch. This shows that feols command behaves in the same way as the 'by hand' calculation I did. That being said, there are differences in the standard deviations and the R^2 values between these two models.
+    
+    2) All of the models have statistically significant coefficients expect for model 5 (two-way fixed effects with district and year). When we add a fixed effect for year our coefficients are no longer staistically significant. Meaning that once you control for the year, expenditured per pupil and percent of students on free lunch does not have a significant effect on percentage of 4th graders performing satificatory in math. 
+
+
+
+## Coding 10
+
+**Finally, we’ll close it out by using correlated random effects instead of fixed effects (see 16.3.3). You already have expp_demean and lunch_demean from earlier. Now, modify the code from that slightly to add on expp_mean and lunch_mean (the mean within distid instead of the value minus that mean). Then, regress math4 on expp_demean, lunch_demean, expp_mean, and lunch_mean, with random effects for distid using lmer() from lme4 in R. Show a summary of the regression results**
+
+```{r}
+library(lme4)
+```
+
+
+```{r model 6 - correlated random effects}
+
+#by hand fixed effects
+mp_fixed_2 <- mp |> 
+  group_by(distid) |> 
+  mutate(math4_demean = math4 - mean(math4),
+         expp_demean = expp - mean(expp),
+         lunch_demean = lunch - mean(lunch),
+         expp_mean = mean(expp),
+         lunch_mean = mean(lunch)) |> 
+  ungroup()
+
+#analyze within variation
+
+m6 <- lmer(math4 ~ expp_demean + lunch_demean + expp_mean + lunch_mean + (1 | distid),
+         data = mp_fixed_2)
+
+summary(m6)
+
+```
+
+
+    Now for the random effects model. The advantage of the random effects model is that we can incorporate both the within variation from the fixed effects and the between variation. The 'demean' values are the within variation while the 'mean' values are the between variation. 
+    
+    Within districts, we expect a 0.01203 change in satisfactory 4th grader math percentage for increase in expenditures per pupil. 
+    Within districts, we expect a 0.3135 change in satisfactory 4th grader math percentage for increase in percentage of students getting free lunch.
+    
+    Between districts, we expect a 0.0019855 change in satisfactory 4th grader math percentage for increase in expenditures per pupil.
+    Between districts, we expect a -0.4413807 change in satisfactory 4th grader math percentage for increase in percentage of students getting free lunch. 
+
+

@@ -7,6 +7,11 @@ output: html_document
 
 # Theory Homework
 
+```{r}
+library(tidyverse)
+```
+
+
 ## How Does it Work?
 
 ### Question 1
@@ -39,7 +44,7 @@ btwn <- avg_z - avg_s
 btwn
 ```
 
-The mean for Zac is 5 vacations and the mean for Skylar is 6 vacations. So the between variation is -1. 
+The mean for Zac is 5 vacations and the mean for Skylar is 6 vacations. So the between variation is -1, or 1 taking the absolute value. 
 
 
 **b.	Isolate the variation within Zac and within Skylar in their vacation-taking.** 
@@ -60,10 +65,8 @@ For Skylar, it compares the fact that in 2012 she took 4 less vacations than ave
 
 **c.	(Difficult!) We perform a fixed effects analysis of the effect of vacations on happiness. A vacation increases Zac’s happiness by 1 “happiness point,” but it increases Skylar’s happiness by 2 “happiness points.” Will our fixed effects estimate likely give us an answer closer to 1, closer to 2, or exactly 1.5?**
 
+Skylar has more within variation over the time period, which is weighted more heavily in the fixed effect estimation. So the value would be closer to 2.
     
-
-
-
 
 ### Question 2
 
@@ -124,23 +127,21 @@ When we take observations relative to the individual level mean we are only look
 
 **You are interested in the effect of cultural events on the levels of trust in a city. You run a regression of trust levels (on a 0-100 scale) on the number of cultural events with city fixed effects and get a coefficient on cultural events of 3.6. Assume that there are still some back doors open, so do not interpret the result causally. Interpret the 3.6, explaining it in an English sentence**
 
-The coefficient of 3.6 in this fixed effects model means that, for a given city where trust levels is one unit higher than it typically is for that city, we'd expect there to be 3.6 more cultural events than is typical for that city. 
+The coefficient of 3.6 in this fixed effects model means that, for a given city where the number cultural events are one unit higher than it typically is for that city, we'd expect trust levels to be 3.6 higher than is typical for that city. 
 
 
 ### Question 6
 
 **You are interested in the effect of cultural events on the levels of trust in a city. You run a regression of trust levels (on a 0-100 scale) on the number of cultural events with city and year fixed effects and get a coefficient on cultural events of 2.4. Assume that there are still some back doors open, so do not interpret the result causally. Interpret the 2.4, explaining it in an English sentence**
 
-The coefficient of 2.4 in this fixed effects model means that, for a given city in a year where trust levels is one unit higher than it typically is for that city, we'd expect there to be 2.4 more cultural events than is typical for that city. 
+The coefficient of 2.4 in this fixed effects model means that, for a given city in a given year where the number of cultural events is one unit higher than it typically is for that city, we'd expect trust levels to be 2.4 higher than is typical for that city. 
 
 
 ### Question 7
 
 **Two-way fixed effects with terms for both individual and time are often referred to as “controlling for individual and time effects”. Why might a researcher want to do this rather than just taking individual fixed effects and adding a linear/polynomial/etc. term for time?**
 
-Having two-way fixed effects for both individual and time allows us to look at the *within* variation for both the individual and the time period, again isolating within variation and closing backdoors. If we were to simply add a term for time...
-
-**CHECK**
+Having two-way fixed effects for both individual and time allows us to look at the *within* variation for both the individual and the time period, again isolating within variation and closing backdoors. If we were to simply add a term for time, we will miss how the individual fixed effects and the year fixed effect affect each other.
 
 
 ### Question 8
@@ -149,9 +150,13 @@ Having two-way fixed effects for both individual and time allows us to look at t
 
 a.	Because it makes the assumption that the individual effects are unrelated to the other predictors, which breaks that back door and thus reduces bias.
 
-**b.	Because random effects allows some amount of between variation into the model, and some of the real individual effect is that between variation.**
+b.	Because random effects allows some amount of between variation into the model, and some of the real individual effect is that between variation.
 
-c.	Because it uses the information from the entire data set to estimate each individual effect, rather than relying on only a few observations per individual.
+    However, the chapter does note that one of the primary advantages of random effects over fixed effects is that, instead of just using within variation, it uses a weighted average of within and between variation.
+    
+**c.	Because it uses the information from the entire data set to estimate each individual effect, rather than relying on only a few observations per individual.**
+
+    In the chapter, it notes that random effects allows us to use **all** data to estimate the distribution which improves the indiviudal effects estimation, which gives support to this answer.
 
 d.	It won’t. Enforcing Durbin-Wu-Hausman makes both methods produce the same estimates anyway
 
@@ -176,9 +181,13 @@ library(wooldridge)
 **Load the data file as mp and limit the variables to: distid, year, math4, expp, and lunch**
 
 distid - district identifier
+
 year
+
 math4 - percentage of 4th grade students who are satisfactory or better in math
+
 expp - expenditure per pupil
+
 lunch - percentage of students eligible for free lunch
 
 
@@ -348,36 +357,45 @@ summary(m3)
 library(car)
 ```
 
-```{r F test - dummy set}
-
-#found this command in Chapter 13 to conduct an F test. First I want to grab all the coefficients
-
-coef_m3 <- as.data.frame(m3$coefficients)
-
-```
-
-
-```{r}
-#then run the F test
-
-linearHypothesis(m3, hypothesis.matrix = coef_m3,
-                 test = "F")
-
-```
-
-    I got this error and after looking it up on stack overflow it looks like I need to convert the dataframe into a matrix format:
+    [Early disclaimer, this fails] First we want to just get the dummy variables. Let's first see what where expp, lunch, and the intercept are:
     
 ```{r}
-#convert the coefficients data into a matrix
+#view the coefficient list
 
-coef_m3 <- as.matrix(coef_m3)
+coef_3 <- as.data.frame(m3$coefficients)
 
-#run the F test
+coef_3
 
-linearHypothesis(m3,hypothesis.matrix = coef_m3,
-                 test = "F")
+#get the dimensions
+
+dim(coef_3)
+```
+    
+    It's showing up in the 1st, 73rd, and 74th rows (the ones we want to get rid of). So we'll keep 2 through 72.
+
+
+```{r}
+#to grab just the dummy variables without
+
+coef_3 <- coef(m3)[2:72]
 
 ```
+
+```{r F - test on the dummy set (failed!), results='hold'}
+#run the F test using the command from Chapter 13: linearHypothesis
+
+## linearHypothesis(m3,hypothesis.matrix = coef(m3)[2:72], test = "F")
+```
+
+    **Note to Nico** - This process continually gives me non-conformable arguements, even after checking with the class it does not seem to run when I remove the non-dummy variables, so I did run it also with all variables in tact:
+
+```{r F - test on the dummy set}
+#run the F test using the command from Chapter 13: linearHypothesis
+
+linearHypothesis(m3,hypothesis.matrix = m3$coefficients, test = "F")
+```
+
+    Looking at the significance stars in this model, it looks like we can reject that the dummies are jointly zero at the 99% level.
     
 
 
@@ -440,14 +458,14 @@ modelsummary(list(m1,m2,m3,m4,m5),
              coef_map = c('(Intercept)','expp','lunch','expp_demean','lunch_demean'),
              stars = TRUE) 
 
-#keep the variables and don't clog up the model summary with the coefficeints from model 3
+#keep the variables and don't clog up the model summary with the coefficients from model 3
 ```
 
     Two interesting things about this model summary:
     
     1) Model 2 (fixed effects) and model 4 (fixed effects feols) give the exact same coefficients for expp_demean / expp and lunch_demean and lunch. This shows that feols command behaves in the same way as the 'by hand' calculation I did. That being said, there are differences in the standard deviations and the R^2 values between these two models.
     
-    2) All of the models have statistically significant coefficients expect for model 5 (two-way fixed effects with district and year). When we add a fixed effect for year our coefficients are no longer staistically significant. Meaning that once you control for the year, expenditured per pupil and percent of students on free lunch does not have a significant effect on percentage of 4th graders performing satificatory in math. 
+    2) All of the models have statistically significant coefficients expect for model 5 (two-way fixed effects with district and year). When we add a fixed effect for year our coefficients are no longer statistically significant. Meaning that once you control for the year, expenditured per pupil and percent of students on free lunch does not have a significant effect on percentage of 4th graders performing satificatory in math. 
 
 
 
@@ -475,7 +493,7 @@ mp_fixed_2 <- mp |>
 #analyze within variation
 
 m6 <- lmer(math4 ~ expp_demean + lunch_demean + expp_mean + lunch_mean + (1 | distid),
-         data = mp_fixed_2)
+         data = mp_fixed_2) #taking the formula from the example Steve gave in class
 
 summary(m6)
 

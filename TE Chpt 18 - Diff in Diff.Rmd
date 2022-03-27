@@ -1,0 +1,386 @@
+---
+title: "TE 18 HW - Differences in Differences"
+author: "Fatima Fairfax"
+date: "3/24/2022"
+output: html_document
+---
+
+# Theory Homework
+
+## How Does it Work?
+
+### Question 1
+
+**In the Event Studies chapter we estimated the effect of something that occurs at a specific time by just comparing before-event to after-event, without really using a control group. What assumption is made by no-control-group event studies that we don’t have to make with difference-in-differences?**
+
+In the no-control group event studies we use before-treatment information to create a counterfactual after-treatment untreated prediction, looking at within variation for a treated population. The assumption here is that you can close the backdoor for time by observing changes within a single individual unit holding time-constant variables constant.
+
+
+### Question 2
+
+**Which of the following potential back doors is controlled for by comparing the treated group to a control group?**
+
+a.	The treated group may be following a trend, unique to the group, that would make the outcome change from before-treatment to after-treatment anyway
+
+**b.	There may be events affecting everyone that would change the outcome from before-treatment to after-treatment anyway**
+
+c.	There may be differences in typical outcome levels between the treated group and the untreated group
+
+d.	The decision to treat the treated group, rather than some other group, may be based on factors that are related to the outcome
+
+
+### Question 3
+
+**Consider a treatment and control group. Looking only at the pre-treatment period, they have exactly the same outcomes (zero gap between them in each period).**
+
+**a.	Despite having exactly the same outcomes pre-treatment, it happens to be the case that parallel trends is violated for these two groups. How is this possible? Explain what it means for parallel trends to be violated in this case, or give an example of how it could be violated.**
+
+The parallel trends assumption is that if no treatment had occurred to the treated group, the difference in change between the treated group and untreated group outcomes would have remained the same. In a case where the pre-treatment period shows zero gaps between the groups, parallel trends could still be violated if the trends would have diverged in the post-treatment period.  
+    
+
+**b.	If we estimate the causal effect in this case using difference-in-differences, even though parallel trends is violated, how much would our effect be off by? (note you won’t be able to give a specific number)**
+
+Difference in difference takes the following formula: EffectofTreatment + OtherTreatedGroupChanges - OtherUntreatedGroupChanges. Parallel trends assumes that OtherTreatedGroupChanges and OtherUntreatedGroupChanges cancel each other out so we are left with the EffectofTreatment. If we are to estimate the causal effect in this case with DID with parallel trends violated, then the effect will be off by the difference between OtherTreatedGroupChanges and OtherUntreatedGroupChanges.
+    
+
+### Question 4
+
+**Consider the below graph showing the average outcome for treated and control groups in the lead-up to treatment (indicated by the dashed line), and also after treatment.**
+
+![Q4](/Users/fatimafairfax/Desktop/HW18Q4.png)
+
+**a. Based on the prior trend, does it seem likely that parallel trends holds in this instance?**
+
+No, this does not seem to hold with parallel trends. There has been a positive trend in the untreated group that was not the same for the treated group in the pre-treatment period. The untreated group was meeting the rates of the treated group before treatment. Thus, the effect will be a combination of the long-term positive trend in the untreated group and the treatment. It does not matter that the trends diverged, but we are led to believe that the trends would have continued to diverge post-treatment.
+
+**b. If we estimate difference-in-differences anyway, are we likely to overestimate the actual causal effect, underestimate it, or get it right on average?**
+
+Again, taking the following formula: EffectofTreatment + OtherTreatedGroupChanges - OtherUntreatedGroupChanges, the OtherUntreatedGroupChanges seem large and consistent which leads me to believe that we would end up underestimating the actual causal effect (subtracting more).
+
+### Question 5
+
+**In mid-2020, during the COVID-19 pandemic, different countries pursued different courses of action. Some locked down fully, imposing harsh penalties to most people for leaving the house outside certain proscribed times. Some were looser and only suggested staying at home, and some had hardly any restrictions at all. You notice that COVID rates tend to spike dramatically in different countries at seemingly-random times, and want to know if certain restrictions helped.**
+
+**From March through May 2020, US and Canada COVID case rates followed similar trends (US rates were higher, but the trends were similar). You want to look at the effect of COVID restrictions enacted in Canada in late May 2020 on case rates. Is DID, with the US as a control group, a good way to estimate this effect? If not, what concerns would you have about this research design?**
+
+When choosing a control group in the diff-in-diff analysis, we should try to pick a group for which we have no particular reason to believe it would suddenly change around the time of treatment, the groups should be generally be similar in many ways, and have similar trajectories for the dependent variable (case rates). 
+
+We are choosing US because we know that they did not make a change in policy in May 2020, which covers us for the first check. The second, about group similarity, is potentially effected by the differences in US and Canada particularly around healthcare, but we have the pre-treatment rates as similar which gives some comfort. Because of this, the US is a good control group to use in this instance.
+
+
+### Question 6
+
+**Consider the below table of mean outcomes, and calculate the difference-in-difference effect of treatment. Write out the equation you used to calculate it (i.e. show how the four numbers in the table are combined to get the estimate)**
+
+![Q6](/Users/fatimafairfax/Desktop/HW18Q6.png)
+
+
+A difference in difference analysis takes the difference in the values of the treated group before and after treatment and then takes the difference of that with the difference in values of the untreated group.
+
+
+```{r}
+(9 - 5) - (7.5 - 6)
+
+#or, more explicitly
+
+T_before <- 5
+T_after <- 9
+
+U_before <- 6
+U_after <- 7.5
+
+(T_after - T_before) - (U_after - U_before)
+
+```
+
+
+The difference in difference effect of treatment, of the average treatment effect on the treated, is 2.5.
+
+
+## How is it performed?
+
+### Question 7
+
+**You are planning to estimate whether voter-protection laws increase voter turnout. You note that, in 2015, a lot of new voter-protection laws were enacted in some provinces but not in others. Conveniently, no new laws were enacted in 2012, 2014, or 2016, so you decide to use 2012 and 2014 as your “before” periods and 2016 as “after”.**
+
+**a.	Which of the following best describes what you’d want to regress state-and-year level “voter turnout” measures on?**
+
+  i.	An indicator for whether the state is treated, and an indicator for whether the year is 2016.
+
+  ii.	A set of fixed effects for state, and a set of fixed effects for year.
+
+  iii.	An indicator for whether the state is treated, a set of fixed effects for year, and an indicator for whether the state is currently treated.
+
+  **iv.	A set of fixed effects for state, and for year, and an interaction between “is 2016” and “is a treated state”.**
+
+  v.	This design should not be estimated using a regression.
+
+
+**b. Unless you chose the final option in the previous question, specify which coefficient in that regression would give you the DID estimate**
+
+The DID estimate would be given by the coefficient on the interaction between if the state is a treated state and if it is in the treated time frame (i.e., if its 2016).
+
+
+### Question 8
+
+**You are looking at a difference-in-difference design to estimate the effect of providing laptops to school children on their test scores. Look at the below regression output, in which “Treated” is an indicator that the school received laptops in 2008 as part of a new program (the untreated group did not receive any laptops until years after the sample window for this study ended), and “After” is an indicator for being after the year 2008.**
+
+![Q8](/Users/fatimafairfax/Desktop/HW18Q8.png)
+
+
+“Assuming that **the parallel trend assumption holds**, the effect of laptops on test scores was **5.034**, and this effect **was** statistically significant at the 95% level.”
+
+
+### Question 9
+
+**A standard “prior trends” test might estimate a regression using the model Y= β_0 + β_1 t + β_2 Treated + β_3 t×Treated + ε (only using data from before-treatment), where t is a time variable, Treated is an indicator for being in the treated group, and Y is an outcome variable, and look for a large/significant estimate of β_3. Explain why this test is performed, and specifically what it shows**
+
+Prior trends tests test if trends are different pre-treatment. Looking at $\beta_3$ gives us the coefficient on the interaction between the time variable and the treated variable. In this regression, this value being statistically significant would mean that we can reject that the interaction is 0, which would signify that there **are** differences in trends in the pre-treatment period. This would convey a violation of the parallel trends assumption. We would look to see if the estimate is large to see **how different** trends might have been pre-treatment to give us a sense for if the violation is large or not.
+
+
+### Question 10
+
+**Consider the below graph with estimates from a dynamic difference-in-differences model for a treatment that occurs between periods 4 and 5, with 95% confidence intervals shown**
+
+![Q10](/Users/fatimafairfax/Desktop/HW18Q10.png)
+
+**a.	What about this graph might make us concerned about our identification assumptions?**
+
+This graph is showing the effects of treatment pre and post treatment period. Is it concerning that there is a statistically significant effect at period 1, which occurs before the treatment period (between 4 and 5). There should not be a treatment effect prior to the treatment taking place. 
+
+**b.	Ignoring any concerns we have, what would we say is the effect of treatment on Y in this case? (note the height of the line in period 5 is about 3, in period 6 is about 1, and in period 7 is about .5).**
+
+Following this graph, we would say that the treatment effect is about 3 in period 1 after treatment, it's about 1 in period 2 after treatment, and it's about 0.5 in period 3 after treatment.
+
+
+### Question 11
+
+**Chapter 18.2.5 points out a problem with two-way fixed effects in cases where treatment is not all assigned at the same time, but rather different groups get treated at different times (a “rollout” design). In these designs, two-way fixed effects treats “already-treated” units, who were treated in earlier periods, as “control” units, as though they hadn’t gotten treated at all**
+
+**However, there’s nothing theoretically wrong about using an already-treated unit as a control; the DID assumptions don’t require that the control group be untreated, just that the gap between treated and control doesn’t change when the treated group’s treatment goes into effect. Why are we so concerned, then, about using an already-treated group as a control? You can answer generally, or use as an example a DID with only two groups – an already-treated group and a newly-treated group. (hint: to do the example, try assuming the treatment only has an effect for the single period after treatment, and the already-treated group is treated exactly one period before the treated group)**
+
+The major issue here has to do with parallel trends and dynamic treatment effects. In the example, if you use an already-treated group as the control the gap between them and the treated group may be set to change because the treatment effects for that group may be growing or shrinking (in this case disappearing) in subsequent periods, so you are capturing both the effect of the treatment immediately after the treatment period **and** the change in effectiveness of the treatment overtime captured in the OtherUntreatedGroupChanges. 
+
+
+# Coding Homework
+
+## Question 1
+
+**In this assignment we will be walking through a very simple application of difference-in-differences that comes from Peter Nencka. In particular, it seemed that the beginning of the COVID-19 pandemic led to a brief craze for homemade sourdough bread, as people had to stay home, and stores were out of yeast (sourdough can be made at home using yeast from the air and does not require store-bought yeast). We will be estimating whether COVID lockdowns actually increased interest in sourdough bread.**
+
+**We will be measuring interest in sourdough bread using Google Trends data in the USA. Google Trends tracks the popularity of different search terms over time. We will be comparing the popularity of the search term “sourdough” against the control groups: the search terms “cereal,” “soup,” and “sandwich,” the popularity of which we suspect might not have been meaningfully affected by COVID lockdowns**
+
+
+```{r load libraries}
+library(tidyverse)
+library(modelsummary)
+library(fixest)
+```
+
+
+```{r load the data}
+
+db <- read.csv('https://raw.githubusercontent.com/NickCH-K/TheEffectAssignments/main/sourdough_trends.csv')
+  
+```
+
+**Then limit the data to date, hits, and keyword**
+
+```{r}
+sr <- db |> select(date,hits,keyword)
+```
+
+
+**Then convert the 'date' variable into a usable format, taking away the time component**
+
+```{r}
+sr <- sr |> 
+  mutate(date = as.Date(date))
+```
+
+```{r}
+#check out what this does
+
+glimpse(sr)
+```
+
+    This took the time stamps off of the date variable. Now it looks how we want it to look.
+
+## Question 2
+
+**Make a line graph with date on the x-axis and hits on the y-axis, with a separate line for each keyword. Also add a vertical line for the “start of the pandemic” which we’ll decide for our purposes is March 15, 2020.**
+
+```{r}
+eventdate <- as.Date('2020-03-15')
+
+ggplot(sr,aes(x=date,y = hits,color = keyword)) + 
+  geom_line() +
+  geom_vline(aes(xintercept = eventdate))
+```
+
+
+## Question 3
+
+**Looking at your graph from problem 2, comment on (a) whether it looks like the lockdown had an effect on the popularity of sourdough, (b) the shape that effect takes (i.e. is it a permanent increase in popularity? Temporary?), (c) whether you might be concerned about any of the control groups we’ve chosen**
+
+    a) Based on the graph, it does appear that following the lockdown, there was a sharp spike in hits about sourdough.
+    
+    b) however, the sharp increase does appear to have been temporary, with rates decreasing down by July. However it does remain higher than it was in the pre-pandemic time throughout this dataframe.
+    
+    c) The control groups that may pose a problem are 1) soup, which seems to have taken a deep dip before the "event date" and then a spike up, though it also stabilized, and 2) sandwhich, which seems to have also changed course at the eventdate, which started a steady and lasting moderate increase different from the prior decrease.
+    
+
+## Question 4
+
+**Create a “Treated” indicator that’s equal to 1 for sourdough and 0 otherwise (or True/False, either way). Do a test of whether the prior trends (keeping March 15 as the “treatment date”) differ between the treated and control groups, using a linear trend and doing a statistical significance test at the 95% level. Then, if you were concerned about any of the control groups in question 3c, drop any you were concerned about (and keep them dropped for the rest of the assignment) and rerun the test.**
+
+**Write a line commenting on whether you can reject equal prior trends in your model(s).**
+
+```{r}
+sr <- sr |> 
+  mutate(treated = if_else(keyword == 'sourdough',1L,0L))
+```
+
+    To test prior trends, we can run a linear regression of the following form:
+    
+    Y = alpha_g + beta_1 Time + beta_2 Time x Group + e
+    
+    Where alpha_g is a variable for 'treated', time is only the time before the eventdate (2020-03-15), and group is the keyword. We want to see if beta_2 is significant at the 95% level. If beta_2 = 0 is unlikely (statistically significant), then this signals that the trends are different. 
+  
+
+```{r prior trends}
+
+pt_db <- sr |> filter(date < eventdate) #data from before the eventdate
+
+pt_1 <- lm(hits ~ treated + date + date*keyword,data = pt_db)
+
+tidy(pt_1,conf.int = TRUE, conf.level = 0.95)
+
+  
+```
+
+    This shows that the beta_2 on soup is statistically significant at the 95% level (t-stat is over 1.96 and p is less than .05), meaning we would have to reject the null that beta_2 is zero and signifying that the trends are different. This is one of the control groups of concern, so I will run this again dropping the soup group: 
+    
+
+```{r remove soup}
+sr2 <- sr |> filter(keyword != "soup") #removing the soup data
+
+pt_db2 <- sr2 |> filter(date < eventdate)
+
+
+pt_2 <- lm(hits ~ treated + date + date*keyword,data = pt_db2)
+
+tidy(pt_2,conf.int = TRUE, conf.level = 0.95)
+
+```
+    
+    Now we see that the beta_2 is statistically significant at the 95% level on the interaction with sandwhich, which was another variable of concern in the graph. So let's run it once more with sandwich dropped.
+    
+```{r remove sandwich}
+
+sr3 <- sr2 |> filter(keyword != "sandwich") #removing the sandwich data
+
+pt_db3 <- sr3 |> filter(date < eventdate)
+
+
+pt_3 <- lm(hits ~ treated + date + date*keyword,data = pt_db3)
+
+tidy(pt_3,conf.int = TRUE, conf.level = 0.95)
+```
+    
+  
+    Finally, we have the final remaining beta_2 with cereal and sourdough as not statistically significant which means that it is likely to be 0 and we can fail to reject that trends are different. Moving forward I will only use the dataset sr3 which is just cereal and sourdough. 
+  
+
+## Question 5
+
+**Create a month variable by shifting the date variable back 15 days (so that the treatment day is the first day of the month) and then taking the month of the resulting date. Also create an After variable equal to 1/0 (or True/False) if the date is March 15 or afterwards.**
+
+```{r}
+library(lubridate)
+```
+
+
+```{r add a month and after variable}
+sr3 <- sr3 |> mutate(month = month(ymd(date - 14)),
+                   after = if_else(date >= eventdate,1L,0L))
+```
+
+
+**Then, take a look at the values of month you get and how they line up with date, and subtract a number from month so that the last period just before treatment (Feb 16-Mar 14) is 0. (Also, change the Jan 1-14 month so it’s one less than the Jan 15-Feb 14 month)**
+
+```{r}
+sr3 |> select(date,month)
+```
+
+    So if I'm understanding this correctly, we want the Feb 16-Mar 14 to be "month 0," and each increment outside of that should be plus or minus 1. Also, we have to adjust the Jan 1 - Jan 14 dates to be a full month less than Jan 15-Feb 14.
+    
+    Our eventdate, 2020-03-15, is the beginning of "month 3," and the period right before is "month 2." So if we subtract 2 from the month variable we should align appropriately.
+    
+```{r}
+sr3 <- sr3 |> mutate(month = month - 2)
+
+glimpse(sr3)
+```
+    
+    And now we have to adjust the 2020-01-01 to 2020-01-14 to be -2, rather than 10. I'm going to try and filter values over 9, because the next highest month value in the set right now is 5.
+    
+```{r}
+sr3 <- sr3 |>  mutate(month = if_else(month > 9, -2,month))
+
+glimpse(sr3)
+
+```
+    
+    This appears to have worked! 
+
+**Then, use two-way fixed effects to estimate the difference-in-difference estimate of the effect of lockdown on sourdough popularity with keyword and month fixed effects, and standard errors clustered at the keyword level.**
+
+```{r two way fixed effects DID}
+#treatment variable to signify both the treatment group status and the after eventdate status
+
+sr3 <- sr3 |> mutate(Treated = treated == 1 &
+                       after == 1)
+
+
+m1 <- feols(hits ~ Treated | keyword + month,
+              data = sr3)
+
+summary(m1,stars = TRUE)
+
+```
+
+    This shows a difference in difference estimate of 8.1 which is statitically significant at the 99% level. The interpretation of this would be: the treatedgroup effect is 8.1 units bigger in the aftertreatment period than in the beforetreatment period. Otherwise said: the treated/untreated gap between sourdough adn cereal is 8.1 units bigger after the eventdate than before it.
+
+
+## Question 6
+
+**Now, let’s allow the effect to be dynamic over time. Estimate a difference-in-difference model allowing the effect to differ by month (using month = 0 as a reference period), with standard errors clustered at the keyword level, and show the results**
+
+```{r dynamic effect}
+#treatment variable
+
+sr3 <- sr3 |> mutate(Sourdough = keyword == 'sourdough')
+
+#interact date with being in the treated group using the fixest i() function
+#this lets us specify a reference period using months
+
+m2 <- feols(hits ~ i(month, Sourdough, ref = 0) | Sourdough + month, data = sr3)
+
+summary(m2)
+```
+
+    This does seem to signify that the effect changes across time.
+
+
+## Question 7
+
+**Make a graph demonstrating the results of your dynamic difference-in-differences model. Describe both what the effect looks like and also whether this graph gives you any concerns about prior trends violations**
+
+```{r}
+# use a plot to graph effects
+coefplot(m2)
+```
+
+
+    This does seem to signify that there was a sharp spike at the eventdate / treatment, but that the effect did fade over time. This graph also gives us some more confidence in the prior trends assumption as it seems that there is no treatment effect prior to the treatment event, which we see looking at month = -2 and -1 having estimated effect as 0. 

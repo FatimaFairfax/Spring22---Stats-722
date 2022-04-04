@@ -1,0 +1,132 @@
+---
+title: "Stats Final Project"
+author: "Fatima Fairfax"
+date: "4/3/2022"
+output: html_document
+---
+
+```{r load libraries}
+
+library(tidyverse)
+library(modelsummary)
+library(fixest)
+library(lme4)
+
+```
+
+# Panel Checks
+
+Panel data is N by T. See what we have here:
+
+```{r}
+N <- nrow(db)
+
+t_val <- unique(db$year)
+
+t_len <- length(t_val)
+
+print(paste("N = ", N, "T = ", t_len))
+```
+
+## Balance Check
+
+```{r}
+length(unique(db$State))
+
+#show how many observations are in the same year
+
+table(db$year)
+```
+
+
+This is not balanced, and there are only 31 observations here. Let me filter out all variables that don't have data in both years:
+
+
+
+# Models
+
+
+```{r model 1 - OLS}
+#regular linear
+
+death_per <- lm(death_per ~ EHR_per,
+         data = db)
+
+death_n <- lm(death_n ~ EHR_per, data = db)
+
+LOS1 <- lm(LOS_mean ~ EHR_per, data = db)
+
+summary(death_per)
+summary(death_n)
+summary(LOS1)
+```
+
+
+None of these are significant.
+
+## Fixed Effects
+
+```{r}
+f_death_per <- feols(death_per ~ EHR_per | State,
+              data = db)
+
+f_death_n <- feols(death_n ~ EHR_per | State,
+              data = db)
+
+f_LOS1 <- feols(LOS_mean ~ EHR_per | State,
+              data = db)
+
+#standard errors are clustered by the first fixed effect by default (which is State, which is what we want)
+summary(f_death_per)
+summary(f_death_n)
+summary(f_LOS1)
+```
+
+
+### Two Way Fixed Effects
+
+```{r}
+f2_death_per <- feols(death_per ~ EHR_per | State + year,
+              data = db)
+
+f2_death_n <- feols(death_n ~ EHR_per | State + year,
+              data = db)
+
+f2_LOS1 <- feols(LOS_mean ~ EHR_per | State + year,
+              data = db)
+
+#standard errors are clustered by the first fixed effect by default (which is State, which is what we want)
+summary(f2_death_per)
+summary(f2_death_n)
+summary(f2_LOS1)
+```
+
+## Random Effects
+
+```{r}
+#by hand fixed effects
+db_fixed <- db |> 
+  group_by(State) |> 
+  mutate(EHR_demean = EHR_per - mean(EHR_per),
+         death_per_demean = death_per - mean(death_per),
+         death_n_demean = death_n - mean(death_n),
+         LOS_demean = LOS_mean - mean(LOS_mean),
+         EHR_mean = mean(EHR_per)) |> 
+  ungroup()
+
+#analyze within variation
+
+re_death_per <- lmer(death_per ~ EHR_demean + EHR_mean + (1 | State),
+         data = db_fixed) #taking the formula from the example Steve gave in class
+
+re_death_n <- lmer(death_n ~ EHR_demean + EHR_mean + (1 | State),
+         data = db_fixed)
+
+re_LOS1 <- lmer(LOS_mean ~ EHR_demean + EHR_mean + (1 | State),
+         data = db_fixed)
+
+summary(re_death_per)
+summary(re_death_n)
+summary(re_LOS1)
+```
+

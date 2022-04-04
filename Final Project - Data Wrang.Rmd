@@ -1,0 +1,125 @@
+---
+title: "Final Project"
+author: "Fatima Fairfax"
+date: "4/2/2022"
+output: html_document
+---
+
+# EHR Basic Adoption Data
+
+From https://www.healthit.gov/sites/default/files/data-brief/2014HospitalAdoptionDataBrief.pdf 
+
+Have actual numbers for 2008 and 2011; then I have threshold data for 2008, 2011, and 2014. I will bring over the actual number data. 
+
+```{r load libraries}
+library(tidyverse)
+library(modelsummary)
+library(fixest)
+
+```
+
+
+```{r import the EHR data}
+ehr_data <- EHR_Adoption
+
+glimpse(ehr_data)
+```
+
+## Data Cleaning
+
+1. Make the first row the title row
+2. Delete the empty columns
+3. Make the titles just the year
+4. Convert the characters to percentages
+5. Make the data long, each state with a column for 2008 and 2011
+
+```{r First row the title row}
+ehr_data <- janitor::row_to_names(ehr_data,1,remove_rows_above = FALSE)
+```
+
+```{r delete the empty columns}
+ehr_data <- ehr_data |> select(State,'2008 Basic EHR, %','2011 Basic EHR, %')
+```
+
+```{r make the titles just the year}
+colnames(ehr_data) <- c('State','2008','2011')
+```
+
+```{r convert the characters to percentages}
+
+ehr_data <- ehr_data |> mutate(`2008` = as.numeric(sub("%","",`2008`))/100,
+                   `2011` = as.numeric(sub("%","",`2011`))/100)
+
+glimpse(ehr_data)
+```
+
+*This has a bunch of data I don't want / left over from the original set. I want to filter for values in 'State'*
+
+```{r}
+ehr_data <- ehr_data |> filter(State %in% state.name) |> slice(1:50)
+```
+
+
+```{r make the data long}
+
+ehr_data <- gather(ehr_data,"year", "EHR_per",2:3)
+
+```
+
+
+
+
+# Hospital Variables Data
+
+```{r}
+hosp_data <- Hosp_Data_Final
+```
+
+
+Select what we need: State, Year, `Total number of discharges: N`, `LOS (length of stay), days (mean)`, `LOS (length of stay), days (median)`, `In-hospital deaths: N`, `In-hospital deaths: %`
+
+```{r}
+hosp <- hosp_data |> select(State,Year, `Total number of discharges: N`, `LOS (length of stay), days (mean)`, `LOS (length of stay), days (median)`, `In-hospital deaths: N`, `In-hospital deaths: %`)
+```
+
+
+Select years we need: 2008 and 2011
+
+```{r}
+hosp <- hosp |> filter(Year %in% c(2008,2011))
+```
+
+
+# Combine the Data
+
+Bring the two data sets together
+
+```{r}
+#change the year in hosp to be characters
+
+hosp <- hosp |> mutate(Year = as.character(Year))
+```
+
+```{r}
+library(reshape2)
+```
+
+```{r}
+db <- merge(ehr_data,hosp, by.x = c('State','year'), by.y = c('State','Year'))
+```
+
+
+# Rename variables
+
+For ease of use
+
+```{r}
+db <- db |> mutate(LOS_mean = `LOS (length of stay), days (mean)`,
+                   LOS_med = `LOS (length of stay), days (median)`,
+                   death_n = `In-hospital deaths: N`,
+                   death_per = `In-hospital deaths: %`,
+                   discharge = `Total number of discharges: N`) |> 
+  select(-c(`LOS (length of stay), days (mean)`,`LOS (length of stay), days (median)`,`In-hospital deaths: N`,`In-hospital deaths: %`,`Total number of discharges: N`))
+```
+
+

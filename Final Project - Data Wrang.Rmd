@@ -5,7 +5,9 @@ date: "4/2/2022"
 output: html_document
 ---
 
-# EHR Basic Adoption Data
+# IDEA 1: EHR and In-Hospital Death Info
+
+## EHR Basic Adoption Data
 
 From https://www.healthit.gov/sites/default/files/data-brief/2014HospitalAdoptionDataBrief.pdf 
 
@@ -25,7 +27,7 @@ ehr_data <- EHR_Adoption
 glimpse(ehr_data)
 ```
 
-## Data Cleaning
+### Data Cleaning
 
 1. Make the first row the title row
 2. Delete the empty columns
@@ -60,6 +62,14 @@ ehr_data <- ehr_data |> filter(State %in% state.name) |> slice(1:50)
 ```
 
 
+### Variation Check
+
+```{r}
+ehr_data |> mutate(diff = `2011` - `2008`)
+```
+
+
+
 ```{r make the data long}
 
 ehr_data <- gather(ehr_data,"year", "EHR_per",2:3)
@@ -69,7 +79,7 @@ ehr_data <- gather(ehr_data,"year", "EHR_per",2:3)
 
 
 
-# Hospital Variables Data
+## Hospital Variables Data
 
 ```{r}
 hosp_data <- Hosp_Data_Final
@@ -90,7 +100,7 @@ hosp <- hosp |> filter(Year %in% c(2008,2011))
 ```
 
 
-# Combine the Data
+## Combine the Data
 
 Bring the two data sets together
 
@@ -109,7 +119,7 @@ db <- merge(ehr_data,hosp, by.x = c('State','year'), by.y = c('State','Year'))
 ```
 
 
-# Rename variables
+## Rename variables
 
 For ease of use
 
@@ -122,4 +132,242 @@ db <- db |> mutate(LOS_mean = `LOS (length of stay), days (mean)`,
   select(-c(`LOS (length of stay), days (mean)`,`LOS (length of stay), days (median)`,`In-hospital deaths: N`,`In-hospital deaths: %`,`Total number of discharges: N`))
 ```
 
+
+
+
+
+
+# IDEA 2: HINTS Data
+
+```{r}
+library(haven)
+
+hints_5_1 <- read_sas('hints5_cycle1_public.sas7bdat')
+hints_5_2 <- read_sas('hints5_cycle2_public.sas7bdat')
+hints_5_3 <- read_sas('hints5_cycle3_public.sas7bdat')
+hints_5_4 <- read_sas('hints5_cycle4_public.sas7bdat')
+```
+
+Cycle 1: 2017
+Cycle 2: 2018
+Cycle 3: 2019
+Cycle 4: 2020
+
+## Variables of Interest
+
+*TabletHealthWellnessApps - on your tablet or smartphone, do you have apps related to health?*
+
+  -9 - missing
+  1 - yes
+  2 - no
+  3 - don't knopw
+  4 - don't have a tablet or smartphone
+
+*Tablet_MakeDecision - has your tablet helped you make a decision about how to treat an illness or condition?*
+
+  -9 - missing data
+  -2 - question error
+  -1 - inapplicable
+  1 - yes
+  2 - no
+
+*OwnAbilityTakeCareHealth - overall, how confident are you about your ability to take good care of your health?*
+
+  -9 - missing
+  -5 - multiple in error
+  1 - completely confident
+  2 - very confident
+  3 - somewhat confident
+  4 - a little confident
+  5 - not confident at all
+
+*GeneralHealth - in general, would you say your health is: 1 - excellent, 5 - poor*
+
+  -9 - missing
+  -5 - multiple races in error
+  1 - excellent
+  2 - very good
+  3 - good
+  4 - fair
+  5 - poor
+
+
+### Demographics of Interest
+
+*IncomeRanges - total combined household annual income*
+
+  -9 - missing data
+  1 - 0k - 9,999
+  2 - 10k - 14,999
+  3 - 15k - 19,999
+  4 - 30k - 34,999
+  5 - 35k - 49,999
+  6 - 50k - 74,999
+  7 - 75k - 99,999
+  8 - 100k - 199,999
+  9 - 200k + 
+  
+
+*Race_Cat2 - race*
+
+  -9 - missing data
+  11 - white
+  12 - black
+  14 - ameircan indian / alska native
+  16 - multiple races selected
+  31 - asian indian
+  32 - chinese
+  33 - filipino
+  34 - japanese
+  35 - korean
+  36 - vietnamese
+  37 - other asian
+  52 - guamanian or chamorro
+  54 - other pacific islander
+
+#### Race Variables 
+
+-9 = missing; -7 = missing; 1 = selected, 2 = not selected
+
+White
+
+Black
+
+AmerInd - american indian or native american
+
+Asian American
+  AsInd - asian indian
+  Chinese
+  Filipino
+  Japanese
+  Korean
+  Vietnamese
+  OthAsian
+
+Pacific Islander - one of these
+  Hawaiian
+  Guamanian
+  Samoan
+  OthPascIsl
+
+Hisp_Cat - > 0  
+  Mexican
+  PuertoRican
+  Cuban
+  OtherHisp
+
+#### Race Variables - Final Edit
+
+RaceEthn5
+
+  -9 - missing
+  -7 - missing
+  1 - non-hispanic white
+  2 - non-hispanic black
+  3 - hispanic
+  4 - non-hispanic asian
+  5 - non-hispanic other
+
+*Age*
+
+  -9 - missing
+  -4 - non-conforming
+  Rest is current age in years 
+  
+  
+*Education - what is the highest grade or level of schooling you completed?*
+
+  -9 - missing
+  1 - less than 8 years (middle school)
+  2 - 8 to 11 years (some HS)
+  3 - 12 years or completed HS
+  4 - post high school other than college
+  5 - some college
+  6 - college graduate
+  7 - postgraduate
+  
+
+*SelfGender*
+
+  -9 - missing
+  1 - male
+  2 - female
+
+
+
+### Other possible variables
+ProviderMaintainEMR2 - Do any of your doctors/HCP maintain your medical records in a computerized system?
+NotAccessed_ConcernedPrivacy - have not accessed online medical record in the last 12 months because you are concerned about the privacy/security of the website for your medical records?
+
+ConfidentGetHealthInf - how confident are you that you could get advice/info about health/medical topics?
+
+TrustDoctor - trust health/medical info from a doctor?
+
+OwnAbilityTakeCareHealth - overall, how confident are you about your ability to take good care of your health?
+
+QualityCare - overall, how would you rate the quality of health care you received in the past 12 months?
+
+GeneralHealth - in general, would you say your health is: 1 - excellent, 5 - poor
+
+
+
+
+
+
+
+
+
+## Bring in Selected Variables (cycle 3) - most recent pre-covid
+
+```{r}
+db <- hints_5_3 |>  select(HHID,PersonID,TabletHealthWellnessApps,Tablet_MakeDecision,OwnAbilityTakeCareHealth,GeneralHealth,IncomeRanges,RaceEthn5,Age,HealthInsurance,Education,SelfGender)
+```
+
+## Wrangling
+
+We will do two model sets - the first set with the main independent variable of having a wellness app at all and the second using the app to make decisions.
+
+1. Only select the independent variables with good data. Each we only want 1 = yes or 2 = no
+2. Only select those with the dependent variable - GeneralHealth (responses over 0)
+3. Rest of the variables are here for matching
+
+```{r}
+app_health <- db |> select(TabletHealthWellnessApps,GeneralHealth,IncomeRanges,RaceEthn5,Age,HealthInsurance,Education,SelfGender) |> 
+  filter(TabletHealthWellnessApps == 1 | TabletHealthWellnessApps == 2) |> 
+  filter(GeneralHealth > 0) |> 
+  mutate(Apps = if_else(TabletHealthWellnessApps == 1, 1L,0L))
+
+dec_health <- db |> select(Tablet_MakeDecision,GeneralHealth,IncomeRanges,RaceEthn5,Age,HealthInsurance,Education,SelfGender) |> 
+  filter(Tablet_MakeDecision == 1 | Tablet_MakeDecision == 2) |> 
+  filter(GeneralHealth >0) |> 
+  mutate(Decision = if_else(Tablet_MakeDecision == 1,1L,0L))
+```
+
+```{r variable editing app health}
+app_health <- app_health |> mutate(white = if_else(RaceEthn5 == 1, 1L,0L),
+                                   black = if_else(RaceEthn5 == 2, 1L,0L),
+                                   hisp = if_else(RaceEthn5 == 3,1L,0L),
+                                   asian = if_else(RaceEthn5 == 4,1L,0L),
+                                   other_race = if_else(RaceEthn5 == 5,1L,0L)) |> #race variables
+  filter(IncomeRanges > 0,
+         Age > 0,
+         Education > 0,
+         SelfGender > 0) |> #filter variables to rid missing
+  mutate(female = if_else(SelfGender == 2, 1L,0L)) |> #code the gender variable
+  select(-c(RaceEthn5, SelfGender))
+```
+
+```{r variabel editing decision health}
+dec_health <- dec_health |> mutate(white = if_else(RaceEthn5 == 1, 1L,0L),
+                                   black = if_else(RaceEthn5 == 2, 1L,0L),
+                                   hisp = if_else(RaceEthn5 == 3,1L,0L),
+                                   asian = if_else(RaceEthn5 == 4,1L,0L),
+                                   other_race = if_else(RaceEthn5 == 5,1L,0L)) |> #race variables
+  filter(IncomeRanges > 0,
+         Age > 0,
+         Education > 0,
+         SelfGender > 0) |> #filter variables to rid missing
+  mutate(female = if_else(SelfGender == 2, 1L,0L)) |> #code the gender variable
+  select(-c(RaceEthn5, SelfGender))
+```
 

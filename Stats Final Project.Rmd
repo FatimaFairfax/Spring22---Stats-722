@@ -1,132 +1,394 @@
 ---
 title: "Stats Final Project"
 author: "Fatima Fairfax"
-date: "4/3/2022"
+date: "4/6/2022"
 output: html_document
 ---
 
-```{r load libraries}
+```{r load packages}
+#loading all the packages I'll need
 
+library(MatchIt) #for matching
+library(WeightIt) #for weighting
+library(cobalt) #for assessing the degree of balance
 library(tidyverse)
-library(modelsummary)
-library(fixest)
-library(lme4)
+library(broom)
+library(haven)
 
+theme_set(theme_minimal())
 ```
 
-# Panel Checks
 
-Panel data is N by T. See what we have here:
+# Research Question 1:  Does having health related apps correlate with improve self-rated health?
 
 ```{r}
-N <- nrow(db)
-
-t_val <- unique(db$year)
-
-t_len <- length(t_val)
-
-print(paste("N = ", N, "T = ", t_len))
+app_health <- app_health |> relocate(Apps) |> select(-TabletHealthWellnessApps)
+glimpse(app_health)
 ```
 
-## Balance Check
+
+```{r data set up - weights}
+# add weights
+
+app_health <- app_health |> 
+  mutate(weight = 1)
+
+# estimate treatment effects
+
+app_est_1 <- lm(GeneralHealth ~ Apps,
+           data = app_health,
+           weights = weight)
+
+tidy(app_est_1, conf.int = TRUE)
+```
+
+    This gives a coefficient of -0.21 on the "treatment," that is staitistically significant at the 95% level. This means that having an app makes you a little less likely to have good health (1 = excellent and 5 = poor)
+    
+
+```{r balance table}
+app_health |> 
+  group_by(Apps) |> 
+  summarize(across(IncomeRanges:female,~mean(.x)))
+```
+
+The balance here is actually pretty good! **check why that is**
+
+## Matching 
+
+*come back to see if we want the ATT or the ATE*
+
+Use all the variables except for the treatment (Apps) and the GeneralHealth variables. 
 
 ```{r}
-length(unique(db$State))
+match_1 <- matchit(Apps ~ IncomeRanges + Age + HealthInsurance + Education + white + black + hisp + asian + other_race + female,
+                  data = app_health,
+                  method = "nearest",
+                  distance = "mahalanobis",
+                  estimand = "ATT",
+                  ratio = 3, #to make it a 3-nearest-matching
+                  replace = TRUE)
 
-#show how many observations are in the same year
-
-table(db$year)
+summary(match_1,
+        un = FALSE,
+        improvement = FALSE)
 ```
 
 
-This is not balanced, and there are only 31 observations here. Let me filter out all variables that don't have data in both years:
+```{r Post-Matching average treatment on the treated effect of Apps on GeneralHealth}
 
+#### get matched data for calculating weighted difference
+md1 <- match.data(match_1)
 
+#### compute weighted difference (ATT)
+matchdiff1 <- lm(GeneralHealth ~ Apps,
+                 data = md1,
+                 weights = weights)
+tidy(matchdiff1, conf.int = TRUE)
 
-# Models
-
-
-```{r model 1 - OLS}
-#regular linear
-
-death_per <- lm(death_per ~ EHR_per,
-         data = db)
-
-death_n <- lm(death_n ~ EHR_per, data = db)
-
-LOS1 <- lm(LOS_mean ~ EHR_per, data = db)
-
-summary(death_per)
-summary(death_n)
-summary(LOS1)
 ```
 
+This gives a -0.063 effect that is statistically significant at the 95% level. 
 
-None of these are significant.
+```{r post matching balance}
+md1 |> 
+  group_by(Apps) |> 
+  summarize(across(IncomeRanges:female,~weighted.mean(.x,weights)))
+```
 
-## Fixed Effects
+Better matching - though it was pretty close. 
+
+### Propensity Matching
+
+```{r Estimate propensity score}
+#estimate the propensity score
+p <- glm(Apps ~ IncomeRanges + Age + HealthInsurance + Education + white + black + hisp + asian + other_race + female,
+         data = app_health, family = binomial(link = 'logit'))
+
+#get predicted values
+app_health <- app_health |> 
+  mutate(propensity = predict(p,type = 'response'))
+
+glimpse(app_health)
+```
+
+Check if propensity is between 0 and 1
 
 ```{r}
-f_death_per <- feols(death_per ~ EHR_per | State,
-              data = db)
+range(app_health$propensity)
+```
 
-f_death_n <- feols(death_n ~ EHR_per | State,
-              data = db)
+Yes, all good. 
 
-f_LOS1 <- feols(LOS_mean ~ EHR_per | State,
-              data = db)
 
-#standard errors are clustered by the first fixed effect by default (which is State, which is what we want)
-summary(f_death_per)
-summary(f_death_n)
-summary(f_LOS1)
+```{r create ipw and estimate the ATT}
+#create IPW weights
+app_health <- app_health |> 
+  mutate(ipw = case_when(
+    Apps == 1 ~ 1/propensity,
+    Apps == 0 ~ 1/(1-propensity)
+  ))
+
+#and use to weight regressions
+
+lm(GeneralHealth ~ Apps,
+   data = app_health,
+   weights = ipw)
+```
+
+Treatment effect of -0.05 points (on a 5 points scale of health).
+
+```{r steve weighting methods}
+#### do the weighting
+weight_ps <- weightit(Apps ~ IncomeRanges + Age + HealthInsurance + Education + white + black + hisp + asian + other_race + female,
+                  data = app_health,
+                  method = "ps",
+                  estimand = "ATT")
+
+#### summary
+summary(weight_ps)
+
+#### cobalt balance checks
+bal.plot(weight_ps,
+         which = "both",
+         mirror = TRUE)
+
+love.plot(weight_ps,
+          abs = TRUE,
+          binary = "std",
+          thresholds = .1)
+
+#### compute weighted difference (ATT)
+matchdiff_ps <- lm(GeneralHealth ~ Apps,
+                 data = app_health,
+                 weights = weight_ps$weights)
+
+tidy(matchdiff_ps, conf.int = TRUE)
+```
+
+Gives an estimate on -0.066 for treatment.
+
+
+```{r Common Support Graph}
+
+ggplot(app_health,aes(x=propensity, color = factor(Apps),weight = ipw)) + 
+  geom_density() +
+  labs(xlab = "Propensity Score", ylab = "Density",title = "Common Support Graph")
 ```
 
 
-### Two Way Fixed Effects
+### Treatment Effect
 
 ```{r}
-f2_death_per <- feols(death_per ~ EHR_per | State + year,
-              data = db)
+library(causalweight)
+```
+    
+    
+```{r}
+#outcome
+Y <- app_health |> 
+  pull(GeneralHealth)
 
-f2_death_n <- feols(death_n ~ EHR_per | State + year,
-              data = db)
+#treatment
+D <- app_health |> 
+  pull(Apps)
 
-f2_LOS1 <- feols(LOS_mean ~ EHR_per | State + year,
-              data = db)
+#matching variables
+X <- app_health |> 
+  select(IncomeRanges, Age, HealthInsurance, Education, white, black, hisp, asian, other_race, female) |> 
+  as.matrix()
 
-#standard errors are clustered by the first fixed effect by default (which is State, which is what we want)
-summary(f2_death_per)
-summary(f2_death_n)
-summary(f2_LOS1)
+#get the average treatment effect
+IPW <- treatweight(Y,D,X,trim = 0,logit=TRUE)
+
+IPW$effect
 ```
 
-## Random Effects
+ATE of -0.05 -- similar to the earlier esimtation.
+
+
+# Research Question 2:  Does making decisions based  on health apps correlate with improve self-rated health?
 
 ```{r}
-#by hand fixed effects
-db_fixed <- db |> 
-  group_by(State) |> 
-  mutate(EHR_demean = EHR_per - mean(EHR_per),
-         death_per_demean = death_per - mean(death_per),
-         death_n_demean = death_n - mean(death_n),
-         LOS_demean = LOS_mean - mean(LOS_mean),
-         EHR_mean = mean(EHR_per)) |> 
-  ungroup()
-
-#analyze within variation
-
-re_death_per <- lmer(death_per ~ EHR_demean + EHR_mean + (1 | State),
-         data = db_fixed) #taking the formula from the example Steve gave in class
-
-re_death_n <- lmer(death_n ~ EHR_demean + EHR_mean + (1 | State),
-         data = db_fixed)
-
-re_LOS1 <- lmer(LOS_mean ~ EHR_demean + EHR_mean + (1 | State),
-         data = db_fixed)
-
-summary(re_death_per)
-summary(re_death_n)
-summary(re_LOS1)
+dec_health <- dec_health |> relocate(Decision) |> select(-Tablet_MakeDecision)
+glimpse(dec_health)
 ```
 
+
+```{r data set up - weights}
+# add weights
+
+dec_health <- dec_health |> 
+  mutate(weight = 1)
+
+# estimate treatment effects
+
+dec_est_1 <- lm(GeneralHealth ~ Decision,
+           data = dec_health,
+           weights = weight)
+
+tidy(dec_est_1, conf.int = TRUE)
+```
+
+    This gives a coefficient of -0.22 on the "treatment," that is _not_ staitistically significant at the 95% level. This means that having an app makes you a little less likely to have good health (1 = excellent and 5 = poor)
+    
+
+```{r balance table}
+dec_health |> 
+  group_by(Decision) |> 
+  summarize(across(IncomeRanges:female,~mean(.x)))
+```
+
+The balance here is also pretty good! **check why that is**
+
+## Matching 
+
+*come back to see if we want the ATT or the ATE*
+
+Use all the variables except for the treatment (Apps) and the GeneralHealth variables. 
+
+```{r}
+dec_match_1 <- matchit(Decision ~ IncomeRanges + Age + HealthInsurance + Education + white + black + hisp + asian + other_race + female,
+                  data = dec_health,
+                  method = "nearest",
+                  distance = "mahalanobis",
+                  estimand = "ATT",
+                  ratio = 3, #to make it a 3-nearest-matching
+                  replace = TRUE)
+
+summary(dec_match_1,
+        un = FALSE,
+        improvement = FALSE)
+```
+
+
+```{r Post-Matching average treatment on the treated effect of Apps on GeneralHealth}
+
+#### get matched data for calculating weighted difference
+dec_md1 <- match.data(dec_match_1)
+
+#### compute weighted difference (ATT)
+dec_matchdiff1 <- lm(GeneralHealth ~ Decision,
+                 data = dec_md1,
+                 weights = weights)
+tidy(dec_matchdiff1, conf.int = TRUE)
+
+```
+
+This gives a 0.034 effect that is not statistically significant at the 95% level
+
+
+```{r post matching balance}
+dec_md1 |> 
+  group_by(Decision) |> 
+  summarize(across(IncomeRanges:female,~weighted.mean(.x,weights)))
+```
+
+Better matching - though it was pretty close. 
+
+### Propensity Matching
+
+```{r Estimate propensity score}
+#estimate the propensity score
+dec_p <- glm(Decision ~ IncomeRanges + Age + HealthInsurance + Education + white + black + hisp + asian + other_race + female,
+         data = dec_health, family = binomial(link = 'logit'))
+
+#get predicted values
+dec_health <- dec_health |> 
+  mutate(propensity = predict(dec_p,type = 'response'))
+
+glimpse(dec_health)
+```
+
+Check if propensity is between 0 and 1
+
+```{r}
+range(dec_health$propensity)
+```
+
+Yes, all good. 
+
+
+```{r create ipw and estimate the ATT}
+#create IPW weights
+dec_health <- dec_health |> 
+  mutate(ipw = case_when(
+    Decision == 1 ~ 1/propensity,
+    Decision == 0 ~ 1/(1-propensity)
+  ))
+
+#and use to weight regressions
+
+lm(GeneralHealth ~ Decision,
+   data = dec_health,
+   weights = ipw)
+```
+
+Treatment effect of 0.031 points (on a 5 points scale of health).
+
+```{r steve weighting methods}
+#### do the weighting
+dec_weight_ps <- weightit(Decision ~ IncomeRanges + Age + HealthInsurance + Education + white + black + hisp + asian + other_race + female,
+                  data = dec_health,
+                  method = "ps",
+                  estimand = "ATT")
+
+#### summary
+summary(dec_weight_ps)
+
+#### cobalt balance checks
+bal.plot(dec_weight_ps,
+         which = "both",
+         mirror = TRUE)
+
+love.plot(dec_weight_ps,
+          abs = TRUE,
+          binary = "std",
+          thresholds = .1)
+
+#### compute weighted difference (ATT)
+dec_matchdiff_ps <- lm(GeneralHealth ~ Decision,
+                 data = dec_health,
+                 weights = dec_weight_ps$weights)
+
+tidy(dec_matchdiff_ps, conf.int = TRUE)
+```
+
+Gives an estimate on 0.04 for treatment, but still not staistically significant.
+
+
+```{r Common Support Graph}
+
+ggplot(dec_health,aes(x=propensity, color = factor(Decision),weight = ipw)) + 
+  geom_density() +
+  labs(xlab = "Propensity Score", ylab = "Density",title = "Common Support Graph")
+```
+
+
+### Treatment Effect
+
+```{r}
+library(causalweight)
+```
+    
+    
+```{r}
+#outcome
+dec_Y <- dec_health |> 
+  pull(GeneralHealth)
+
+#treatment
+dec_D <- dec_health |> 
+  pull(Decision)
+
+#matching variables
+dec_X <- dec_health |> 
+  select(IncomeRanges, Age, HealthInsurance, Education, white, black, hisp, asian, other_race, female) |> 
+  as.matrix()
+
+#get the average treatment effect
+dec_IPW <- treatweight(dec_Y,dec_D,dec_X,trim = 0,logit=TRUE)
+
+dec_IPW$effect
+```
+
+ATE is 0.031, which again is very similar. 

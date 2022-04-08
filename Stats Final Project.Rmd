@@ -33,16 +33,16 @@ glimpse(app_health)
 app_health <- app_health |> 
   mutate(weight = 1)
 
-# estimate treatment effects
+# estimate treatment effects - ATT or ATE?
 
-app_est_1 <- lm(GeneralHealth ~ Apps,
+app_est_1 <- lm(health ~ Apps,
            data = app_health,
            weights = weight)
 
 tidy(app_est_1, conf.int = TRUE)
 ```
 
-    This gives a coefficient of -0.21 on the "treatment," that is staitistically significant at the 95% level. This means that having an app makes you a little less likely to have good health (1 = excellent and 5 = poor)
+    This gives a coefficient of 0.21 on the "treatment," that is staitistically significant at the 95% level. This means that having an app makes you a little more likely to have good health (1 = excellent and 5 = poor)
     
 
 ```{r balance table}
@@ -59,7 +59,7 @@ The balance here is actually pretty good! **check why that is**
 
 Use all the variables except for the treatment (Apps) and the GeneralHealth variables. 
 
-```{r}
+```{r ATT for Question 1 with matching}
 match_1 <- matchit(Apps ~ IncomeRanges + Age + HealthInsurance + Education + white + black + hisp + asian + other_race + female,
                   data = app_health,
                   method = "nearest",
@@ -74,20 +74,35 @@ summary(match_1,
 ```
 
 
+
 ```{r Post-Matching average treatment on the treated effect of Apps on GeneralHealth}
 
 #### get matched data for calculating weighted difference
 md1 <- match.data(match_1)
 
+#### cobalt balance checks
+bal.plot(match_1,
+         which = "both",
+         mirror = TRUE)
+
+love.plot(match_1,
+          abs = TRUE,
+          binary = "std",
+          thresholds = .1)
+
+
 #### compute weighted difference (ATT)
-matchdiff1 <- lm(GeneralHealth ~ Apps,
+matchdiff1 <- lm(health ~ Apps,
                  data = md1,
                  weights = weights)
+
 tidy(matchdiff1, conf.int = TRUE)
+
 
 ```
 
-This gives a -0.063 effect that is statistically significant at the 95% level. 
+**With mahalabonis 3-nearest matching, having health apps on your tablet is correlated with a 0.063 unit increase in self-rated health. This result is statistically significant at the 95% level.** 
+
 
 ```{r post matching balance}
 md1 |> 
@@ -130,12 +145,13 @@ app_health <- app_health |>
 
 #and use to weight regressions
 
-lm(GeneralHealth ~ Apps,
+lm(health ~ Apps,
    data = app_health,
    weights = ipw)
 ```
 
-Treatment effect of -0.05 points (on a 5 points scale of health).
+**With propensity score matching and weights, having a health app is associated with a 0.05 point increase in self-rated health**
+
 
 ```{r steve weighting methods}
 #### do the weighting
@@ -158,14 +174,14 @@ love.plot(weight_ps,
           thresholds = .1)
 
 #### compute weighted difference (ATT)
-matchdiff_ps <- lm(GeneralHealth ~ Apps,
+matchdiff_ps <- lm(health ~ Apps,
                  data = app_health,
                  weights = weight_ps$weights)
 
 tidy(matchdiff_ps, conf.int = TRUE)
 ```
 
-Gives an estimate on -0.066 for treatment.
+**Using Steve's propensity matching process, having a health app is associated with a 0.066 increase in self-rated health that is significant at the 95% level.** 
 
 
 ```{r Common Support Graph}
@@ -186,7 +202,7 @@ library(causalweight)
 ```{r}
 #outcome
 Y <- app_health |> 
-  pull(GeneralHealth)
+  pull(health)
 
 #treatment
 D <- app_health |> 
@@ -203,7 +219,7 @@ IPW <- treatweight(Y,D,X,trim = 0,logit=TRUE)
 IPW$effect
 ```
 
-ATE of -0.05 -- similar to the earlier esimtation.
+ATE of 0.05 -- similar to the earlier estimation. The ATE asks - what would the effect be if someone who doesn't have the app were to get an app? 
 
 
 # Research Question 2:  Does making decisions based  on health apps correlate with improve self-rated health?
@@ -222,14 +238,14 @@ dec_health <- dec_health |>
 
 # estimate treatment effects
 
-dec_est_1 <- lm(GeneralHealth ~ Decision,
+dec_est_1 <- lm(health ~ Decision,
            data = dec_health,
            weights = weight)
 
 tidy(dec_est_1, conf.int = TRUE)
 ```
 
-    This gives a coefficient of -0.22 on the "treatment," that is _not_ staitistically significant at the 95% level. This means that having an app makes you a little less likely to have good health (1 = excellent and 5 = poor)
+    This gives a coefficient of 0.02 on the "treatment," that is _not_ staitistically significant at the 95% level. This means that decisions based on the app makes you a bit more likely to have good health  (5 = excellent and 1 = poor)
     
 
 ```{r balance table}
@@ -267,14 +283,14 @@ summary(dec_match_1,
 dec_md1 <- match.data(dec_match_1)
 
 #### compute weighted difference (ATT)
-dec_matchdiff1 <- lm(GeneralHealth ~ Decision,
+dec_matchdiff1 <- lm(health ~ Decision,
                  data = dec_md1,
                  weights = weights)
 tidy(dec_matchdiff1, conf.int = TRUE)
 
 ```
 
-This gives a 0.034 effect that is not statistically significant at the 95% level
+This gives a -0.034 effect that is not statistically significant at the 95% level
 
 
 ```{r post matching balance}
@@ -318,12 +334,12 @@ dec_health <- dec_health |>
 
 #and use to weight regressions
 
-lm(GeneralHealth ~ Decision,
+lm(health ~ Decision,
    data = dec_health,
    weights = ipw)
 ```
 
-Treatment effect of 0.031 points (on a 5 points scale of health).
+Treatment effect of -0.031 points (on a 5 points scale of health).
 
 ```{r steve weighting methods}
 #### do the weighting
@@ -346,14 +362,14 @@ love.plot(dec_weight_ps,
           thresholds = .1)
 
 #### compute weighted difference (ATT)
-dec_matchdiff_ps <- lm(GeneralHealth ~ Decision,
+dec_matchdiff_ps <- lm(health ~ Decision,
                  data = dec_health,
                  weights = dec_weight_ps$weights)
 
 tidy(dec_matchdiff_ps, conf.int = TRUE)
 ```
 
-Gives an estimate on 0.04 for treatment, but still not staistically significant.
+Gives an estimate on -0.04 for treatment, but still not staistically significant.
 
 
 ```{r Common Support Graph}
@@ -374,7 +390,7 @@ library(causalweight)
 ```{r}
 #outcome
 dec_Y <- dec_health |> 
-  pull(GeneralHealth)
+  pull(health)
 
 #treatment
 dec_D <- dec_health |> 
@@ -391,4 +407,4 @@ dec_IPW <- treatweight(dec_Y,dec_D,dec_X,trim = 0,logit=TRUE)
 dec_IPW$effect
 ```
 
-ATE is 0.031, which again is very similar. 
+ATE is -0.031, which again is very similar. 

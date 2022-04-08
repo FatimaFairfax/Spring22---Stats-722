@@ -171,6 +171,8 @@ Cycle 4: 2020
   1 - yes
   2 - no
 
+*WearableDevTrackHealth - in the past 12 months, have you used an electronic wearable device to monitor or track your health or activity?*
+
 *OwnAbilityTakeCareHealth - overall, how confident are you about your ability to take good care of your health?*
 
   -9 - missing
@@ -191,6 +193,13 @@ Cycle 4: 2020
   4 - fair
   5 - poor
 
+*MedConditions_Diabetes - has a doctor or health professional ever told you that you had diabetes or high blood sugar?*
+
+*MedConditions_HighBP*
+
+*MedConditions_HeartCondition*
+
+*MedConditions_LungDisease*
 
 ### Demographics of Interest
 
@@ -320,7 +329,7 @@ GeneralHealth - in general, would you say your health is: 1 - excellent, 5 - poo
 ## Bring in Selected Variables (cycle 3) - most recent pre-covid
 
 ```{r}
-db <- hints_5_3 |>  select(HHID,PersonID,TabletHealthWellnessApps,Tablet_MakeDecision,OwnAbilityTakeCareHealth,GeneralHealth,IncomeRanges,RaceEthn5,Age,HealthInsurance,Education,SelfGender)
+db <- hints_5_3 |>  select(TabletHealthWellnessApps,Tablet_MakeDecision,WearableDevTrackHealth,GeneralHealth,IncomeRanges,RaceEthn5,Age,HealthInsurance,Education,SelfGender,MedConditions_Diabetes,MedConditions_HighBP,MedConditions_HeartCondition,MedConditions_LungDisease)
 ```
 
 ## Wrangling
@@ -331,17 +340,26 @@ We will do two model sets - the first set with the main independent variable of 
 2. Only select those with the dependent variable - GeneralHealth (responses over 0)
 3. Rest of the variables are here for matching
 
-```{r}
+### Treatment Variables
+
+```{r treatment variables editing}
 app_health <- db |> select(TabletHealthWellnessApps,GeneralHealth,IncomeRanges,RaceEthn5,Age,HealthInsurance,Education,SelfGender) |> 
-  filter(TabletHealthWellnessApps == 1 | TabletHealthWellnessApps == 2) |> 
-  filter(GeneralHealth > 0) |> 
+  filter(TabletHealthWellnessApps == 1 | TabletHealthWellnessApps == 2) |> #only values of yes and no
+  filter(GeneralHealth > 0) |> #only take viable values
   mutate(Apps = if_else(TabletHealthWellnessApps == 1, 1L,0L))
 
 dec_health <- db |> select(Tablet_MakeDecision,GeneralHealth,IncomeRanges,RaceEthn5,Age,HealthInsurance,Education,SelfGender) |> 
   filter(Tablet_MakeDecision == 1 | Tablet_MakeDecision == 2) |> 
   filter(GeneralHealth >0) |> 
   mutate(Decision = if_else(Tablet_MakeDecision == 1,1L,0L))
+
+wear_health <- db |> select(WearableDevTrackHealth,GeneralHealth,IncomeRanges,RaceEthn5,Age,HealthInsurance,Education,SelfGender) |> 
+  filter(WearableDevTrackHealth == 1 | WearableDevTrackHealth == 2) |> 
+  filter(GeneralHealth >0) |> 
+  mutate(Wear = if_else(WearableDevTrackHealth == 1,1L,0L))
 ```
+
+### Matching Variables
 
 ```{r variable editing app health}
 app_health <- app_health |> mutate(white = if_else(RaceEthn5 == 1, 1L,0L),
@@ -354,10 +372,12 @@ app_health <- app_health |> mutate(white = if_else(RaceEthn5 == 1, 1L,0L),
          Education > 0,
          SelfGender > 0) |> #filter variables to rid missing
   mutate(female = if_else(SelfGender == 2, 1L,0L)) |> #code the gender variable
-  select(-c(RaceEthn5, SelfGender))
+  mutate(health = 6 - GeneralHealth) |> #flip the health scale so 5 is excellent and 1 is poor
+  select(-c(RaceEthn5, SelfGender,GeneralHealth))
+  
 ```
 
-```{r variabel editing decision health}
+```{r variable editing decision health}
 dec_health <- dec_health |> mutate(white = if_else(RaceEthn5 == 1, 1L,0L),
                                    black = if_else(RaceEthn5 == 2, 1L,0L),
                                    hisp = if_else(RaceEthn5 == 3,1L,0L),
@@ -368,6 +388,22 @@ dec_health <- dec_health |> mutate(white = if_else(RaceEthn5 == 1, 1L,0L),
          Education > 0,
          SelfGender > 0) |> #filter variables to rid missing
   mutate(female = if_else(SelfGender == 2, 1L,0L)) |> #code the gender variable
-  select(-c(RaceEthn5, SelfGender))
+   mutate(health = 6 - GeneralHealth) |> #flip the health scale so 5 is excellent and 1 is poor
+  select(-c(RaceEthn5, SelfGender,GeneralHealth))
+```
+
+```{r variable editing wear health}
+wear_health <- wear_health |> mutate(white = if_else(RaceEthn5 == 1, 1L,0L),
+                                   black = if_else(RaceEthn5 == 2, 1L,0L),
+                                   hisp = if_else(RaceEthn5 == 3,1L,0L),
+                                   asian = if_else(RaceEthn5 == 4,1L,0L),
+                                   other_race = if_else(RaceEthn5 == 5,1L,0L)) |> #race variables
+  filter(IncomeRanges > 0,
+         Age > 0,
+         Education > 0,
+         SelfGender > 0) |> #filter variables to rid missing
+  mutate(female = if_else(SelfGender == 2, 1L,0L)) |> #code the gender variable
+   mutate(health = 6 - GeneralHealth) |> #flip the health scale so 5 is excellent and 1 is poor
+  select(-c(RaceEthn5, SelfGender,GeneralHealth))
 ```
 

@@ -1,0 +1,230 @@
+---
+title: "The Effects of Health Apps on General Health"
+author: "Fatima Fairfax"
+date: "4/10/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r load packages, message = FALSE, echo = FALSE}
+#loading all the packages I'll need
+
+library(MatchIt) #for matching
+library(WeightIt) #for weighting
+library(cobalt) #for assessing the degree of balance
+library(tidyverse)
+library(broom)
+library(haven)
+library(knitr)
+
+theme_set(theme_minimal())
+```
+
+```{r message = FALSE, echo = FALSE}
+load(file = 'statsfinal.rda')
+```
+
+
+In recent years, consumer digital health apps have been on a meteoric rise. In 2020 alone, over 90,000 new health apps were released (Hall n.d.). Along with the rise of personal devices (Pew Research Center 2021), apps that can help people track health statistics on their own have been prophesied to increase personalized health tracking capabilities would empower people to make better decisions about their health on a daily basis (e.g., walking more and monitoring their cholesterol) and be a line of first defense to catch potential serious instances of illness (e.g., irregular heartbeat, high blood pressure) (Raghupathi and Raghupathi 2018).
+
+With this rise in personal devices that can monitor health, we can start to test the assumption that these devices do in fact lead to better health outcomes for those who use them. In this paper I attempt to answer three questions related to this topic: 1) Does having health related apps cause individuals to have better general health? 2) Does using apps recently make cause individuals to have better general health?, 3) Does using health related apps to make health decisions cause individuals to have better general health? The results of this analysis suggest that while having health related apps and having used health related apps in the last 12 months has a modest positive effect on general health, using health related apps to make health decisions has a small, negative, but statistically insignificant effect on general health.
+
+## Causal Diagram
+
+There are many variables that would effect having and using health related app that also effect the general health of adults. Characteristics like race, age, income, education, occupation, health insurance, and have a chronic health condition have effects on the probability that you have a health app and on general health. The same variables have similar effects on using a health app and using a health app to make decisions about health 
+
+![](/Users/fatimafairfax/Desktop/Stats DAG.png)
+
+
+## What is my Estimand?
+
+These analyses are set to identify the Average Treatment effect on the Treated (ATT). The unit-specific quantity of interest is the self-rated health that person *i* realized given that they a) have a health related application, b) use a health related application, or c) use a health related application to make decisions about ones health. The target population of units are adults in the U.S.
+
+The identification problem in this analysis is as follows:
+
+![](/Users/fatimafairfax/Desktop/Stats Dag Abbrv.png)
+
+
+## Hypotheses
+
+There is mixed reviews on the projected effectiveness of self-use health apps to contribute to health. However, for those who have access to these technologies, I would expect to see a small but positive effect on health quality.
+
+## Data and Methods
+
+The data used for this analysis comes from the Health Information National Trends Survey (HINTS) run through the National Cancer Institute by the National Health Institute. This is a nationally representative repeated cross-sectional survey of American adults on knowledge of, attitudes toward, and use of cancer and health related information (National Cancer Institute 2019). This analysis uses 2019 data, the most recently available data preceding the onset of the covid-19 pandemic.
+
+#### Dependent Variable
+
+The main dependent variable for all analyses is General Health. Self-reported general health has been proven to be a valid measure of overall health (Idler and Benyamini 1997). I flipped the scale so that 5 represents excellent health while 1 represents poor health.
+
+#### Independent Variables
+
+The first treatment variable, **having a health related app** is the response to the question: On your tablet or smartphone, do you have apps related to health?
+
+The second treatment variable, **using health apps**, is the response to the question: In the past 12 months, have you used an electronic wearable device to monitor or track your health or activity? (e.g., fitbit, apple watch).
+
+The third treatment variable, **using health apps to make health decisions** is the response to the question: Has your tablet helped you make a decision about how to treat an illness or condition?
+
+For all three variables, I dropped missing or ineligible responses and recoded them to a binary with 0 being a response in the negative and 1 being a response in the affirmative.
+
+After removing ineligible responses, the N for research question 1 is 3622, the N for research question 2 is 4453, and the N for research question 3 is 3799. 
+
+#### Demographic Variables
+
+Demographic variables used for matching and comparison included: chronic, age, race, income, education, gender, and health insurance status. 
+
+The variable 'chronic' is a binary variable that indicates if respondents answered in the affirmative to having Diabetes, High Blood Pressure, a Heart Condition, or Lung Disease. These represent some of the most common chronic conditions (Raghupathi and Raghupathi 2018) and one of the main projected uses for health applications (Hall n.d.). 
+
+### Methods
+
+To answer my research questions, I employed a number of matching and weighting techniques to attempt to close observable backdoors between treatment and control groups. After using linear models, I used mahalanobis distance matching, propensity score weighting, covariate balancing propensity scores, and entropy balancing.
+
+
+
+## Results
+
+In this section, I will detail my methods for question 1, which I then replicated for questions 2 and 3. I will then display my results for all three questions and discuss them in the following section.
+
+### Balancing Variables for Question 1
+
+Prior to matching or weighting, the provided sample was decently balanced on the demographic characteristics of interest:
+
+```{r Balance Table Prior To Matching, echo=FALSE}
+kable(pre_match,caption = "Balance Table Prior to Matching")
+```
+
+Running the data through a linear model with all observations weighted equally, beta_1 = 0.0612 (se = 0.029), which is statistically significant at the alpha = 0.05 level. After adding a quadratic term for the Age variable, beta_1 = 0.060 (se = 0.029), which is statistically significant at the alpha = 0.05 level.
+
+#### Matching
+
+I first used Mahalanobis nearest matching with replacement to balance the sample across my treatment variable of having a health app using RStudio's 'matchit' package. This distance matching technique allows me to match treatment with a control observation with similar values on matching variables. This minimizes the variation between the treatment and control groups. With nearest Mahalanobis, I was able to achieve good covariate balance on all variables on interest.
+
+```{r Mahalanobis Nearest Balance Plots, echo=FALSE, message = FALSE}
+bal.plot(app_match2,
+         which = "both",
+         mirror = TRUE)
+
+love.plot(app_match2,
+          abs = TRUE,
+          binary = "std",
+          thresholds = .1)
+```
+
+Given the distribution of treatment in this sample, with 1551 control observations and 2071 treated, I am able to take advantage of k-nearest matching. With a large number of control observations, there are multiple potential good matches for each treatment observation. Allowing for multiple control matches is unlikely to introduce additional bias and has the benefit of shrinking variance. Given this, I balanced wit Mahalanobis 3-nearest matching with replacement and achieved the following balance:
+
+```{r Mahalanobis 3-Nearest Balance Plots, echo = FALSE, message = FALSE}
+bal.plot(app_match3,
+         which = "both",
+         mirror = TRUE)
+
+love.plot(app_match3,
+          abs = TRUE,
+          binary = "std",
+          thresholds = .1)
+```
+
+This produced similar results, though Age has a slightly higher absolute standardized mean difference in the 3-nearest matching case. However, in both cases all covariate balances are below the preferred threshold of 0.1.
+
+#### Weighting
+
+Next, I attempted basic propensity score weighting using RStudio's 'weightit' package. Propensity score weighting allows me to treat observations from the control and treatment group as similar if they are similarly likely to be treated. This does less work to remove variation in all matching variables, but closes back doors between the treatment and the matching variables of interest. With this methods, I achieved similarly good balance results.
+
+```{r Propensity Score Weighting, echo = FALSE, message = FALSE}
+bal.plot(app_weight1,
+         which = "both",
+         mirror = TRUE)
+
+love.plot(app_weight1,
+          abs = TRUE,
+          binary = "std",
+          thresholds = .1)
+```
+
+I also checked for common support, using a common support graph, which shows good balance and no obvious trends that would identify violation of the common support assumption.
+
+```{r echo=FALSE}
+common_support_apps
+```
+
+
+Next, I attempted covariate balancing propensity scores. This technique allows me to optimize balance in all of the variables. It utilizes the "propensity score as a covariate balancing score and the conditional probability of treatment assignment" (Imai and Ratkovic 2013). The balance was similarly improved by this method, with the best balance results thus far. 
+
+```{r Covariate Balancing Propensity Score, echo = FALSE, message = FALSE}
+bal.plot(app_weight2,
+         which = "both",
+         mirror = TRUE)
+
+love.plot(app_weight2,
+          abs = TRUE,
+          binary = "std",
+          thresholds = .1)
+```
+
+Next, I attempted entropy balancing, which is a technique that enforced restrictions on the distance between treatment and control observations on particular moment conditions. This model included 2 moments. The results again were well balanced, similar to the CBPS balancing results.
+
+```{r Entropy Balancing, echo=FALSE}
+bal.plot(app_weight3, "IncomeRanges", which = "both", mirror = TRUE)
+
+love.plot(app_weight3,
+          abs = TRUE,
+          binary = "std",
+          thresholds = .1)
+```
+
+Finally, I provided a doubly robust estimation using regression and covariate balancing propensity scores. This allows me to take advantage of both methods to provide further confidence in my estimation.
+
+### Results for All Models on All Questions
+
+The following tables show the results for each of the research questions on all matching or balancing models run. A theme across all models is the consistency in results and significance, which gives higher confidence in the ATT estimations across all three questions.
+
+```{r echo = FALSE}
+apps_summary
+```
+
+For question 1, Does having a health app effect general health?, we see a significant result in every model of between 0.06 and 0.077. From this analysis, I would conclude that having a health app is likely in increase your general health by 0.06 on the 5 point health scale, with 5 being excellent health. This represents a small but significant increase in general health.
+
+```{r, echo = FALSE}
+wear_summary
+```
+
+The results for question 2 are similarly consistent across all models and are all significant at or above the 95% level. The estimates range from 0.088 to 0.114, indicating that there is a modest but positive effect of wearing an electronic health monitoring device in the last 12 months on general health. This treatment had the highest positive effect out of all three treatments tested. 
+
+
+```{r echo=FALSE}
+dec_summary
+```
+
+Finally, none of the estimates for question 3 were statistically significant at the 90% level. However, results are consistently small in size and in the negative direction across all 8 models. This suggests a potentially small but negative effect on general health if you are making health choices based off of health apps. 
+
+
+
+## Conclusion and Discussion
+
+Based on the results of this analysis, having a health app has a small put positive effect on general health. Wearing a health monitoring device in the last 12 months has a larger (but still modest) positive effect on general health. However, making decisions based on your health app has a small, negative, but statistically insignificant effect on general health. The results across models for each question were extremely consistent, providing greater confidence in these estimates for each question. This suggests that the initial linear regression was a good approximation of the data generating process and that the randomized sample selection process for this survey was effective at balancing on observable variables, making matching or weighting techniques relatively redundant. 
+
+Though significant, these results indicate a very modest effect of personal health apps on the general health of those who use them. These indicate that the optimism of the personal health tracking and monitoring industry may be premature or that there is yet to be a significant return on the use of health tech.
+
+### Future Research
+
+The contradicting estimates of wearing a personal health device in the last 12 months versus using a personal health device to make choices about health should be explored further. There is likely an unobserved mechanism that contributes to increase health with use but decreased health with decision making. This could be related to the additional supports that are complimentary to health apps and devices such as access to health professionals that can interpret results from health apps.
+
+Future studies would also benefit from examining how relative frequency of use of health apps affects these results. Is there a threshold at which use is more beneficial to health? Studies and companies would also benefit from attention to what kind or brand of apps have more or less success in correlation to better general health outcomes. Another question of interest is looking beyond general health to see what effects health apps and using apps to make decisions has on specific conditions.
+
+With the rapid scaling of personalized health apps and technology, these results and future studies on this topic will be important guidance for healthcare professionals and citizens alike in making informed decisions about how to increase the quality of their health and healthcare.
+
+
+## References
+
+Hall, Reuben. n.d. “Health Apps: How Mobile Apps Are Improving Our Lives & Well Being.” Retrieved April 8, 2022 (https://mindsea.com/health-apps/).
+
+Idler, Ellen L., and Yael Benyamini. 1997. “Self-Rated Health and Mortality: A Review of Twenty-Seven Community Studies.” Journal of Health and Social Behavior 38(1):21–37.
+
+Imai, Kosuke, and Marc Ratkovic. 2014. “Covariate Balancing Propensity Score.” Journal of the Royal Statistics Society 76(1):243–63.
+
+National Cancer Institute. 2019. Health Information National Trends Survey 5, Cycle 3.
+
+Pew Research Center. 2021. Mobile Fact Sheet. Washington, DC.
+
+Raghupathi, Wullianallur, and Viju Raghupathi. 2018. “An Empirical Study of Chronic Diseases in the United States: A Visual Analytics Approach to Public Health.” International Journal of Environmental Research and Public Health 15(3):431. doi: 10.3390/ijerph15030431.
+
